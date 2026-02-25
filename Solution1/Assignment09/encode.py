@@ -4,6 +4,9 @@ import csv
 import os
 import re
 
+
+csvdict ={}
+
 counts = {}
 
 antibodys = {}
@@ -28,22 +31,24 @@ os.makedirs(outdir, exist_ok=True)
 
 with open(input) as f:
 
-    reader = csv.DictReader(f)
-
-
-    for row in reader:
-        all_cells.add(row["Cell_Type"])
 
 
 
-        a = row["Data_Type"]
+    for row in f:
+        if row.startswith("Data_Type"):
+            continue
+        lines = row.split(",")
+
+        all_cells.add(lines[1])
+
+        a = lines[0]
         counts[a] = counts.get(a, 0) + 1
 
-        if row["Data_Type"].__contains__("ChIP-seq") :
-            r = row["Experimental_Factors"]
+        if lines[0].__contains__("ChIP-seq") :
+            r = lines[2]
             if "Antibody=" in r :
                     a = r.split("Antibody=")[1].split()
-                    cell = row["Cell_Type"]
+                    cell = lines[1]
                     antibodys.setdefault(cell, set()).add(a[0])
                     antibody_counts[cell] = len(antibodys[cell])
 
@@ -52,10 +57,10 @@ with open(input) as f:
 
 
 
-        if (row["Experimental_Factors"].__contains__("H3K27me3") and row["Data_Type"].__contains__("ChIP-seq") and not row["Experimental_Factors"].__contains__("H3K27me3B")) or row["Data_Type"].__contains__("RNA-seq") :
-            list = [row["Data_Type"] + "$" + row["Cell_Type"] + "$" + row["DCC_Accession"]]
+        if (lines[2].__contains__("H3K27me3") and lines[0].__contains__("ChIP-seq") and not lines[2].__contains__("H3K27me3B")) or lines[0].__contains__("RNA-seq") :
+            list = [lines[0] + "$" + lines[1] + "$" + lines[9]]
             list_of_rows.append(list)
-            celltypes.append(row["Cell_Type"])
+            celltypes.append(lines[1])
 
 
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import os
 import mycgi
 import subprocess
@@ -33,7 +33,7 @@ print(f"""
         <body>
             <h1>Genome Lengths for: </h1>
             Download as FASTA:
-            <a> href="GenomeLengths.txt" download="GenomeLengths.txt">Download File</a>
+            <a> href="../Assignment08/GenomeLengths.txt" download="GenomeLengths.txt">Download File</a>
             {output}
         </body>
 </html>
