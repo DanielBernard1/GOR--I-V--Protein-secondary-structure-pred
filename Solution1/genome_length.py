@@ -13,19 +13,23 @@ patterns = [re.compile(p) for p in args.organism]
 url = "ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/prokaryotes.txt"
 
 with urllib.request.urlopen(url) as response:
-    for raw_line in response:
-        line = raw_line.decode("utf-8").rstrip()
-        #header line ignorieren 
-        if line.startswith("#"):
-            continue
-        #Attribute sind Tab seperated
-        columns = line.rstrip().split("\t")
-        name = columns[0]
-        size = columns[6]
-        status = columns[15]
-        
-        
-        if any(p.search(name) for p in patterns):
-            if "Complete" not in status:
+    with open("GenomeLengths.txt", "w") as f:
+        f.write("Name\tSize (Mb)")
+        for raw_line in response:
+            line = raw_line.decode("utf-8").rstrip()
+            #header line ignorieren 
+            if line.startswith("#"):
                 continue
-            print(f"{name}\t{size}")
+            #Attribute sind Tab seperated
+            columns = line.rstrip().split("\t")
+            name = columns[0]
+            size = columns[6]
+            status = columns[15]
+            
+            
+            if any(p.search(name) for p in patterns):
+                if "Complete" not in status:
+                    continue
+                print(f"{name}\t{size}")
+                f.write(f"{name}\t{size}")
+                
