@@ -11,6 +11,7 @@ form = mycgi.Form()
 fasta = form["fasta"]
 features = form["features"]
 
+#Datein speichern
 os.makedirs("uploads", exist_ok=True)
 
 orf_path = "uploads/cgi.fasta"
@@ -22,6 +23,7 @@ with open(orf_path, "w") as f:
 with open(feat_path, "w") as f:
     f.write(features.value)
 
+#
 output = subprocess.run(["python3", "genome2orf.py", "--organism", orf_path, "--features", feat_path], capture_output=True, text = True)
 
 

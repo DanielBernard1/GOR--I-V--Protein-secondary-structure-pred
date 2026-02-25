@@ -66,34 +66,34 @@ else:
     with open(path, "r") as f:
         geg_fasta = reader.read_fasta_function(f)
 
+with open("MyFile.txt", "w") as f:# file
+    for header, seq in geg_fasta.items():
+        codon = ""
+        amino = ""
+        i = 0
 
+        seq = seq.upper()
 
-for header, seq in geg_fasta.items():
-    codon = ""
-    amino = ""
-    i = 0
+        if len(seq) % 3 != 0: continue
 
-    seq = seq.upper()
+        wrong_base = False
 
-    if len(seq) % 3 != 0: continue
+        for j in seq:
 
-    wrong_base = False
-
-    for j in seq:
-
-        if j != "A" and j != "U" and j != "G" and j != "C":
-            wrong_base = True
-            break
-        codon += j
-        if i % 3 == 2:
-            if ct[codon] == "Stop": break
-            amino += ct[codon]
-            codon = ""
-        i += 1
-    if wrong_base: continue
-
-    print(header)
-    print(amino)
+            if j != "A" and j != "U" and j != "G" and j != "C":
+                wrong_base = True
+                break
+            codon += j
+            if i % 3 == 2:
+                if ct[codon] == "Stop": break
+                amino += ct[codon]
+                codon = ""
+            i += 1
+        if wrong_base: continue
+        f.write(header + "\n") # file
+        f.write(amino + "\n") # file
+        print(header)
+        print(amino)
 
 
 

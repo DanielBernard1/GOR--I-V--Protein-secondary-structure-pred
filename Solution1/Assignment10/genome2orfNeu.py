@@ -2,7 +2,7 @@
 import argparse
 
 
-class FASTAreader:
+class FASTAreader: #!!!!!!!!!!!!!!!!!!!!!!!!!!
     def read_fasta_function(self, filepath):
         self.motifs = {}
         self.indexes = []
@@ -87,10 +87,10 @@ for genom_acc in features:
         genom = sequence[start-1:end]
 
 
-
+    #Reverse Complement?
         if (strand == "-"):
             rev_Base = []
-            for letter in genom[::-1]:
+            for letter in genom[::-1]: #warum ::-1
                 if letter == "A":
                     rev_Base.append("T")
                 elif letter == "T":
