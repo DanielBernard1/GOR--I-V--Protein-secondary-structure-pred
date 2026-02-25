@@ -3,12 +3,12 @@
 import os
 import subprocess
 
-import cgi
+import mycgi
 
 print ("Content-Type: text/html\n")
 #genom --> orf
 
-form =cgi.Form()
+form = mycgi.Form()
 
 #Inputs
 fasta = form["fasta"]
