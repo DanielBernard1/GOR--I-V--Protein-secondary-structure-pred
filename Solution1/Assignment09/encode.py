@@ -39,8 +39,8 @@ with open(input) as f:
             continue
         lines = row.split(",")
 
-        all_cells.add(lines[1])
 
+        all_cells.add(lines[1])
         a = lines[0]
         counts[a] = counts.get(a, 0) + 1
 
@@ -52,12 +52,8 @@ with open(input) as f:
                     antibodys.setdefault(cell, set()).add(a[0])
                     antibody_counts[cell] = len(antibodys[cell])
 
-
-
-
-
-
-        if (lines[2].__contains__("H3K27me3") and lines[0].__contains__("ChIP-seq") and not lines[2].__contains__("H3K27me3B")) or lines[0].__contains__("RNA-seq") :
+        factors = lines[2].split()
+        if ("Antibody=H3K27me3" in factors and lines[0].__contains__("ChIP-seq")) or lines[0].__contains__("RNA-seq") :
             list = [lines[0] + "$" + lines[1] + "$" + lines[9]]
             list_of_rows.append(list)
             celltypes.append(lines[1])
