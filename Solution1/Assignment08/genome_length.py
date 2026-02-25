@@ -2,6 +2,7 @@
 import urllib.request
 import argparse
 import re
+import os
 
 #regex argumente parsen 
 parser = argparse.ArgumentParser(description="Filter by organism regex")
@@ -13,8 +14,8 @@ patterns = [re.compile(p) for p in args.organism]
 url = "ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/prokaryotes.txt"
 
 with urllib.request.urlopen(url) as response:
-    with open("GenomeLengths.txt", "w") as f:
-        f.write("Name\tSize (Mb)")
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "GenomeLengths.txt"), "w") as f:
+        f.write("Name\tSize (Mb)\n")
         for raw_line in response:
             line = raw_line.decode("utf-8").rstrip()
             #header line ignorieren 
@@ -31,5 +32,4 @@ with urllib.request.urlopen(url) as response:
                 if "Complete" not in status:
                     continue
                 print(f"{name}\t{size}")
-                f.write(f"{name}\t{size}")
-                
+                f.write(f"{name}\t{size}\n")
