@@ -33,7 +33,8 @@ print("""
     <p> Pls insert a fasta file and a features file, which should be analysed </p>
     <p> The output of the programm will be shown after you hit the button send </p>
     <form method="post" enctype="multipart/form-data">
-      <input type="file" name="name" required>
+      <input type="file" name="fasta" required>
+      <input type="file" name="features" required>
       <input type="submit" value="send">
     </form>
     <h2> Output </h2>
