@@ -40,4 +40,4 @@ result = output3.stdout
 
 print("<pre>")
 print(result)
-print("</pre")
+print("</pre>")
