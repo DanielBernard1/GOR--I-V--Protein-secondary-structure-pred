@@ -45,6 +45,34 @@
             </form>
         </section>
 
+
+        <section>
+            <h1>Aufgabe 10 </h1>
+            <p>This programm analysis a Fasta File connected to a features file and translates it
+            into a Protein, for other Options look down below </p>
+            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~huynhngoc/propragruppe15/Solution1/cgiFiles/Pipeline_10.cgi">
+                <p>Please upload a fasta file and a features file</p>
+                <input type="file" name="fasta" required>
+                <input type="file" name="features" required>
+                <button type="submit">Run</button>
+            </form>
+
+            <p> If you only wanna translate your DNA represented by its Locus-Tag to a ORFs: </p>
+            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~huynhngoc/propragruppe15/Solution1/cgiFiles/genome2orf.cgi">
+                <p>Please upload a fasta file and a features file</p>
+                <input type="file" name="fasta" required>
+                <input type="file" name="features" required>
+                <button type="submit">Run</button>
+            </form>
+
+            <p> If you only wanna translate your DNA represented by its Locus-Tag to a ORFs: </p>
+            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~huynhngoc/propragruppe15/Solution1/cgiFiles/genome2orf.cgi">
+                <p>Please upload a fasta file </p>
+                <input type="file" name="fasta" required>
+                <button type="submit">Run</button>
+            </form>
+        </section>
+
         
 
     </body>
