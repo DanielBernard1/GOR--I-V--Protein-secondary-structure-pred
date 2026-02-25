@@ -1,0 +1,7 @@
+Wie viele Sequenzen wurden durchsucht: 119,466,436
+
+Was bedeuten die E-Values:  Da wir einen sehr kleinen E-Value von hier genau 0 haben ist davon auszugehen, dass hier ein signifikanter Treffer vorliegt.
+
+Welches Virale Gen ist in der Sequenz enthalten: 
+Der Virus "Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2)" enthält unter anderem das S-Gen sowie das Polyprotein-Gen ORF1ab. 
+Diese Gene sind entscheidend für die Hauptwirkung des Virus im menschlichen Körper.
