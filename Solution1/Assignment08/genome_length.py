@@ -7,14 +7,16 @@ import os
 #regex argumente parsen 
 parser = argparse.ArgumentParser(description="Filter by organism regex")
 parser.add_argument("--organism", nargs="+", required=True, help="Regex organism names")
+parser.add_argument("--output", required=True, help="Path to output file")
 args = parser.parse_args()
+
 patterns = [re.compile(p) for p in args.organism]
 
 #Datensatz über url zugreifen 
 url = "ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/prokaryotes.txt"
 
 with urllib.request.urlopen(url) as response:
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "GenomeLengths.txt"), "w") as f:
+    with open(args.output, "w") as f:
         f.write("Name\tSize (Mb)\n")
         for raw_line in response:
             line = raw_line.decode("utf-8").rstrip()
