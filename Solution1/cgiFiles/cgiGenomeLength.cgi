@@ -31,9 +31,10 @@ print(f"""
     <head><title>Genome Lengths</title></head>
         <body>
             <h1>Genome Lengths for: </h1>
-            Download as FASTA:
-            <a href="../Assignment08/GenomeLengths.txt" download>Download File</a>
             {output}
         </body>
 </html>
 """)
+
+#Download as FASTA:
+#<a href="../Assignment08/GenomeLengths.txt" download>Download File</a>
