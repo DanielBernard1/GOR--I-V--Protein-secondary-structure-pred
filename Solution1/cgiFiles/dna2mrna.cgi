@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/biopython
 import os
 import subprocess
 import mycgi

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/biopython
 import os
 import subprocess
 import mycgi
@@ -17,14 +17,14 @@ os.makedirs("uploads", exist_ok=True)
 orf_path = "uploads/cgi.fasta"
 feat_path = "uploads/cgi.features"
 
-with open(orf_path, "w") as f:
+with open(orf_path, "wb") as f:
     f.write(fasta.value)
 
-with open(feat_path, "w") as f:
+with open(feat_path, "wb") as f:
     f.write(features.value)
 
 #
-output = subprocess.run(["python3", "genome2orf.py", "--organism", orf_path, "--features", feat_path], capture_output=True, text = True)
+output = subprocess.run(["python3", "../Assignment10/genome2orf.py", "--organism", orf_path, "--features", feat_path], capture_output=True, text = True)
 
 
 print("""
