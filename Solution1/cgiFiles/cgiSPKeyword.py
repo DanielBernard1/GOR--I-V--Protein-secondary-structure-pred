@@ -17,7 +17,7 @@ uploaded_file_path = os.path.join("copies", swiss_prot_input.filename)
 with open(uploaded_file_path, 'wb') as fout:
     shutil.copyfileobj(swiss_prot_input.file, fout)
 
-res = subprocess.run(
+result = subprocess.run(
     ["python3", "../Assignment06/spkeyword.py", "--keyword"] + keywords + ["--swissprot", uploaded_file_path], 
     text=True,
     capture_output=True
