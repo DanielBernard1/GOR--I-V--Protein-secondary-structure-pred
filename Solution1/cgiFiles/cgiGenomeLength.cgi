@@ -10,11 +10,6 @@ result = "No Organism Name entered."
 form = mycgi.Form()
 organisms_input = form.get('organisms')
 
-if not organisms_input:
-    print("<h3>No organisms provided.</h3>")
-    mycgi.print_footer()
-    exit()
-
 organisms = [organism.strip() for organism in organisms_input.split(",") if organism.strip()]
 
 cgi_dir = os.path.dirname(os.path.abspath(__file__))
