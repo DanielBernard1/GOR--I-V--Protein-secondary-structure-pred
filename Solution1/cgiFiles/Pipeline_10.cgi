@@ -1,14 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/bin/biopython
 
 import os
 import subprocess
 
-import mycgi
+import cgi
 
 print ("Content-Type: text/html\n")
 #genom --> orf
 
-form = mycgi.Form()
+form =cgi.Form()
 
 #Inputs
 fasta = form["fasta"]
