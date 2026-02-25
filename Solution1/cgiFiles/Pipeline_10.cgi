@@ -19,10 +19,10 @@ os.makedirs("uploads", exist_ok=True)
 orf_path = "uploads/cgi.fasta"
 feat_path = "uploads/cgi.features.tsv"
 
-with open(orf_path, "w") as f:
+with open(orf_path, "wb") as f:
     f.write(fasta.value)
 
-with open(feat_path, "w") as f:
+with open(feat_path, "wb") as f:
     f.write(features.value)
 #orf_path = "C:/Users/LauMa/UNI/3.Semester/propragruppe15/Solution1/Assignment10/Downloads_Datensätze/genome_files/E_coli_K-12_MG1655_genomic.fna"
 #feat_path= "C:/Users/LauMa/UNI/3.Semester/propragruppe15/Solution1/Assignment10/Downloads_Datensätze/genome_files/E_coli_K-12_MG1655_feature_table.txt"
