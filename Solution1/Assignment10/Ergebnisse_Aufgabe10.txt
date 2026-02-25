@@ -1,0 +1,20 @@
+Aufruf Befehl der Pipeline: 
+
+E_coli_K-12:
+
+(bioinfo) PS C:\Users\LauMa\UNI\3.Semester\propragruppe15\Solution1\Assignment10> python3 genome2orf.py --organism Downloads_Datensätze\genome_files\E_coli_K-12_MG1655_genomic.fna --features Downloads_Datensätze\genome_files\E_coli_K-12_MG1655_feature_table.txt | python3 dna2mrna.py --fasta - | python3 mrna2aa.py --fasta -
+
+Mycobacterium:
+
+(bioinfo) PS C:\Users\LauMa\UNI\3.Semester\propragruppe15\Solution1\Assignment10> python3 genome2orf.py --organism .\Downloads_Datensätze\genome_files\Mycobacterium_tuberculosis_CDC1551_genomic.fna --features .\Downloads_Datensätze\genome_files\Mycobacterium_tuberculosis_CDC1551_feature_table.txt | python3 dna2mrna.py --fasta - | python3 mrna2aa.py --fasta -
+
+Helicobacter:
+
+(bioinfo) PS C:\Users\LauMa\UNI\3.Semester\propragruppe15\Solution1\Assignment10> python3 genome2orf.py --organism .\Downloads_Datensätze\genome_files\Helicobacter_pylori_G27_genomic.fna --features .\Downloads_Datensätze\genome_files\Helicobacter_pylori_G27_feature_table.txt | python3 dna2mrna.py --fasta - | python3 mrna2aa.py --fasta -   
+
+Pseudomonas:
+
+(bioinfo) PS C:\Users\LauMa\UNI\3.Semester\propragruppe15\Solution1\Assignment10> python3 genome2orf.py --organism .\Downloads_Datensätze\genome_files\Pseudomonas_aeruginosa_PAO1_genomic.fna --features .\Downloads_Datensätze\genome_files\Pseudomonas_aeruginosa_PAO1_feature_table.txt | python3 dna2mrna.py --fasta - | python3 mrna2aa.py --fasta -
+
+
+
