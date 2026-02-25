@@ -18,7 +18,7 @@ if not organisms_input:
 organisms = [organism.strip() for organism in organisms_input.split(",") if organism.strip()]
 
 result = subprocess.run(
-    ["python3", "genome_length.py", "--organism"] + organisms, 
+    ["python3", "../Assignment08/genome_length.py", "--organism"] + organisms, 
     text=True,
     capture_output=True
     ) 
@@ -33,7 +33,7 @@ print(f"""
         <body>
             <h1>Genome Lengths for: </h1>
             Download as FASTA:
-            <a> href="../Assignment08/GenomeLengths.txt" download="GenomeLengths.txt">Download File</a>
+            <a> href="../Assignment08/GenomeLengths.txt" download>Download File</a>
             {output}
         </body>
 </html>
