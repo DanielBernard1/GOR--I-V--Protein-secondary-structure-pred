@@ -71,14 +71,27 @@ else:
 for header, seq in geg_fasta.items():
     codon = ""
     amino = ""
-    for i, j in enumerate(seq):
-        if i % 3 == 0:
-            if ct[codon].equals ("Stop"): break
-            amino += ct[codon]
-            codon = j
+    i = 0
 
-        else:
-            codon += j
+    seq = seq.upper()
+
+    if len(seq) % 3 != 0: continue
+
+    wrong_base = False
+
+    for j in seq:
+
+        if j != "A" and j != "U" and j != "G" and j != "C":
+            wrong_base = True
+            break
+        codon += j
+        if i % 3 == 2:
+            if ct[codon] == "Stop": break
+            amino += ct[codon]
+            codon = ""
+        i += 1
+    if wrong_base: continue
+
     print(header)
     print(amino)
 
