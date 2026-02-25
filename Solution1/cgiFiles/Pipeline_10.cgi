@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import cgitb
+cgitb.enable()
 import os
 import subprocess
 
