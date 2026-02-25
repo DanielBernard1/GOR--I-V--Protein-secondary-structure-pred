@@ -36,27 +36,8 @@ output2 = subprocess.run(["python3", "dna2mrna.py", "--fasta", "-"], input = out
 output3 = subprocess.run(["python3", "mrna2aa.py", "--fasta", "-"], input = output2.stdout, capture_output=True, text = True, check = True)
 
 #Output
-result = output3
+result = output3.stdout
 
-print("""
-<!DOCTYPE html>
-<html>
-  <body>
-    <h1>Transformation Genom+Feature to Protein with its Lotus-Tag</h1>
-    <p> Pls insert a fasta file which should be analysed </p>
-    <p> The output of the programm will be shown after you hit the button send </p>
-    <form method="post" enctype="multipart/form-data">
-      <input type="file" name="fasta" required>
-      <input type="file" name="features" required>
-      <input type="submit" value="send">
-    </form>
-    <h2> Output </h2>
-    <pre>
-    """)
+print("<pre>")
 print(result)
-
-print("""
-     </pre>
-  </body>
-</html>
-""")
+print("</pre")
