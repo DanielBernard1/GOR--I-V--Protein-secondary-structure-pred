@@ -11,7 +11,7 @@ ac = form.getfirst("fasta", "").strip()
 
 
 
-result = subprocess.run(["python3", "acsearch.py", "--ac", ac],
+result = subprocess.run(["python3", "../Assignment05/acsearch.py", "--ac", ac],
                         text=True,
                         capture_output=True,
                         )

@@ -4,21 +4,21 @@ git clone <REMOTE-URL> cd <PROJEKTORDNER>
 -neuesten Stand holen:
 git pull
 
-2) Neue Datei hinzufŸgen:
+2) Neue Datei hinzufuegen:
 touch neue_datei.txt
 git status
 
-3) Datei Šndern:
+3) Datei aendern:
 echo "NameProjekt" > neue_datei.txt
 
-4) €nderungen zum Commit vormerken und hochladen:
+4) Aenderungen zum Commit vormerken und hochladen:
 git add neue_datei.txt
 git commit -m "Beschreibung"
 
--nochmal Šndern und zweiten Commit machen:
+-nochmal aendern und zweiten Commit machen:
 echo "Zweite Zeile" >> neue_datei.txt
 git add neue_datei.txt
 git commit -m "Update neue_datei.txt"
 
-5) €nderung mit anderen teilen (auf Remote hochladen)
+5) Aenderung mit anderen teilen (auf Remote hochladen)
 git push

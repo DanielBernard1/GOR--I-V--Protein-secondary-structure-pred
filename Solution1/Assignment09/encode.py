@@ -5,19 +5,22 @@ import os
 import re
 
 
-csvdict ={}
 
+
+#Aufgabe 1
 counts = {}
 
+#Aufgabe 2
 antibodys = {}
 antibody_counts = {}
 all_cells = set()
 
-
+#Aufgabe 3
 celltypes= []
 list_of_rows = []
 rna_seq = {}
 chip_seq = {}
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input",required=True)
@@ -30,20 +33,19 @@ outdir = args.output
 os.makedirs(outdir, exist_ok=True)
 
 with open(input) as f:
-
-
-
-
     for row in f:
+        #csv einlesen
         if row.startswith("Data_Type"):
             continue
         lines = row.split(",")
 
 
-        all_cells.add(lines[1])
+        #Aufgabe 1
         a = lines[0]
         counts[a] = counts.get(a, 0) + 1
 
+        #Aufgabe 2
+        all_cells.add(lines[1])
         if lines[0].__contains__("ChIP-seq") :
             r = lines[2]
             if "Antibody=" in r :
@@ -52,6 +54,7 @@ with open(input) as f:
                     antibodys.setdefault(cell, set()).add(a[0])
                     antibody_counts[cell] = len(antibodys[cell])
 
+        #Aufgabe 3
         factors = lines[2].split()
         if ("Antibody=H3K27me3" in factors and lines[0].__contains__("ChIP-seq")) or lines[0].__contains__("RNA-seq") :
             list = [lines[0] + "$" + lines[1] + "$" + lines[9]]
@@ -74,17 +77,18 @@ for celltype in celltypes:
                 rna_seq[celltype] = sorted(newlistrna)
                 chip_seq[celltype] = sorted(newlistchip)
 
+#Write Output Aufgabe 1
 with open(f"{outdir}/exptypes.tsv", "w") as out:
     for dtype in counts:
         out.write(f"{dtype}\t{counts[dtype]}\n")
 
-
+#Write Output Aufgabe 2
 with open(f"{outdir}/antibodies.tsv", "w") as out:
     for cell in sorted(all_cells):
         out.write(f"{cell}\t{antibody_counts.get(cell, 0)}\n")
 
 
-
+#Write Output Aufgabe 3
 with open(f"{outdir}/chip_rna_seq.tsv", "w") as out:
     common_cells = set(rna_seq.keys()) & set(chip_seq.keys())
     out.write("cell line\tRNAseq Accession\tChIPseq Accession\n")
