@@ -1,0 +1,7 @@
+huynhngoc@bioclient1:/mnt/extstud/praktikum/bioprakt> Software/blast/blast-2.8.1/makeblastdb -in Data/Genomes/Mycoplasma_genitalum_protein.faa -dbtype prot -out Mgen_prot_db -parse_seqids
+
+huynhngoc@bioclient1:/mnt/extstud/praktikum/bioprakt> Software/blast/blast-2.8.1/blastp -query progprakt-15/propragruppe15/Solution2/Assignment12/DNA_Polymerase.fasta -db progprakt-15/propragruppe15/Solution2/Assignment12/Mgen_prot_db -out progprakt-15/propragruppe15/Solution2/Assignment12/result.xml -outfmt 5 -evalue 1e-5
+
+huynhngoc@bioclient1:/mnt/extstud/praktikum/bioprakt> Software/blast/blast-2.8.1/blastp -query progprakt-15/propragruppe15/Solution2/Assignment12/DNA_Polymerase.fasta -db progprakt-15/propragruppe15/Solution2/Assignment12/Mgen_prot_db -out progprakt-15/propragruppe15/Solution2/Assignment12/result.tsv -outfmt 6 -evalue 1e-5
+
+https://www.uniprot.org/uniprotkb/P56282/entry#sequences 
