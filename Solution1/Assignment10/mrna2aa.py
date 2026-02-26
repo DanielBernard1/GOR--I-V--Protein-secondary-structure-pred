@@ -21,7 +21,7 @@ ct = {"UUU" : "F", "CUU" : "L", "AUU" : "I", "GUU" : "V",
 "UGU" : "C" ,"CGU" : "R" ,"AGU" : "S"  ,"GGU" : "G",
 "UGC" : "C" ,"CGC" : "R" ,"AGC" : "S"  ,"GGC" : "G",
 "UGA" : "Stop","CGA" : "R" ,"AGA" : "R","GGA" : "G",
-"UGG" : "W" ,"CGG" : "R" ,"AGG" : "R","GGG" : "G", "" : ""}
+"UGG" : "W" ,"CGG" : "R" ,"AGG" : "R","GGG" : "G", "" : ""} #Codon : AS
 
 
 class FASTAreader:
@@ -59,6 +59,7 @@ path = args.fasta
 
 reader = FASTAreader()
 
+#Pipeline? wird durch '-' dargestellt
 if path == '-':
     geg_fasta = reader.read_fasta_function(sys.stdin)
 
@@ -66,30 +67,31 @@ else:
     with open(path, "r") as f:
         geg_fasta = reader.read_fasta_function(f)
 
-with open("MyFile.txt", "w") as f:# file
+with open("MyFile.txt", "w") as f:# file erstellen für ausgabe  (für Funktion irrelevant)
     for header, seq in geg_fasta.items():
         codon = ""
         amino = ""
-        i = 0
+        i = 0 #Basenzähler
 
         seq = seq.upper()
 
-        if len(seq) % 3 != 0: continue
+        if len(seq) % 3 != 0: continue # Filter auf
 
-        wrong_base = False
+        wrong_base = False # Basenprüfung
 
         for j in seq:
 
-            if j != "A" and j != "U" and j != "G" and j != "C":
+            if j != "A" and j != "U" and j != "G" and j != "C": #Basenprüfung
                 wrong_base = True
                 break
             codon += j
-            if i % 3 == 2:
+            if i % 3 == 2: #sobald 3 Basen übersetzen wir
                 if ct[codon] == "Stop": break
                 amino += ct[codon]
-                codon = ""
+                codon = "" #reset weil Codon eingelesen
             i += 1
-        if wrong_base: continue
+        if wrong_base: continue # um diese sequenz zu überspringen
+
         f.write(header + "\n") # file
         f.write(amino + "\n") # file
         print(header)
