@@ -6,7 +6,7 @@
   <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
   <BlastOutput_db>progprakt-15/propragruppe15/Solution2/Assignment12/Mgen_prot_db</BlastOutput_db>
   <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
-  <BlastOutput_query-def>unnamed protein product</BlastOutput_query-def>
+  <BlastOutput_query-def>sp|P56282|DPOE2_HUMAN DNA polymerase epsilon subunit 2 OS=Homo sapiens OX=9606 GN=POLE2 PE=1 SV=2</BlastOutput_query-def>
   <BlastOutput_query-len>527</BlastOutput_query-len>
   <BlastOutput_param>
     <Parameters>
@@ -21,7 +21,7 @@
 <Iteration>
   <Iteration_iter-num>1</Iteration_iter-num>
   <Iteration_query-ID>Query_1</Iteration_query-ID>
-  <Iteration_query-def>unnamed protein product</Iteration_query-def>
+  <Iteration_query-def>sp|P56282|DPOE2_HUMAN DNA polymerase epsilon subunit 2 OS=Homo sapiens OX=9606 GN=POLE2 PE=1 SV=2</Iteration_query-def>
   <Iteration_query-len>527</Iteration_query-len>
 <Iteration_hits>
 </Iteration_hits>
