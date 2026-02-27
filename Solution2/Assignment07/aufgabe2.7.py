@@ -4,15 +4,16 @@ import re
 import argparse as ap
 import sys
 import urllib.request
+import mysql.connector
 
 parser = ap.ArgumentParser()
-src1 = parser.add_mutually_exclusive_group(required=True)
-src1.add_argument('--fasta')
-src1.add_argument('--db')
 src = parser.add_mutually_exclusive_group(required=True)
-src.add_argument('--pattern')
-src.add_argument('--web')
-#
+src.add_argument('--fasta')
+src.add_argument('-db',  action='store_true')
+src2 = parser.add_mutually_exclusive_group(required=True)
+src2.add_argument('--pattern')
+src2.add_argument('--web')
+
 args = parser.parse_args()
 filepath = args.fasta
 
@@ -44,7 +45,7 @@ if(args.fasta):
             return self.motifs
     reader = FASTAreader()
     with open(filepath, "r") as f:
-        fasta_as_dictafasta = reader.read_fasta_function(f)
+        fasta_as_dict = reader.read_fasta_function(f)
 
 input = ""
 
@@ -91,7 +92,7 @@ for i in input:
     else:
         output_list.append(i)
 output_list = "".join(output_list)
-input = re.compile(output_list)
+
 
 
 if args.db:
@@ -104,19 +105,22 @@ if args.db:
     )
     cursor = db.cursor()
 
+
+
     cursor.execute(f'''
-    SELECT seq_id, REGEXP_SUBSTR(seq, '{input}') AS matched
+    SELECT seq_heeader, REGEXP_SUBSTR(seq, \'{output_list}\') AS matched
 
     FROM Sequenz;
 
     ''')
     Output = cursor.fetchall()
     for r in Output:
+        if r[1] == "": continue
         print(f'{r[0]}\t{r[1]}')
 
     exit()
 
-
+input = re.compile(output_list)
 # print(output_list)
 
 
