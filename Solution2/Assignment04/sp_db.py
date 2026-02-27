@@ -28,11 +28,11 @@ with open(file_path, "r") as f:
             ac_line = line[5:].strip().rstrip(".;")
             data["AC"] = [ac.strip() for ac in ac_line.split(";")]
         elif line.startswith("ID"):
-            data["ID"] = line[5:].strip()
+            data["ID"] = line[5:].strip().rstrip(".")
         elif line.startswith("OS"):
-            data["OS"] = line[5:].strip()
+            data["OS"] = line[5:].strip().rstrip(".")
         elif line.startswith("DE"):
-            data["DE"] = line[5:].strip()
+            data["DE"] = line[5:].strip().rstrip(".")
         elif line.startswith("KW"):
             kws = line[5:].rstrip(".").split(";")
             data["KW"].extend(kw.strip() for kw in kws)
