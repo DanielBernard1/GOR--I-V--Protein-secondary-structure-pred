@@ -19,7 +19,7 @@ class FASTAreader:
                 self.indexes.append(line)
             elif current_key is not None:
                 self.motifs[current_key] += s
-        
+
         return self.motifs
     def get_indexes(self, index):
         return self.indexes[index]
