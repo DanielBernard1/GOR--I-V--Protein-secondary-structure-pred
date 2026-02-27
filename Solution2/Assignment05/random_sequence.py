@@ -15,7 +15,7 @@ parser.add_argument("--name", type=str, default=None, help="Name of the sequence
 args = parser.parse_args()
 
 length = args.length
-gc = args.gc
+gc = int(args.gc * length)
 name = args.name
 
 random_sequence = ""
@@ -26,7 +26,9 @@ for i in range(length):
     else:
         random_sequence += choice(["A", "T"])
 
-random_sequence = "".join(random_sequence)
+seq = list(random_sequence)
+shuffle(seq)
+random_sequence = "".join(seq)
 
 print(f">{name}")
 print(random_sequence)
