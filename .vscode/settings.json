@@ -1,0 +1,25 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3307,
+            "sshOptions": {
+                "port": 12,
+                "host": "bioclient6.bio.ifi.lmu.de",
+                "username": "huynhngoc",
+                "password": "BLAbla2507"
+            },
+            "driver": "MariaDB",
+            "name": "Propra",
+            "database": "bioprakt15",
+            "username": "bioprakt15",
+            "password": "$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0"
+        }
+    ]
+}

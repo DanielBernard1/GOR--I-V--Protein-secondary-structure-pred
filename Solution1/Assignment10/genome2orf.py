@@ -4,28 +4,30 @@ import argparse
 
 class FASTAreader:
     def read_fasta_function(self, filepath):
-        self.motifs = {}
-        self.indexes = []
+        self.motifs = {} #dict header --> seq
+        self.indexes = [] #liste header
 
+        #Einlesen
         with open(filepath, "r") as f:
             current_key = None
             for line in f:
                 s = line.strip()
                 if not s:
                     continue
-
+                #Header?
                 if s.startswith(">"):
                     current_key = s
                     self.motifs[current_key] = []
                     self.indexes.append(s)
+                    #Sequenzzeilen
                 elif current_key is not None:
                     self.motifs[current_key].append(s)
 
-
+        #muss noch zur ganzen Sequenz zusammenfügen
         for k in self.motifs:
             self.motifs[k] = "".join(self.motifs[k])
 
-        return self.motifs
+        return self.motifs # OUTPUT = dict
 
 #Einlesen übergebene Parameter
 parser = argparse.ArgumentParser(description="ORFs aus einer Genomsequenz extrahieren")
@@ -65,7 +67,7 @@ with open(features_path, "r") as g:
 
         genom = None
         for seq_id in organism:
-            if genom_acc in seq_id:
+            if genom_acc in seq_id:# hier vereinigung beider dokumente
                 genom = organism[seq_id][start-1:end]
                 locus = spalten[locus_i]
                 break
@@ -73,6 +75,7 @@ with open(features_path, "r") as g:
         strand = spalten[strand_i]
 
         if genom is None: continue
+        #Reverse?
         if (strand == "-"):
             rev_Base = ""
             for letter in genom[::-1]:
