@@ -12,7 +12,7 @@ src1.add_argument('--db')
 src = parser.add_mutually_exclusive_group(required=True)
 src.add_argument('--pattern')
 src.add_argument('--web')
-
+#
 args = parser.parse_args()
 filepath = args.fasta
 
