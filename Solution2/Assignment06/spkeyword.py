@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import mysql
 
 
 #Ausgabe AC-keys zugehörig zu jeweiligen keywords lexikographisch sortiert

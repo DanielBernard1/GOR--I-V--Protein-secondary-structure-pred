@@ -1,10 +1,21 @@
 #!/usr/bin/env python3
 import argparse
-import MySQLdb
+import mysql.connector
 
-db = MySQLdb
+db = mysql.connector.connect(
+  host="127.0.0.1",
+  port=3307,
+  user="bioprakt15",
+  password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
+  database="bioprakt15")
+
+
+
 parser = argparse.ArgumentParser(description="Add Swissprot to Database")
 parser.add_argument("--input", type=str, required=True, help="Path to swissprot data")
+parser.add_argument("--db", type=str, required=True, help="Path to Database")
+
+curser = db.cursor()
 
 args = parser.parse_args()
 file_path = args.input
