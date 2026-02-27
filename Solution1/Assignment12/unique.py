@@ -63,6 +63,7 @@ for k in ks:
     for kmer, v in kmers.items():
         if len(v) == 1:
             uniques.add(next(iter(v)))
+        
     
     print(k + "\t" + str(len(uniques)))
     #print(count/len(sequences))
