@@ -30,7 +30,7 @@ with open(file_path, "r") as f:
         elif line.startswith("ID"):
             data["ID"] = line[5:].strip().rstrip(".")
         elif line.startswith("OS"):
-            data["OS"] = line[5:].strip().rstrip(".")
+            data["OS"] = line[5:].strip().rstrip(".").replace("'", "")
         elif line.startswith("DE"):
             data["DE"] = line[5:].strip().rstrip(".")
         elif line.startswith("KW"):
