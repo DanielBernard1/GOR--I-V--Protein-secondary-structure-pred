@@ -1,0 +1,35 @@
+#1. Anzahl Familien:
+#Ist Familie = Alignment?
+#SELECT COUNT(DISTINCT family) FROM alignment_sequences;
+Answer 1:   1015
+
+#2.1 wie viele Sequenzen enthalten die Familien-Alignments insgesammt
+#SELECT COUNT(*) as m FROM alignment_sequences;
+
+#2.2 verschiedene:
+#SELECT COUNT(distinct aligned_sequence) as k FROM alignment_sequences;
+
+Answer 2:   3155    2662
+
+
+#3 Wie viele Proteine kommen vor:
+#SELECT occurrence, COUNT(*) as count FROM
+#(SELECT pdb_id, COUNT(*) as occurrence FROM alignment_sequences
+#GROUP BY pdb_id) t
+#GROUP BY occurrence
+#ORDER BY occurrence;
+
+Answer 3:   (1: 2405)   (2: 105)    (3: 104)    (4: 30) (5: 6)  (6: 6)  (7: 3)  (8: 1)  (13: 1)
+
+
+#4. Welche Protein kommen am häufigsten vor
+#SELECT pdb_id, count(pdb_id) as count FROM alignment_sequences
+#GROUP BY pdb_id
+#ORDER BY count DESC, pdb_id;
+Answer 4:   (1jj2: 13)  (1bgy: 8)   (1e6v: 7)   (1e6y: 7)   (1mro: 7)
+
+
+
+
+
+

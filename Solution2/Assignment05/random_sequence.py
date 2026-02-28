@@ -34,7 +34,6 @@ class FASTAreader:
 parser = argparse.ArgumentParser(description="Convert CRISPR sequences")
 parser.add_argument("--fasta", type=str, required=True, help="Path to FASTA file")
 
-args = parser.parse_args()
 file_path = args.fasta
 
 reader = FASTAreader()
