@@ -62,14 +62,16 @@ if output is not None:
 for id in args.id:
     afirst = []
     alast = []
+    lineamount=0
 
     bfirst = []
     blast = []
-
+    afirst = bfirst = None
+    alast = blast = None
 
     minx = miny = minz = float("inf")
     maxx = maxy = maxz = float("-inf")
-
+    all_resedues_chain = set()
     allsecstuk =set()
 
     with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r:
@@ -78,25 +80,35 @@ for id in args.id:
         maxline = 0
         for line in text.splitlines():
             parts = line.split()
+            countera = 0
+            counterb = 0
+
+
+
 
             if line.startswith("ATOM"):
+                chain_id = parts[4]
+                residue = parts[5]
+                all_resedues_chain.add(chain_id+residue)
+
+
 
 
                 #abstand aplha beta
+                coords = [float(parts[6]), float(parts[7]), float(parts[8])]
 
-                if parts[2] == "CA" and parts[5] == "1":
+                if parts[2] == "CA" and parts[5] == "1" and afirst is None:
                     afirst = [float(x) for x in [parts[6],parts[7],parts[8]]]
-                if parts[2] == "CB" and parts[5] == "1":
+                    countera += 1
+                if parts[2] == "CB" and parts[5] == "1" and bfirst is None:
                     bfirst = [float(x) for x in [parts[6], parts[7], parts[8]]]
-
-                if int(parts[5]) > int(maxline):
-                    maxline = int(parts[5])
+                    counterb += 1
 
 
-                if parts[2] == "CA" and parts[5] == str(maxline):
-                    alast = [float(x) for x in [parts[6], parts[7], parts[8]]]
-                if parts[2] == "CB" and parts[5] == str(maxline):
-                    blast = [float(x) for x in [parts[6], parts[7], parts[8]]]
+                if parts[2] == "CA":
+                    alast = coords
+                if parts[2] == "CB":
+                    blast = coords
 
                 #karton
 
@@ -115,11 +127,19 @@ for id in args.id:
                     maxz = float(parts[8])
 
             if line.startswith("HELIX"):
-                allsecstuk.update(range(int(parts[5]), int(parts[8]) + 1))
+
+                chain = line[19]
+                start = int(parts[5])
+                end = int(parts[8])
+
+                allsecstuk.update(chain + str(r) for r in range(start, end + 1))
+
             if line.startswith("SHEET"):
-                allsecstuk.update(range(int(parts[6]), int(parts[9]) + 1))
 
-
+                chain = line[21]
+                start = int(parts[6])
+                end = int(parts[9])
+                allsecstuk.update(chain + str(r) for r in range(start, end + 1))
 
         distanceCA = np.sqrt(
             np.square(alast[0]-afirst[0])+
@@ -139,7 +159,7 @@ for id in args.id:
         volumen = XGroesse * YGroesse * ZGroesse
 
         #% sekundär struktur
-        prozent = len(allsecstuk)/ float(maxline)
+        prozent = len(allsecstuk)/ float(len(all_resedues_chain))
 
 
         print(textwrap.dedent(f"""\
