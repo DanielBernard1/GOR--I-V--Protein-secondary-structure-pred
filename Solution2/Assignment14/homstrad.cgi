@@ -10,9 +10,7 @@ form = mycgi.Form()
 
 pdb1 = form["pdb1"].value
 pdb2 = form["pdb2"].value
-
-
-
+#
 
 #
 try:
@@ -38,7 +36,6 @@ print("""
     <pre> 
     """)
 print(output.stdout)
-
 print("""
      </pre>
   </body>

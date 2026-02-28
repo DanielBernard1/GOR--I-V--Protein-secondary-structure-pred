@@ -17,12 +17,15 @@ parser.add_argument("--id", required=True)
 parser.add_argument("--distance", required=True)
 parser.add_argument("--type", required=True)
 parser.add_argument("--length", required=True)
+parser.add_argument("--contactmatrix", required=False)
 args = parser.parse_args()
 
 id = args.id
 distance_threshhold = float(args.distance)
 type = args.type
 length = float(args.length)
+contactmatrix = args.contactmatrix
+interactions = []
 
 as_map = {
     'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C',
@@ -55,10 +58,13 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
 
         if line.startswith("HELIX"):
             helixes.update(range(int(parts[5]), int(parts[8]) + 1))
-            print(parts[5],parts[8])
+
         if line.startswith("SHEET"):
-            print(parts[5],parts[9])
-            sheets.update(range(int(parts[5]), int(parts[9]) + 1))
+
+            if isinstance(parts[5], int):
+                sheets.update(range(int(parts[5]), int(parts[9]) + 1))
+            if isinstance(parts[6], int):
+                sheets.update(range(int(parts[6]), int(parts[9]) + 1))
 
         if line.startswith("ATOM"):
             if parts[2] == type:
@@ -79,10 +85,12 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
         current_chain = d[5]
         if d[0] in helixes:
             d.append("H")
-        elif d[0] in sheets:
+        if d[0] in sheets:
             d.append("E")
         else:
             d.append("C")
+
+
 
 
 
@@ -98,6 +106,7 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
                 np.square(coordinates[2] - coordinates_node[2])
             )
             if distanceA_B < distance_threshhold :
+                interactions.append([k[0], d[0]])
                 if abs(k[0]-d[0]) < length and current_chain == other_chain:
                     count_local += 1
                 else:
@@ -106,6 +115,25 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
 
 
         print (f'{current_chain}\t{d[0]}\t{d[6]}\t{d[1]}\t{d[7]}\t{count_global}\t{count_local}')
+
+if contactmatrix is not None:
+    n = len(distance)
+    C = [[0] * n for _ in range(n)]
+
+    for i in range(n):
+        for j in range(n):
+            if [distance[i][0], distance[j][0]] in interactions or [distance[j][0], distance[i][0]] in interactions:
+                C[i][j] = 1
+
+    for i in range(n):
+        for j in range(n):
+            print(C[j][i])
+
+    if contactmatrix is not None:
+        with open(contactmatrix, "w", newline="\n") as f:
+            for row in C:
+
+                f.write(" ".join(map(str, row)) + "\n")
 
 
 
