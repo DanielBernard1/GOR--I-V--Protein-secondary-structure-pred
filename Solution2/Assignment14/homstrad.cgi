@@ -11,16 +11,17 @@ form = mycgi.Form()
 pdb1 = form["pdb1"]
 pdb2 = form["pdb2"]
 
-#Datein speichern
 
 
 
 #
-if pdb2:
+try:
+    if pdb2:
         output = subprocess.run(["python3", "../Assignment14/homestrad2.0.py", "--pdb1", pdb1, "--pdb2", pdb2], capture_output=True, text = True)
-else:
-    output = subprocess.run(["python3", "../Assignment14/homestrad2.0.py", "--pdb1", pdb1], capture_output=True, text=True)
-
+    else:
+        output = subprocess.run(["python3", "../Assignment14/homestrad2.0.py", "--pdb1", pdb1], capture_output=True, text=True)
+except Exception as e:
+    print(e)
 print("""
 <!DOCTYPE html>
 <html>
