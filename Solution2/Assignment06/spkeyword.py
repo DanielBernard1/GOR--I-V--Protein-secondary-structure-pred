@@ -64,3 +64,5 @@ else:
 
     for a in sorted(output):                        #lexikographisch sortiert
         print (a)
+curser.close()
+db.close()

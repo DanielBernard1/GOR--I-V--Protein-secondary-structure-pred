@@ -42,10 +42,10 @@ with open(file_path, "r") as f:
             if data["SQ"] != "":
                 #add sequence to whole DB // TODO
                 for ac in data["AC"]:
-                    curser.execute("INSERT IGNORE INTO Sequenz(seq_header, typ, laenge, organism, quelle, seq, source_key) VALUES(%s, %s, %s, %s, %s, %s, %s)", 
+                    curser.execute("INSERT IGNORE INTO sequenz(seq_header, typ, laenge, organism, quelle, seq, source_key) VALUES(%s, %s, %s, %s, %s, %s, %s)", 
                                 (ac, "Protein", len(data["SQ"].replace(" ", "")), data["OS"], "Swissprot", data["SQ"], ac))
                     #add to swissprot table
-                    query = "INSERT IGNORE INTO Swissprot(ac, id, de, os) VALUES (%s, %s, %s, %s)"
+                    query = "INSERT IGNORE INTO swissprot(ac, id, de, os) VALUES (%s, %s, %s, %s)"
                     vals = (ac, data['ID'], data["DE"], data["OS"])
                     curser.execute(query, vals)
                     #add to keywords
@@ -57,7 +57,7 @@ with open(file_path, "r") as f:
                         (kw,)
                         )
                         keyword_id = curser.fetchone()[0]
-                        curser.execute("SELECT seq_number FROM Sequenz WHERE seq_header = %s AND quelle = %s", 
+                        curser.execute("SELECT seq_number FROM sequenz WHERE seq_header = %s AND quelle = %s", 
                         (ac, "Swissprot"))
                         seq_number = curser.fetchone()[0]
                         curser.execute("INSERT IGNORE INTO ac_keywords(seq_number, ac, keyword_id) VALUES (%s, %s, %s)",
@@ -71,4 +71,30 @@ with open(file_path, "r") as f:
 
         if i % 100 == 0:
             db.commit()
+
+#letzten eintrag
+    for ac in data["AC"]:
+        curser.execute("INSERT IGNORE INTO sequenz(seq_header, typ, laenge, organism, quelle, seq, source_key) VALUES(%s, %s, %s, %s, %s, %s, %s)", 
+                    (ac, "Protein", len(data["SQ"].replace(" ", "")), data["OS"], "Swissprot", data["SQ"], ac))
+        #add to swissprot table
+        query = "INSERT IGNORE INTO swissprot(ac, id, de, os) VALUES (%s, %s, %s, %s)"
+        vals = (ac, data['ID'], data["DE"], data["OS"])
+        curser.execute(query, vals)
+        #add to keywords
+        for kw in data["KW"]:
+            curser.execute("INSERT IGNORE INTO keywords(keyword) VALUES (%s)",
+            (kw,)
+            )
+            curser.execute("SELECT keyword_id FROM keywords WHERE keyword = %s",
+            (kw,)
+            )
+            keyword_id = curser.fetchone()[0]
+            curser.execute("SELECT seq_number FROM sequenz WHERE seq_header = %s AND quelle = %s", 
+            (ac, "Swissprot"))
+            seq_number = curser.fetchone()[0]
+            curser.execute("INSERT IGNORE INTO ac_keywords(seq_number, ac, keyword_id) VALUES (%s, %s, %s)",
+            (seq_number, ac, keyword_id))
+        print(ac)
     db.commit()
+curser.close()
+db.close()

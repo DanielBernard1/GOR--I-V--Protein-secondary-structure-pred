@@ -1,4 +1,1 @@
-TRUNCATE TABLE ac_keywords;
-TRUNCATE TABLE Sequenz;
-TRUNCATE TABLE Swissprot;
-TRUNCATE TABLE keywords;
+TRUNCATE TABLE alignment_sequences
