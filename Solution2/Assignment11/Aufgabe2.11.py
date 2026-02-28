@@ -116,23 +116,24 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
 
         print (f'{current_chain}\t{d[0]}\t{d[6]}\t{d[1]}\t{d[7]}\t{count_global}\t{count_local}')
 
-n = len(distance)
-C = [[0] * n for _ in range(n)]
-
-for i in range(n):
-    for j in range(n):
-        if [distance[i][0], distance[j][0]] in interactions or [distance[j][0], distance[i][0]] in interactions:
-            C[i][j] = 1
-
-for i in range(n):
-    for j in range(n):
-        print(C[j][i])
-
 if contactmatrix is not None:
-    with open(contactmatrix, "w", newline="\n") as f:
-        for row in C:
+    n = len(distance)
+    C = [[0] * n for _ in range(n)]
 
-            f.write(" ".join(map(str, row)) + "\n")
+    for i in range(n):
+        for j in range(n):
+            if [distance[i][0], distance[j][0]] in interactions or [distance[j][0], distance[i][0]] in interactions:
+                C[i][j] = 1
+
+    for i in range(n):
+        for j in range(n):
+            print(C[j][i])
+
+    if contactmatrix is not None:
+        with open(contactmatrix, "w", newline="\n") as f:
+            for row in C:
+
+                f.write(" ".join(map(str, row)) + "\n")
 
 
 
