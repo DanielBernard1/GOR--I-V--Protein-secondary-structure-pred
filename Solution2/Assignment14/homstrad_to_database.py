@@ -62,13 +62,13 @@ def tem_files(file_path):
 
 def ali_files(ali_id, file_path):
     with open(file_path, "r") as f:
-        # family = ""
+        family = ""
         # ali_class = ""
         sequence = ""
         addSequence = False
         for line in f:
-            # if line.startswith("C; family:"):
-            #     family = line[9:].strip()
+            if line.startswith("C; family:"):
+                family = line[10:].strip()
             # elif line.startswith("C; class:"):
             #     ali_class = line[8:].strip()
             #     continue
@@ -76,8 +76,8 @@ def ali_files(ali_id, file_path):
                 addSequence = True
                 attributes = [x.strip() for x in line.split(":")]
                 #add to alignment sequences
-                curser.execute("INSERT IGNORE INTO alignment_sequences VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                            (ali_id, attributes[1], attributes[6], attributes[7], attributes[2], attributes[4], attributes[3], "-", "-"))
+                curser.execute("INSERT IGNORE INTO alignment_sequences VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                            (ali_id, attributes[1], attributes[6], attributes[7], attributes[2], attributes[4], attributes[3], "-", "-", family))
                 db.commit()
             elif addSequence:
                 if line.endswith("*\n"):
