@@ -10,7 +10,7 @@ form = mycgi.Form()
 
 pdb1 = form["pdb1"].value
 pdb2 = form["pdb2"].value
-
+print (pdb1)
 
 
 
