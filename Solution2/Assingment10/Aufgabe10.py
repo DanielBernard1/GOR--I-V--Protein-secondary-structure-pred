@@ -1,10 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/biopython
 import argparse
 import os
 import subprocess
 import tempfile
 import urllib
 import numpy as np
+import urllib.request
+import textwrap
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--id", required=True,nargs="+")
@@ -18,11 +20,11 @@ output = args.output
 
 
 
-print(args.id)
+
 if output is not None:
     os.makedirs(output, exist_ok=True)
     for i in args.id:
-        print(i)
+
         outfile = os.path.join(output, f"{i}.png").replace("\\", "/")
 
         script = f'''
@@ -42,17 +44,17 @@ if output is not None:
         exit
         '''
 
-        JMOL_JAR = os.path.join(os.path.dirname(__file__), "Jmol.jar")
+
 
         with tempfile.NamedTemporaryFile("w", delete=False, suffix=".spt") as f:
             f.write(script)
             script_path = f.name
 
-        subprocess.run(["java", "-jar", JMOL_JAR, "-n" ,"-s", script_path])
+        subprocess.run(["java", "-jar", "/mnt/extsoft/software/jmol/JmolData.jar", "-n" ,"-s", script_path])
 
         os.remove(script_path)
 
-        print(outfile)
+
 #optinal bilder ende
 
 
@@ -88,7 +90,7 @@ for id in args.id:
                     bfirst = [float(x) for x in [parts[6], parts[7], parts[8]]]
 
                 if int(parts[5]) > int(maxline):
-                    maxline = parts[5]
+                    maxline = int(parts[5])
 
 
                 if parts[2] == "CA" and parts[5] == str(maxline):
@@ -140,16 +142,15 @@ for id in args.id:
         prozent = len(allsecstuk)/ float(maxline)
 
 
-        print(allsecstuk)
-        print(f''' 
-        {id}\tAnteil AS in Sekunaerstruktur\t{prozent.__round__(4):.4f}
-        {id}\tAbstand C_alpha\t{distanceCA.__round__(4):.4f}
-        {id}\tAbstand C_beta\t{distanceCB.__round__(4):.4f} 
-        {id}\tX-Grosse\t{XGroesse.__round__(4):.4f}
-        {id}\tY-Grosse\t{YGroesse.__round__(4):.4f}
-        {id}\tZ-Grosse\t{ZGroesse.__round__(4):.4f}
-        {id}\tVolumen {volumen.__round__(4):.4f}
-        ''')
+        print(textwrap.dedent(f"""\
+        {id}\tAnteil AS in Sekundaerstruktur\t{prozent:.4f}
+        {id}\tAbstand C_alpha\t{distanceCA:.4f}
+        {id}\tAbstand C_beta\t{distanceCB:.4f}
+        {id}\tX-Groesse\t{XGroesse:.4f}
+        {id}\tY-Groesse\t{YGroesse:.4f}
+        {id}\tZ-Groesse\t{ZGroesse:.4f}
+        {id}\tVolumen\t{volumen:.4f}
+        """), end="")
 
 
 
