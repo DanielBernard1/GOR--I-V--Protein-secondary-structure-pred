@@ -25,7 +25,7 @@ inputs = args.keyword
 db_access = args.db                     
 output = set()                        
 
-ids = []
+ids = [] 
 hit = False
 
 if db_access:
