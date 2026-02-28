@@ -8,8 +8,8 @@ print("Content-type: text/html\n")
 form = mycgi.Form()
 
 
-pdb1 = form["pdb1"]
-pdb2 = form["pdb2"]
+pdb1 = form["pdb1"].value
+pdb2 = form["pdb2"].value
 
 
 
