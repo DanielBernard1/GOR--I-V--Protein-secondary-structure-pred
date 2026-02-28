@@ -77,7 +77,7 @@ if histogram:
     with open(histogram, "w") as out:
         edges = list(range(lower, upper + bin_size , bin_size))
 
-        plt.hist(values, bins=edges)
+        plt.hist(values, bins=edges, edgecolor="black")
         plt.xlabel("Protein length (AA)")
         plt.ylabel("Number of ORFs")
         plt.savefig(args.histogram)

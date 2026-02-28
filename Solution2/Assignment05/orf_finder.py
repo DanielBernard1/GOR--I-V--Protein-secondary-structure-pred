@@ -49,10 +49,11 @@ def revcomp(dna: str) -> str: #: legt Variabel fest, -> Output der Methode
     comp = {"A": "T", "T": "A", "C": "G", "G": "C"}
     return "".join(comp[b] for b in reversed(dna))
 
-
-for header, seq_2 in seq.items():
-    orf_id = 0
-    for strand, sequence in seq.items():
+with open("MyFile.txt", "w") as f:
+    for header, seq_2 in seq.items():
+        orf_id = 0
+        strand = ""
+        sequence = seq_2.upper()
         length = len(sequence)
 
         codon_end = length-2 # n-3+1
@@ -73,6 +74,8 @@ for header, seq_2 in seq.items():
                         end = j + 3
                         print(f"{header}{strand}_0")
                         print(sequence[start0:end])
+                        f.write(f"{header}{strand}_0_{orf_id}\n")
+                        f.write(sequence[start0:end]+ "\n")
                         orf_id += 1
                         start0 = None
 
@@ -86,6 +89,8 @@ for header, seq_2 in seq.items():
                         end = j + 3
                         print(f"{header}{strand}_1")
                         print(sequence[start1:end])
+                        f.write(f"{header}{strand}_1_{orf_id}\n")
+                        f.write(sequence[start1:end] + "\n")
                         orf_id += 1
                         start1 = None
 
@@ -99,58 +104,66 @@ for header, seq_2 in seq.items():
                         end = j + 3
                         print(f"{header}{strand}_2")
                         print(sequence[start2:end])
+                        f.write(f"{header}{strand}_2_{orf_id}\n")
+                        f.write(sequence[start2:end]+ "\n")
                         orf_id += 1
                         start2 = None
 
+        strand = "_rev"
+        rev = revcomp(seq_2)
+        length = len(rev)
+        codon_end = length-2
+        start0 = None
+        start1 = None
+        start2 = None
 
-#Gleiche nochmal für 5 zu 3
-        for strand, sequence in seq.items():
-            rc = revcomp(sequence)
-            length = len(sequence)
+    #Gleiche nochmal für 5 zu 3
 
-            codon_end = length - 2  # n-3+1
-            start0 = None
-            start1 = None
-            start2 = None
 
             # wir gehen position für position (j ist die Position)
-            for j in range(codon_end):
-                codon = sequence[j:j + 3]
+        for j in range(codon_end):
+            codon = rev[j:j + 3]
 
-                if j % 3 == 0:
-                    if start0 is None:
-                        if codon == "ATG":
-                            start0 = j
-                    else:
-                        if codon == "TAA" or codon == "TAG" or codon == "TGA":
-                            end = j + 3
-                            print(f"{header}{strand}_0")
-                            print(sequence[start0:end])
-                            orf_id += 1
-                            start0 = None
+            if j % 3 == 0:
+                if start0 is None:
+                    if codon == "ATG":
+                        start0 = j
+                else:
+                    if codon == "TAA" or codon == "TAG" or codon == "TGA":
+                        end = j + 3
+                        print(f"{header}{strand}_0")
+                        print(rev[start0:end])
+                        f.write(f"{header}{strand}_0_{orf_id}\n")
+                        f.write(rev[start0:end]+ "\n")
+                        orf_id += 1
+                        start0 = None
 
 
-                if j % 3 == 1:
-                    if start1 is None:
-                        if codon == "ATG":
-                            start1 = j
-                    else:
-                        if codon == "TAA" or codon == "TAG" or codon == "TGA":
-                            end = j + 3
-                            print(f"{header}{strand}_1")
-                            print(sequence[start1:end])
-                            orf_id += 1
-                            start1 = None
+            if j % 3 == 1:
+                if start1 is None:
+                    if codon == "ATG":
+                        start1 = j
+                else:
+                    if codon == "TAA" or codon == "TAG" or codon == "TGA":
+                        end = j + 3
+                        print(f"{header}{strand}_1")
+                        print(rev[start1:end])
+                        f.write(f"{header}{strand}_1_{orf_id}\n")
+                        f.write(rev[start1:end]+ "\n")
+                        orf_id += 1
+                        start1 = None
 
-                if j % 3 == 2:
-                    if start2 is None:
-                        if codon == "ATG":
-                            start2 = j
-                    else:
-                        if codon == "TAA" or codon == "TAG" or codon == "TGA":
-                            end = j + 3
-                            print(f"{header}{strand}_2")
-                            print(sequence[start2:end])
-                            orf_id += 1
-                            start2 = None
+            if j % 3 == 2:
+                if start2 is None:
+                    if codon == "ATG":
+                        start2 = j
+                else:
+                    if codon == "TAA" or codon == "TAG" or codon == "TGA":
+                        end = j + 3
+                        print(f"{header}{strand}_2")
+                        print(rev[start2:end])
+                        f.write(f"{header}{strand}_2_{orf_id}\n")
+                        f.write(rev[start2:end]+ "\n")
+                        orf_id += 1
+                        start2 = None
 
