@@ -35,8 +35,8 @@ print("""
     <h2> Output </h2>
     <pre> 
     """)
-print(output.stdout)
-
+print(output)
+print(pdb1)
 print("""
      </pre>
   </body>
