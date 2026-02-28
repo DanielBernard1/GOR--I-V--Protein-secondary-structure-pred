@@ -1,9 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/biopython
+
+print("chain\tpos\tserial\taa\tss\tglobal\tlocal")
 import argparse
 import os
 import subprocess
 import tempfile
 import urllib
+import urllib.request
 
 import numpy as np
 
@@ -32,9 +35,11 @@ saw_model = False
 
 with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r:
     text = r.read().decode("utf-8")
-    connectionsAS = 0
     distance = []
-    line_counter = 0
+
+    helixes = set()
+    sheets = set()
+
     for line in text.splitlines():
 
         if line.startswith("MODEL"):
@@ -44,15 +49,24 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
         if saw_model and line.startswith("ENDMDL"):
             break
 
+
+        parts = line.split()
+
+
+        if line.startswith("HELIX"):
+            helixes.update(range(int(parts[5]), int(parts[8]) + 1))
+            print(parts[5],parts[8])
+        if line.startswith("SHEET"):
+            print(parts[5],parts[9])
+            sheets.update(range(int(parts[5]), int(parts[9]) + 1))
+
         if line.startswith("ATOM"):
-            parts = line.split()
             if parts[2] == type:
 
-
                 as_converted = as_map[parts[3]]
-                temp = [float(parts[5]), as_converted, parts[6], parts[7], parts[8], parts[4]]
+                temp = [int(parts[5]), as_converted, parts[6], parts[7], parts[8], parts[4],parts[1]]
                 distance.append(temp)
-        print(len(distance))
+
 
 
 
@@ -63,6 +77,13 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
         count_global=0
         count_local=0
         current_chain = d[5]
+        if d[0] in helixes:
+            d.append("H")
+        elif d[0] in sheets:
+            d.append("E")
+        else:
+            d.append("C")
+
 
 
         coordinates_node = [float(x) for x in [d[2],d [3], d[4]]]
@@ -83,7 +104,9 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
                     count_global += 1
 
 
-        print (f'chain {current_chain} | {d[1]} | {d[0]} | local {count_global} | global {count_local}')
+
+        print (f'{current_chain}\t{d[0]}\t{d[6]}\t{d[1]}\t{d[7]}\t{count_global}\t{count_local}')
+
 
 
 
