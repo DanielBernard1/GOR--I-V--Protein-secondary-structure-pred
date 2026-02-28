@@ -1,5 +1,4 @@
 import argparse
-import mariadb
 import mysql.connector
 
 db = mysql.connector.connect(
