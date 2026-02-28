@@ -49,9 +49,7 @@ def revcomp(dna: str) -> str: #: legt Variabel fest, -> Output der Methode
     comp = {"A": "T", "T": "A", "C": "G", "G": "C"}
     return "".join(comp[b] for b in reversed(dna))
 
-with open("MyOutput.txt", "w") as f:
-
-
+with open("MyFile.txt", "w") as f:
     for header, seq_2 in seq.items():
         orf_id = 0
         strand = ""
@@ -76,8 +74,8 @@ with open("MyOutput.txt", "w") as f:
                         end = j + 3
                         print(f"{header}{strand}_0")
                         print(sequence[start0:end])
-                        f.write(f"{header}{strand}_0\n")
-                        f.write(sequence[start0:end] + "\n")
+                        f.write(f"{header}{strand}_0_{orf_id}\n")
+                        f.write(sequence[start0:end]+ "\n")
                         orf_id += 1
                         start0 = None
 
@@ -91,8 +89,8 @@ with open("MyOutput.txt", "w") as f:
                         end = j + 3
                         print(f"{header}{strand}_1")
                         print(sequence[start1:end])
-                        f.write(f"{header}{strand}_0\n")
-                        f.write(sequence[start0:end] + "\n")
+                        f.write(f"{header}{strand}_1_{orf_id}\n")
+                        f.write(sequence[start1:end] + "\n")
                         orf_id += 1
                         start1 = None
 
@@ -106,8 +104,8 @@ with open("MyOutput.txt", "w") as f:
                         end = j + 3
                         print(f"{header}{strand}_2")
                         print(sequence[start2:end])
-                        f.write(f"{header}{strand}_0\n")
-                        f.write(sequence[start0:end] + "\n")
+                        f.write(f"{header}{strand}_2_{orf_id}\n")
+                        f.write(sequence[start2:end]+ "\n")
                         orf_id += 1
                         start2 = None
 
@@ -135,8 +133,8 @@ with open("MyOutput.txt", "w") as f:
                         end = j + 3
                         print(f"{header}{strand}_0")
                         print(rev[start0:end])
-                        f.write(f"{header}{strand}_0\n")
-                        f.write(rev[start0:end] + "\n")
+                        f.write(f"{header}{strand}_0_{orf_id}\n")
+                        f.write(rev[start0:end]+ "\n")
                         orf_id += 1
                         start0 = None
 
@@ -150,8 +148,8 @@ with open("MyOutput.txt", "w") as f:
                         end = j + 3
                         print(f"{header}{strand}_1")
                         print(rev[start1:end])
-                        f.write(f"{header}{strand}_0\n")
-                        f.write(rev[start1:end] + "\n")
+                        f.write(f"{header}{strand}_1_{orf_id}\n")
+                        f.write(rev[start1:end]+ "\n")
                         orf_id += 1
                         start1 = None
 
@@ -164,8 +162,8 @@ with open("MyOutput.txt", "w") as f:
                         end = j + 3
                         print(f"{header}{strand}_2")
                         print(rev[start2:end])
-                        f.write(f"{header}{strand}_0\n")
-                        f.write(rev[start2:end] + "\n")
+                        f.write(f"{header}{strand}_2_{orf_id}\n")
+                        f.write(rev[start2:end]+ "\n")
                         orf_id += 1
                         start2 = None
 

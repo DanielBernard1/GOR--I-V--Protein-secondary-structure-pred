@@ -108,9 +108,9 @@ if args.db:
 
 
     cursor.execute(f'''
-    SELECT seq_heeader, REGEXP_SUBSTR(seq, \'{output_list}\') AS matched
+    SELECT seq_header, REGEXP_SUBSTR(seq, \'{output_list}\') AS matched
 
-    FROM Sequenz;
+    FROM sequenz;
 
     ''')
     Output = cursor.fetchall()
