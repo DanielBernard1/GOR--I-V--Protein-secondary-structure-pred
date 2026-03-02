@@ -127,8 +127,7 @@ for id in args.id:
                     maxz = float(parts[8])
 
             if line.startswith("HELIX"):
-
-                chain = line[19]
+                chain = parts[4]
                 start = int(parts[5])
                 end = int(parts[8])
 
@@ -136,7 +135,7 @@ for id in args.id:
 
             if line.startswith("SHEET"):
 
-                chain = line[21]
+                chain = parts[4]
                 start = int(parts[6])
                 end = int(parts[9])
                 allsecstuk.update(chain + str(r) for r in range(start, end + 1))
