@@ -3,15 +3,15 @@ import mysql.connector
 
 db = mysql.connector.connect(
   host="mysql2-ext.bio.ifi.lmu.de",
-  port=3306,
+  port=3307,
   user="bioprakt15",
   password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
   database="bioprakt15"
 )
 
 parser = argparse.ArgumentParser(description="übergebene pdb_id mit alignments abgleichen")
-parser.add_argument("--pdb1", type=str, required=True, help="Pdb-ID 1")
-parser.add_argument("--pdb2", type=str, required=False, help="Pdb-Id 2 - optional")
+parser.add_argument("--pdb1", type=str, required=True, help="Pdb-ID 1") #Eingabe mit --pdb1
+parser.add_argument("--pdb2", type=str, required=False, help="Pdb-Id 2 - optional") #Eingabe mit --pdb2
 
 args = parser.parse_args()
 
@@ -19,9 +19,10 @@ pdb1 = args.pdb1
 pdb2 = args.pdb2
 
 cursor = db.cursor()
-if pdb1 and pdb2 is None:
+#pdb1 true und pdb2 nicht eingegeben
+if (pdb1) and (pdb2 is None):
     cursor.execute(f'''
-    SELECT * FROM alignment_sequences 
+    SELECT * FROM alignment_sequences #alle Spalten aus alignment_sequences
     WHERE alignment_id IN (
         SELECT alignment_id 
         FROM alignment_sequences 
@@ -32,15 +33,16 @@ if pdb1 and pdb2 is None:
     for row in cursor.fetchall():
         print(row)
 
+#2 Übergabeparameter
 else:
     cursor.execute(f'''
     SELECT * FROM alignment_sequences
     WHERE alignment_id IN (
     SELECT alignment_id
     FROM alignment_sequences
-    WHERE pdb_id IN ('{pdb1}','{pdb2}')
+    WHERE pdb_id IN ('{pdb1}','{pdb2}') #pdb_id entweder im pdb1 oder in pdb2
     GROUP BY alignment_id
-    HAVING COUNT(DISTINCT pdb_id) = 2
+    HAVING COUNT(DISTINCT pdb_id) = 2 #beide ids drin
     );
     ''')
     results = cursor.fetchall()
@@ -51,9 +53,10 @@ else:
 
 
     else:
+        #wollen beide alignment einzeln
         print("No pairwise alignments found, search single:")
         ids = [pdb1, pdb2]
-        for id in ids:
+        for id in ids: #einmal pdb1 einmal pdb2
             cursor.execute(f'''
             SELECT * FROM alignment_sequences 
             WHERE alignment_id IN (
@@ -67,4 +70,6 @@ else:
             for row in results2:
                 print(row)
 
+cursor.close()
+db.close()
 

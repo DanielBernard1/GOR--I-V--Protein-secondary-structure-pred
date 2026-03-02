@@ -62,13 +62,13 @@ counter = 0
 values = []
 
 for seq in ORFs.values():
-    if seq[-3:] in {"TAA", "TAG", "TGA"}:
-        length = (len(seq)/3) -1
+    if seq[-3:] in {"TAA", "TAG", "TGA"}: #war in letzten 3 Pos Stopcodon?
+        length = (len(seq)/3) -1 #wollen wir nicht mit drinnen haben
     else:
-        length = len(seq)/3
+        length = len(seq)/3 #ohen Stopcodon können wir ganze länge nehmen
     if length >= lower and length <= upper:
-        counter+=1
-        values.append(length)
+        counter+=1 # wie viele Orfs in diesem Bereich
+        values.append(length) # welche Länge haben sie --> hier unnötig eigtl, dachte man muss die Längen nochmal untereinander vergleichen
 
 print(counter)
 
@@ -80,6 +80,6 @@ if histogram:
         plt.hist(values, bins=edges, edgecolor="black")
         plt.xlabel("Protein length (AA)")
         plt.ylabel("Number of ORFs")
-        plt.savefig(args.histogram)
+        plt.savefig(args.histogram) #name aus kommandline
         plt.close()
 
