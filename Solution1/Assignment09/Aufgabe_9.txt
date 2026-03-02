@@ -1,0 +1,19 @@
+1) 
+ChIP-seq, ausgeschrieben Chromatin Immunoprecipitation sequencing ist ein Prozess wo DNA-Fragmente, die an ein bestimmtes Protein (z.B. Transkriptionsfaktor oder Histon-Marke) gebunden sind, mit einem Antikörper herausgefischt werden und anschließend sequenziert werden, um Bindestellen im Genom zu finden.
+
+RNA-seq: Gesamte RNA wird in cDNA umgeschrieben und sequenziert, um später Genexpression/Transkripte messen zu können und z.B. Spleißvarianten zu erkennen.
+
+
+2) 
+K562 (167 verschiedene Antikörper)
+
+3)
+
+NFKB: Nuclear Factor kappa-B, ein Transkriptionsfaktor-Komplex, Immun-/Entzündungsantworten und Signaltransduktion.
+
+Pol2: Steht für die RNA Polymerase II, welche DNA in unter anderem mRNA transkribiert.
+
+H3K27me3: Trimethylierung von Lysin 27 am Histon H3 
+
+
+
