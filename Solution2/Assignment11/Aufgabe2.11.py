@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 import urllib
 import urllib.request
-
+import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -17,7 +17,7 @@ parser.add_argument("--id", required=True)
 parser.add_argument("--distance", required=True)
 parser.add_argument("--type", required=True)
 parser.add_argument("--length", required=True)
-parser.add_argument("--contactmatrix", required=False)
+parser.add_argument("-contactmatrix", action='store_true')
 args = parser.parse_args()
 
 id = args.id
@@ -38,41 +38,49 @@ saw_model = False
 
 with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r:
     text = r.read().decode("utf-8")
+    lines = text.splitlines()
     distance = []
 
     helixes = set()
     sheets = set()
 
-    for line in text.splitlines():
+    for line in lines:
 
-        if line.startswith("MODEL"):
+        if line[0:5].strip()== "MODEL":
             saw_model = True
             in_first_model = True
             continue
-        if saw_model and line.startswith("ENDMDL"):
+        if saw_model and line[0:5].strip() == "ENDMDL":
             break
 
 
         parts = line.split()
 
 
-        if line.startswith("HELIX"):
-            helixes.update(range(int(parts[5]), int(parts[8]) + 1))
+        if line[0:5].strip() == "HELIX":
+            start = int(line[21:25].strip())
+            end = int(line[33:37].strip())
+            helixes.update(range(start, end + 1))
 
-        if line.startswith("SHEET"):
+        if line[0:5].strip() == "SHEET":
+            start = int(line[22:26].strip())
+            end = int(line[33:37].strip())
+            sheets.update(range(start, end + 1))
 
-            if isinstance(parts[5], int):
-                sheets.update(range(int(parts[5]), int(parts[9]) + 1))
-            if isinstance(parts[6], int):
-                sheets.update(range(int(parts[6]), int(parts[9]) + 1))
-
-        if line.startswith("ATOM"):
+        if line[0:5].strip() == "ATOM":
+            atom_name = line[12:16].strip()
+            res_name = line[17:20].strip()
+            chain_id = line[21].strip()
+            res_seq = int(line[22:26].strip())
+            x = float(line[30:38].strip())
+            y = float(line[38:46].strip())
+            z = float(line[46:54].strip())
+            atom_id = line[6:11].strip()
             if parts[2] == type:
-
-                as_converted = as_map[parts[3]]
-                temp = [int(parts[5]), as_converted, parts[6], parts[7], parts[8], parts[4],parts[1]]
+                as_converted = as_map[res_name]
+                #Residue, Mapping, X, Y, Z, Chain, Atom-ID
+                temp = [res_seq, as_converted, x, y, z, chain_id, atom_id]
                 distance.append(temp)
-
 
 
 
@@ -116,6 +124,9 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
 
         print (f'{current_chain}\t{d[0]}\t{d[6]}\t{d[1]}\t{d[7]}\t{count_global}\t{count_local}')
 
+
+
+
 if contactmatrix is not None:
     n = len(distance)
     C = [[0] * n for _ in range(n)]
@@ -125,9 +136,13 @@ if contactmatrix is not None:
             if [distance[i][0], distance[j][0]] in interactions or [distance[j][0], distance[i][0]] in interactions:
                 C[i][j] = 1
 
-    for i in range(n):
-        for j in range(n):
-            print(C[j][i])
+    matrix = np.array(C)
+    plt.figure(figsize=(10, 10))
+    plt.imshow(matrix, cmap='binary', interpolation='none')
+    plt.title("Secondary structure interactions plot")
+    plt.xlabel("xAminoacids")
+    plt.ylabel("yAminoacids")
+    plt.show()
 
     if contactmatrix is not None:
         with open(contactmatrix, "w", newline="\n") as f:
