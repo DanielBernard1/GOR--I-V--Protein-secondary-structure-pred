@@ -37,7 +37,7 @@ with open(file_path, "r") as f:
             kws = line[5:].rstrip(".").split(";")
             data["KW"].extend(kw.strip() for kw in kws)
         elif line.startswith("//"):
-            data["SQ"] = sequence
+            data["SQ"] = sequence 
             appendToSequence = False
             if data["SQ"] != "":
                 #add sequence to whole DB // TODO

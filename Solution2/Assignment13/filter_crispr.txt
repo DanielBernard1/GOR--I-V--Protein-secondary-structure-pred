@@ -1,10 +1,10 @@
 https://bowtie-bio.sourceforge.net/manual.shtml#the--v-alignment-mode
 https://bowtie-bio.sourceforge.net/manual.shtml#options
 
-/mnt/extstud/praktikum/bioprakt-ws25/Software/bowtie/bowtie-1.3.1/bowtie -v 3 -f -S --all -x hg19 /mnt/extstud/praktikum/bioprakt-ws25/progprakt-02/Solution1/Assignment13/E_Coli_Crispr.fasta  E_Coli.sam
+/mnt/extstud/praktikum/bioprakt-ws25/Software/bowtie/bowtie-1.3.1/bowtie -v 3 -f -S --all -x hg19 /mnt/extstud/praktikum/bioprakt-ws25/progprakt-15/Solution2/Assignment13/E_Coli_Crispr.fasta  E_Coli.sam
 
 Das selbe natürlich mit:
-Helicobacter_Crispr.fasta  
+Helico_Crispr.fasta  
 Pseudomonas_Crispr.fasta
 
 
