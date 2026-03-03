@@ -9,7 +9,7 @@ db = mysql.connector.connect(
 cursor = db.cursor()
 
 
-
+#sd
 cursor.execute(f'''
 SELECT pdb_id
 FROM alignments

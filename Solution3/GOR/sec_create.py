@@ -6,7 +6,7 @@ import sys
 import urllib.request
 import mysql.connector
 import os
-
+#dd
 def dssp_reader(id):
     dssp_conversion_map = {
         "H": "H", "G": "H", "I": "H",  # Helix
