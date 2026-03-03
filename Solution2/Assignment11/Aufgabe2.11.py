@@ -54,7 +54,7 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
             break
 
 
-        parts = line.split()
+
 
 
         if line[0:5].strip() == "HELIX":
@@ -76,7 +76,7 @@ with urllib.request.urlopen("https://files.rcsb.org/download/"+ id +".pdb") as r
             y = float(line[38:46].strip())
             z = float(line[46:54].strip())
             atom_id = line[6:11].strip()
-            if parts[2] == type:
+            if line[12:16].strip() == type:
                 as_converted = as_map[res_name]
                 #Residue, Mapping, X, Y, Z, Chain, Atom-ID
                 temp = [res_seq, as_converted, x, y, z, chain_id, atom_id]
