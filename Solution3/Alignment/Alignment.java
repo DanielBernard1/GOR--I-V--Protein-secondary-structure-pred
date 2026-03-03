@@ -1,10 +1,6 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Alignment {
@@ -19,44 +15,51 @@ public class Alignment {
 
         int go = -12; //gap open
         int ge = -1; //gap extend
-        boolean useNW = false; //--nw
+        boolean useNW = false;
         boolean check = false;
 
         for(int i=0; i < args.length; i++){
             String a = args[i];
             if(a.equals("--nw")){useNW = true; continue;}
             if(a.equals("--check")){check = true; continue;}
-            if(a.equals("--go")){go = Integer.parseInt(args[i+1]); continue;}
-            if(a.equals("--ge")){ge = Integer.parseInt(args[i+1]); continue;}
-            if(a.equals("--dpmatrices")){modeStr = args[i+1]; continue;}
+            if(a.equals("--go")){go = Integer.parseInt(args[++i]); continue;}
+            if(a.equals("--ge")){ge = Integer.parseInt(args[++i]); continue;}
+            if(a.equals("--dpmatrices")){dpDir = args[++i]; continue;}
             //mandatory
-            if(a.equals("--pairs")){pairsPath = args[i+1]; continue;}
-            if(a.equals("--seqlibs")){seqlibPath = args[i+1]; continue;}
-            if(a.equals("-m")){matrixName = args[i+1]; continue;} //soll das wirklich nur mit einem Strich angegeben werden
-            if(a.equals("--mode")){modeStr = args[i+1]; continue;}
-            if(a.equals("--format")){formatStr = args[i+1]; continue;}
+            if(a.equals("--pairs")){pairsPath = args[++i]; continue;}
+            if(a.equals("--seqlib")){seqlibPath = args[++i]; continue;}
+            if(a.equals("-m")){matrixName = args[++i]; continue;} //soll das wirklich nur mit einem Strich angegeben werden
+            if(a.equals("--mode")){modeStr = args[++i]; continue;}
+            if(a.equals("--format")){formatStr = args[++i]; continue;}
         }
 
         AlignmentType mode = parseMode(modeStr);
-
         Map<String, String> seqlib = readSeqLib(seqlibPath);
-        List<String[]> pairs = readPairs(pairsPath);
-        //String seq1 = seqlib.get();
+        int gap = go; //--nw falls = true
+        SubstitutionMatrix m1 = new SubstitutionMatrix();
+
+        readPairs(pairsPath, seqlib, mode, gap, m1);
     }
 
-    private static List<String[]> readPairs(String path) throws Exception{
-        List<String[]> list = new ArrayList<>();
+    private static void readPairs(String path, Map<String, String> seqlib, AlignmentType mode, int gap, SubstitutionMatrix matrix) throws Exception{
         BufferedReader br = new BufferedReader(new FileReader(path));
         String line;
+
         while ((line = br.readLine())!= null){
             line = line.trim();
             if(line.isEmpty()){continue;}
-            String[] parts = line.split("\t"); //woran soll ich splitten?
-            list.add(new String[]{parts[0], parts[1]});
+            String[] parts = line.split("\\s+"); //soll auf mehrere spaces, taps ud leerzeichen splitten
+            String id1 = parts[0];
+            String id2 = parts[1];
+            String seq1 = seqlib.get(id1);
+            String seq2 = seqlib.get(id2);
+
+            Scoring s = new Scoring(seq1, seq2, matrix, gap, mode);
+            finalAlignment result = s.result();
         }
         br.close();
-        return list;
     }
+
 
     private static Map<String, String> readSeqLib(String path) throws Exception {
         Map<String, String> map = new HashMap<>();
