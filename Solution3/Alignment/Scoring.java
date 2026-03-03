@@ -14,5 +14,13 @@ public class Scoring {
     }
 
     public finalAlignment result() {
+        return null;
+    }
+    private String[] backtrack_NW(int[][] scoring_matrix){
+        String ali_1 = "";
+        String ali_2 = "";
+
+
+        return new String[]{ali_1, ali_2};
     }
 }
