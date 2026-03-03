@@ -6,6 +6,7 @@ from random import *
 #Output:
     # Sequenzname
     # erzeugt eine Sequenz mit bestimmten gc gehalt und länge
+"""
 class FASTAreader:
     def read_fasta_function(self, filepath):
         self.motifs = {}
@@ -31,6 +32,7 @@ class FASTAreader:
         return self.motifs
 
 #argument parsing
+
 parser = argparse.ArgumentParser(description="Generates a random sequence with a given gc content")
 parser.add_argument("--fasta", type=str, required=True, help="Path to FASTA file")
 parser.add_argument("--length", type=int, required=True, help="Length of the sequence")
@@ -47,13 +49,13 @@ with open(file_path, "r") as f:
     seq = reader.read_fasta_function(f)
 
 
-def gc_content_HefeChr1(seq):
-    gc = 0
-    for i in seq:
-        if i == "G" or i == "C":
-            gc += 1
-    return gc / len(seq)
-
+#def gc_content_HefeChr1(seq):
+#    gc = 0
+#    for i in seq:
+#        if i == "G" or i == "C":
+#            gc += 1
+#    return gc / len(seq)
+"""
 
 parser = argparse.ArgumentParser(description="Generates a random sequence with a given gc content")
 parser.add_argument("--length", type=int, required=True, help="Length of the sequence")
@@ -64,7 +66,8 @@ args = parser.parse_args()
 
 length = args.length
 #gc = int(args.gc * length)
-gc = gc_content_HefeChr1(seq)*length
+#gc = gc_content_HefeChr1(seq)*length
+gc = args.gc * length
 name = args.name
 
 random_sequence = ""
@@ -75,9 +78,11 @@ for i in range(length):
     else:
         random_sequence += choice(["A", "T"])
 
-seq = list(random_sequence)
-shuffle(seq)
-random_sequence = "".join(seq)
+seq = list(random_sequence)# erstellen Liste um sie shuffeln zu können
+shuffle(seq) #müssen shuffeln weil sonst immer erst G und Cs kommen und dann A und Ts
+random_sequence = "".join(seq) #"" kein Ausgewählter Separator also ,
 
 print(f">{name}")
 print(random_sequence)
+
+#Problem wo ich stecken geblieben bin, weil ich keine Zeit mehr hatte ist den Gc kontent des hefe chromosoms zu nehmen lösung: Googlen und in Kommandozeile eingeben
