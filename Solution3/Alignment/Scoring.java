@@ -13,6 +13,7 @@ public class Scoring{
         this.mode = mode;
     }
 
+
     protected int diaScore (int i, int j){
         char x = seq1.charAt(i-1);
         char y = seq2.charAt(j-1);
@@ -46,31 +47,15 @@ public class Scoring{
 
         return new String[]{ali_1, ali_2};
     }
-    //Recursiv
+
     public int scoreRec(){
-        return f(seq1.length(), seq2.length());
+        return new Recursion(seq1, seq2, matrix, gap, mode).score();
     }
 
-    private int f(int i, int j){
-        if (i==0 && j ==0){
-            return 0;
-        }
-        if(i==0){
-            return f(0, j-1) + gapScore();
-        }
-        if(j==0){
-            return f(i-1, 0) + gapScore();
-        }
-
-        int diag = f(i-1,j-1) + diaScore(i,j);
-        int up = f(i-1, j) + gapScore();
-        int left = f(i, j-1) + gapScore();
-
-        int Score1 = Math.max(diag, up);
-        return Math.max(Score1, left);
+    public int scoreDp(){
+        return new DynamicProgramming(seq1, seq2, matrix, gap, mode).score();
     }
 
-    //
     public int scoreDP(){
         int[][] F = new int[seq1.length()+1][seq2.length()+1];
         int bestLocal = 0;

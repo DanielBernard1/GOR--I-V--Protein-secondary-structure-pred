@@ -25,5 +25,7 @@ public class Recursion extends Scoring{
         return Math.max(Score1, left);
     }
 
-
+    public int score(){
+        return f(seq1.length(), seq2.length());
+    }
 }
