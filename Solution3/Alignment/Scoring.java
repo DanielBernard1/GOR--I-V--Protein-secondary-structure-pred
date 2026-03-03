@@ -13,4 +13,7 @@ public class Scoring {
         this.mode = mode;
 
     }
+    public finalAlignment result(){
+        return new finalAlignment(result().getAlign1(), result().getAlign2(), result().getScore());
+    }
 }
