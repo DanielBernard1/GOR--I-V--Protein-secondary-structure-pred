@@ -1,14 +1,26 @@
 import java.lang.Math;
-class NMWDP extends Scoring{
+class Needleman_Wunsch extends Scoring{
 
     private final int[][] scoring_matrix;
-    private boolean subMatrix;
-    public NMWDP(String sequence_1, String sequence_2, boolean subMatrix){
-        super(sequence_1, sequence_2, subMatrix);
+
+    public Needleman_Wunsch(String sequence_1, String sequence_2, int match_score, int mismatch_penalty, int gap_penalty) {
+        super(sequence_1, sequence_2, match_score, mismatch_penalty, gap_penalty);
+        scoring_matrix = new int[sequence_1.length() + 1][sequence_2.length() + 1];
+        submatrix = false;
+    }
+
+    public Needleman_Wunsch(String sequence_1, String sequence_2, int gap_score, boolean submatrix) {
+        super(sequence_1, sequence_2, gap_score, submatrix);
         scoring_matrix = new int[sequence_1.length() + 1][sequence_2.length() + 1];
     }
 
-    public int[][] calculate_alignment(){
+    public Needleman_Wunsch(String sequence_1, String sequence_2, boolean submatrix){
+        super(sequence_1, sequence_2, submatrix);
+        scoring_matrix = new int[sequence_1.length() + 1][sequence_2.length() + 1];
+    }
+
+
+    public int[][] calculate_alignment_matrix(){
         int alignment_score = 0;
         for (int i = 0; i < scoring_matrix.length; i++) {
             scoring_matrix[i][0] = i * gap_penalty;
@@ -19,7 +31,7 @@ class NMWDP extends Scoring{
         for (int i = 1; i < scoring_matrix.length; i++) {
             for (int j = 1; j < scoring_matrix[0].length; j++) {
                 int match;
-                if (subMatrix){
+                if (submatrix){
                     match = substitutionMatrix.getScore(sequence_1.charAt(i-1), sequence_2.charAt(j-1));
                 }
                 else{
