@@ -5,6 +5,7 @@ public class Scoring {
     protected int mismatch_penalty;
     protected int gap_penalty;
     protected boolean submatrix;
+    protected final SubstitutionMatrix substitutionMatrix  = new SubstitutionMatrix();
     public Scoring(String sequence_1, String sequence_2, int match_score, int mismatch_penalty, int gap_penalty){
         this.sequence_1 = sequence_1;
         this.sequence_2 = sequence_2;

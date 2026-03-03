@@ -1,6 +1,6 @@
 import java.lang.Math;
 class NMWDP extends Scoring{
-    private final SubstitutionMatrix substitutionMatrix = new SubstitutionMatrix();
+
     private final int[][] scoring_matrix;
     private boolean subMatrix;
     public NMWDP(String sequence_1, String sequence_2, boolean subMatrix){
