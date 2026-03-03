@@ -21,7 +21,6 @@ class Needleman_Wunsch extends Scoring{
 
 
     public int[][] calculate_alignment_matrix(){
-        int alignment_score = 0;
         for (int i = 0; i < scoring_matrix.length; i++) {
             scoring_matrix[i][0] = i * gap_penalty;
         }
