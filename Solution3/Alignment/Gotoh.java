@@ -5,7 +5,7 @@ public class Gotoh extends Scoring{
         super(sequence_1, sequence_2, submatrix, gap, mode);
     }
 
-    public static double free_shift(String seq1, String seq2, int gapOpen, int gapExtend) {
+    public static double FS_Matrices(String seq1, String seq2, int gapOpen, int gapExtend) {
         int n = seq1.length();
         int m = seq2.length();
 
@@ -30,9 +30,7 @@ public class Gotoh extends Scoring{
                 int score = matrix.getScore(seq1.charAt(i), seq2.charAt(j));
 
                 M[i][j] = Math.max(Math.max(M[i - 1][j - 1], Ix[i - 1][j - 1]), Iy[i - 1][j - 1]) + score;
-
                 Ix[i][j] = Math.max(M[i - 1][j] - gapOpen, Ix[i - 1][j] - gapExtend);
-
                 Iy[i][j] = Math.max(M[i][j - 1] - gapOpen, Iy[i][j - 1] - gapExtend);
             }
         }
@@ -46,6 +44,7 @@ public class Gotoh extends Scoring{
 
         return maxScore;
     }
+
 
 
 }

@@ -12,8 +12,6 @@ public class Scoring{
         this.gap = gap;
         this.mode = mode;
     }
-
-
     protected int diaScore (int i, int j){
         char x = seq1.charAt(i-1);
         char y = seq2.charAt(j-1);
@@ -41,39 +39,22 @@ public class Scoring{
     public finalAlignment result() {
         return null;
     }
-    private String[] backtrack_NW(int[][] scoring_matrix){
-        String ali_1 = "";
-        String ali_2 = "";
 
-        return new String[]{ali_1, ali_2};
-    }
-
-    public int scoreRec(){
+    public int Rec_score(){
         return new Recursion(seq1, seq2, matrix, gap, mode).score();
     }
 
-    public int scoreDp(){
-        return new DynamicProgramming(seq1, seq2, matrix, gap, mode).score();
-    }
-
-    public int scoreDP(){
-        int[][] F = new int[seq1.length()+1][seq2.length()+1];
-        int bestLocal = 0;
-        if(mode.isLocal()){
-            return bestLocal;
+    public int DP_score(){
+        DynamicProgramming dynamicProgramming = new DynamicProgramming(seq1, seq2, matrix, gap, mode);
+        if (mode.isGlobal()){
+            return dynamicProgramming.NW_score();
         }
-
-        if(mode.isFreeshift()) {
-            int best = Integer.MIN_VALUE;
-            for(int i = 0; i <= seq1.length(); i++){
-                best = Math.max(best, F[i][seq2.length()]);
-            }
-            for(int j = 0; j <= seq2.length(); j++){
-                best = Math.max(best, F[seq1.length()][j]);
-            }
+        if (mode.isLocal()){
+            return dynamicProgramming.SW_score();
         }
-
-        //global
-        return F[seq1.length()][seq2.length()];
+        if (mode.isFreeshift()) {
+            return dynamicProgramming.FS_score();
+        }
+        return Integer.MIN_VALUE;
     }
 }
