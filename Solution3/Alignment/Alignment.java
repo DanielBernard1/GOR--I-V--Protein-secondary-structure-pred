@@ -77,12 +77,11 @@ public class Alignment {
     private static AlignmentType parseMode(String s) {
         s = s.toLowerCase();
         if (s.equals("global")){
-            return AlignmentType.Global;
+            return AlignmentType.global;
         }
         if(s.equals("local")){
-            return AlignmentType.Local;
+            return AlignmentType.local;
         }
-        return AlignmentType.Freeshift; //darf ich so
-
+        return AlignmentType.freeshift; //darf ich so
     }
 }
