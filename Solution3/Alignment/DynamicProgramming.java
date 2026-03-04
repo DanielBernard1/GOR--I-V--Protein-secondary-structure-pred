@@ -34,7 +34,8 @@ public class DynamicProgramming extends Scoring {
 
     public String[] NW_alignment() {
         calculate_alignment_matrix_NW();
-        String[] alignments = new String[]{"", ""};
+        StringBuilder ali1 = new StringBuilder();
+        StringBuilder ali2 = new StringBuilder();
         int i = seq1.length();
         int j = seq2.length();
         while (i > 0 && j > 0) {
@@ -44,32 +45,32 @@ public class DynamicProgramming extends Scoring {
             int left = scoring_matrix[i][j - 1];
 
             if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
-                alignments[0] = seq1.charAt(i - 1) + alignments[0];
-                alignments[1] = seq2.charAt(j - 1) + alignments[1];
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, seq2.charAt(j - 1));
                 i--; j--;
             }
             else if (current == up + gap){
-                alignments[0] = seq1.charAt(i - 1) + alignments[0];
-                alignments[1] = "-" + alignments[1];
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, "-");
                 i--;
             }
             else if (current == left + gap){
-                alignments[0] = "-" + alignments[0];
-                alignments[1] = seq2.charAt(j - 1) + alignments[1];
+                ali1.insert(0, "-");
+                ali2.insert(0, seq2.charAt(j - 1));
                 j--;
             }
         }
         while (i > 0) {
-            alignments[0] = seq1.charAt(i - 1) + alignments[0];
-            alignments[1] = "-" + alignments[1];
+            ali1.insert(0, seq1.charAt(i - 1));
+            ali2.insert(0, "-");
             i--;
         }
         while (j > 0) {
-            alignments[0] = "-" + alignments[0];
-            alignments[1] = seq2.charAt(j - 1) + alignments[1];
+            ali1.insert(0, "-");
+            ali2.insert(0, seq2.charAt(j - 1));
             j--;
         }
-        return alignments;
+        return new String[]{ali1.toString(), ali2.toString()};
     }
 
     public void calculate_alignment_matrix_SW() {
@@ -111,7 +112,8 @@ public class DynamicProgramming extends Scoring {
 
     public String[] SW_alignment() {
         int[] coords = find_max_coords();
-        String[] alignments = new String[]{"", ""};
+        StringBuilder ali1 = new StringBuilder();
+        StringBuilder ali2 = new StringBuilder();
         int i = coords[0];
         int j = coords[1];
         while (i > 0 && j > 0 && scoring_matrix[i][j] > 0) {
@@ -121,22 +123,22 @@ public class DynamicProgramming extends Scoring {
             int left = scoring_matrix[i][j - 1];
 
             if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
-                alignments[0] = seq1.charAt(i - 1) + alignments[0];
-                alignments[1] = seq2.charAt(j - 1) + alignments[1];
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, seq2.charAt(j - 1));
                 i--; j--;
             }
             else if (current == up + gap){
-                alignments[0] = seq1.charAt(i - 1) + alignments[0];
-                alignments[1] = "-" + alignments[1];
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, "-");
                 i--;
             }
             else if (current == left + gap){
-                alignments[0] = "-" + alignments[0];
-                alignments[1] = seq2.charAt(j - 1) + alignments[1];
+                ali1.insert(0, "-");
+                ali2.insert(0, seq2.charAt(j - 1));
                 j--;
             }
         }
-        return alignments;
+        return new String[]{ali1.toString(), ali2.toString()};
     }
 
     public void calculate_alignment_matrix_FS() {
@@ -184,7 +186,8 @@ public class DynamicProgramming extends Scoring {
     }
 
     public String[] FS_alignment() {
-        String[] alignments = new String[]{"", ""};
+        StringBuilder ali1 = new StringBuilder();
+        StringBuilder ali2 = new StringBuilder();
         int[] coords = fs_coords();
         int i = coords[0];
         int j = coords[1];
@@ -193,12 +196,12 @@ public class DynamicProgramming extends Scoring {
         int lastCol = scoring_matrix[0].length - 1;
 
         for (int k = lastRow; k > i; k--) {
-            alignments[0] = seq1.charAt(k - 1) + alignments[0];
-            alignments[1] = "-" + alignments[1];
+            ali1.insert(0, seq1.charAt(k - 1));
+            ali2.insert(0, "-");
         }
         for (int k = lastCol; k > j; k--) {
-            alignments[0] = "-" + alignments[0];
-            alignments[1] = seq2.charAt(k - 1) + alignments[1];
+            ali1 = new StringBuilder("-" + ali2);
+            ali2.insert(0, seq2.charAt(k - 1));
         }
         while (i > 0 && j > 0) {
             int current = scoring_matrix[i][j];
@@ -207,31 +210,31 @@ public class DynamicProgramming extends Scoring {
             int left = scoring_matrix[i][j - 1];
 
             if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
-                alignments[0] = seq1.charAt(i - 1) + alignments[0];
-                alignments[1] = seq2.charAt(j - 1) + alignments[1];
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, seq2.charAt(j - 1));
                 i--; j--;
             }
             else if (current == up + gap){
-                alignments[0] = seq1.charAt(i - 1) + alignments[0];
-                alignments[1] = "-" + alignments[1];
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, "-");
                 i--;
             }
             else if (current == left + gap){
-                alignments[0] = "-" + alignments[0];
-                alignments[1] = seq2.charAt(j - 1) + alignments[1];
+                ali1.insert(0, "-");
+                ali2.insert(0, seq2.charAt(j - 1));
                 j--;
             }
         }
         while (i > 0) {
-            alignments[0] = seq1.charAt(i - 1) + alignments[0];
-            alignments[1] = "-" + alignments[1];
+            ali1.insert(0, seq1.charAt(i - 1));
+            ali2.insert(0, "-");
             i--;
         }
         while (j > 0) {
-            alignments[0] = "-" + alignments[0];
-            alignments[1] = seq2.charAt(j - 1) + alignments[1];
+            ali1.insert(0, "-");
+            ali2.insert(0, seq2.charAt(j - 1));
             j--;
         }
-        return alignments;
+        return new String[]{ali1.toString(), ali2.toString()};
     }
 }
