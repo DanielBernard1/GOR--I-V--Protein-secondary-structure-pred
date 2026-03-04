@@ -1,40 +1,45 @@
+import java.io.*;
+import java.util.*;
 public class SubstitutionMatrix {
-    private static final String index = "ARNDCQEGHILKMFPSTWYV";
-    private static int[][] submatrix = {
-           // A   R   N   D   C   Q   E   G   H   I   L   K   M   F   P   S   T   W   Y   V
-            { 4, -1, -2, -2,  0, -1, -1,  0, -2, -1, -1, -1, -1, -2, -1,  1,  0, -3, -2,  0}, // A
-            {-1,  5,  0, -2, -3,  1,  0, -2,  0, -3, -2,  2, -1, -3, -2, -1, -1, -3, -2, -3}, // R
-            {-2,  0,  6,  1, -3,  0,  0,  0,  1, -3, -3,  0, -2, -3, -2,  1,  0, -4, -2, -3}, // N
-            {-2, -2,  1,  6, -3,  0,  2, -1, -1, -3, -4, -1, -3, -3, -1,  0, -1, -4, -3, -3}, // D
-            { 0, -3, -3, -3,  9, -3, -4, -3, -3, -1, -1, -3, -1, -2, -3, -1, -1, -2, -2, -1}, // C
-            {-1,  1,  0,  0,  3,  5,  2, -2,  0, -3, -3,  1,  0, -3, -1,  0, -1, -2, -1, -2}, // Q
-            {-1,  0,  0,  2, -4,  2,  5, -2,  0, -3, -3,  1, -2, -3, -1,  0, -1, -3, -2, -2}, // E
-            { 0, -2,  0, -1, -3, -2, -2,  6, -2, -4, -4, -2, -3, -3, -2,  0, -2, -2, -3, -3}, // G
-            {-2,  0,  1, -1, -3,  0,  0, -2,  8, -3, -3, -1, -2, -1, -2, -1, -2, -2,  2, -3}, // H
-            {-1, -3, -3, -3, -1, -3, -3, -4, -3,  4,  2, -3,  1,  0, -3, -2, -1, -3, -1,  3}, // I
-            {-1, -2, -3, -4, -1, -2, -3, -4, -3,  2,  4, -2,  2,  0, -3, -2, -1, -2, -1,  1}, // L
-            {-1,  2,  0, -1, -3,  1,  1, -2, -1, -3, -2,  5, -1, -3, -1,  0, -1, -3, -2, -2}, // K
-            {-1, -1, -2, -3, -1,  0, -2, -3, -2,  1,  2, -1,  5,  0, -2, -1, -1, -1, -1,  1}, // M
-            {-2, -3, -3, -3, -2, -3, -3, -3, -1,  0,  0, -3,  0,  6, -4, -2, -2,  1,  3, -1}, // F
-            {-1, -2, -2, -1, -3, -1, -1, -2, -2, -3, -3, -1, -2, -4,  7, -1, -1, -4, -3, -2}, // P
-            { 1, -1,  1,  0, -1,  0,  0,  0, -1, -2, -2,  0, -1, -2, -1,  4,  1, -3, -2, -2}, // S
-            { 0, -1,  0, -1, -1, -1, -1, -2, -2, -1, -1, -1, -1, -2, -1,  1,  5, -2, -2,  0}, // T
-            {-3, -3, -4, -4, -2, -2, -3, -2, -2, -3, -2, -3, -1,  1, -4, -3, -2, 11,  2, -3}, // W
-            {-2, -2, -2, -3, -2, -1, -2, -3,  2, -1, -1, -2, -1,  3, -3, -2, -2,  2,  7, -1}, // V
-            { 0, -3, -3, -3, -1, -2, -2, -3, -3,  3,  1, -2,  1, -1, -2, -2,  0, -3, -1,  4}  // Y
-            };
-    public int getScore(char a, char b){
-        return submatrix[index.indexOf(a)][index.indexOf(b)];
+    private String index = "ARNDCQEGHILKMFPSTWYV";
+    private int[][] submatrix = new int[20][20];
+
+    public SubstitutionMatrix(String filepath) throws IOException{
+        generate_matrix(filepath);
     }
-    private static void generate_matrix(String line){
-        submatrix = new int[20][20];
-        for (int i = 0; i < ; i++) {
-            for (int j = 0; j < ; j++) {
-                submatrix[i][j] = 4;  //some val
-                submatrix[j][i] = 4;  //same val
+
+    private void generate_matrix(String filepath) throws IOException {
+        List<int[]> rows = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+
+                if (line.startsWith("MATRIX")) {
+                    String[] parts = line.trim().split("\\s+");
+
+                    int[] rowValues = new int[parts.length - 1];
+                    for (int i = 1; i < parts.length; i++) {
+                        String val = parts[i].replaceAll("\\.$", "");
+                        rowValues[i - 1] = (int)(Double.parseDouble(val) * 100) ;
+                    }
+                    rows.add(rowValues);
+                }
+                else if (line.startsWith("ROWINDEX")){
+                    index = line.split("\\s+")[1];
+                }
             }
         }
-
+        for (int i = 0; i < rows.size(); i++) {
+            int[] row = rows.get(i);
+            for (int j = 0; j < row.length; j++) {
+                submatrix[i][j] = row[j];
+                submatrix[j][i] = row[j];
+            }
+        }
+    }
+    public int getScore(char a, char b){
+        return submatrix[index.indexOf(a)][index.indexOf(b)];
     }
 
 }

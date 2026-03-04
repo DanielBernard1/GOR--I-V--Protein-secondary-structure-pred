@@ -11,15 +11,15 @@ public class Recursion extends Scoring{
             return 0;
         }
         if(i==0){
-            return f(0, j-1) + gapScore();
+            return f(0, j-1) + gap;
         }
         if(j==0){
-            return f(i-1, 0) + gapScore();
+            return f(i-1, 0) + gap;
         }
 
         int diag = f(i-1,j-1) + diaScore(i,j);
-        int up = f(i-1, j) + gapScore();
-        int left = f(i, j-1) + gapScore();
+        int up = f(i-1, j) + gap;
+        int left = f(i, j-1) + gap;
 
         int Score1 = Math.max(diag, up);
         return Math.max(Score1, left);

@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class DynamicProgramming extends Scoring {
-    private static int[][] scoring_matrix;
+    private int[][] scoring_matrix;
     public DynamicProgramming(String seq1, String seq2, SubstitutionMatrix matrix, int gap, AlignmentType mode) {
         super(seq1, seq2, matrix, gap, mode);
         scoring_matrix = new int[seq1.length() + 1][seq2.length() + 1];
@@ -16,7 +16,7 @@ public class DynamicProgramming extends Scoring {
         for (int i = 1; i < scoring_matrix.length; i++) {
             for (int j = 1; j < scoring_matrix[0].length; j++) {
 
-                int match = matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                int match = scoring_matrix[i - 1][j - 1] + matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
                 int delete = scoring_matrix[i - 1][j] + gap;
                 int insert = scoring_matrix[i][j - 1] + gap;
 
@@ -42,7 +42,7 @@ public class DynamicProgramming extends Scoring {
         for (int i = 1; i < scoring_matrix.length; i++) {
             for (int j = 1; j < scoring_matrix[0].length; j++) {
 
-                int match = matrix.getScore(seq1.charAt(i-1), seq2.charAt(j-1));
+                int match = scoring_matrix[i - 1][j - 1] + matrix.getScore(seq1.charAt(i-1), seq2.charAt(j-1));
                 int delete = scoring_matrix[i-1][j] + gap;
                 int insert = scoring_matrix[i][j-1] + gap;
 
@@ -77,7 +77,7 @@ public class DynamicProgramming extends Scoring {
         for (int i = 1; i < scoring_matrix.length; i++) {
             for (int j = 1; j < scoring_matrix[0].length; j++) {
 
-                int match = matrix.getScore(seq1.charAt(i-1), seq2.charAt(j-1));
+                int match = scoring_matrix[i - 1][j - 1] + matrix.getScore(seq1.charAt(i-1), seq2.charAt(j-1));
                 int delete = scoring_matrix[i-1][j] + gap;
                 int insert = scoring_matrix[i][j-1] + gap;
 

@@ -36,7 +36,7 @@ public class Alignment {
         AlignmentType mode = parseMode(modeStr);
         Map<String, String> seqlib = readSeqLib(seqlibPath);
         int gap = go; //--nw falls = true
-        SubstitutionMatrix m1 = new SubstitutionMatrix();
+        SubstitutionMatrix m1 = new SubstitutionMatrix(matrixName);
 
         readPairs(pairsPath, seqlib, mode, gap, m1);
     }
@@ -60,7 +60,6 @@ public class Alignment {
         br.close();
     }
 
-
     private static Map<String, String> readSeqLib(String path) throws Exception {
         Map<String, String> map = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(path));
@@ -74,8 +73,6 @@ public class Alignment {
         br.close();
         return map;
     }
-
-
 
     private static AlignmentType parseMode(String s) {
         s = s.toLowerCase();

@@ -1,14 +1,14 @@
 public class Scoring{
     protected final String seq1;
     protected final String seq2;
-    protected static SubstitutionMatrix matrix;
+    protected SubstitutionMatrix matrix;
     protected int gap;
     protected AlignmentType mode;
 
     public Scoring(String seq1, String seq2, SubstitutionMatrix matrix, int gap, AlignmentType mode){
         this.seq1 = seq1;
         this.seq2 = seq2;
-        Scoring.matrix = matrix;
+        this.matrix = matrix;
         this.gap = gap;
         this.mode = mode;
     }
@@ -16,10 +16,6 @@ public class Scoring{
         char x = seq1.charAt(i-1);
         char y = seq2.charAt(j-1);
         return matrix.getScore(x,y);
-    }
-
-    protected int gapScore(){
-        return gap;
     }
 
     public int checkScore(String al1, String al2){
