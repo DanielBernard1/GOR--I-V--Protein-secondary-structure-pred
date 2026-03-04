@@ -12,7 +12,7 @@ public class Gotoh extends Scoring{
     private State[][] prevGy;
 
     public Gotoh(String seq1, String seq2, SubstitutionMatrix matrix, int go, int ge, AlignmentType mode) {
-        super(seq1, seq2, matrix, 0, mode);
+        super(seq1, seq2, matrix, go, ge, mode);
         this.go = go;
         this.ge = ge;
     }
@@ -283,5 +283,99 @@ public class Gotoh extends Scoring{
             max = Math.max(max, Math.max(M[i][m], Math.max(Ix[i][m], Iy[i][m])));
         }
         return max;
+    }
+    public String[] FS_alignment() {
+        FS_Matrices();
+        int n = seq1.length();
+        int m = seq2.length();
+        int max = min_unendlich;
+        int startI = n;
+        int startJ = m;
+        String startMatrix = "M";
+
+        for (int i = 0; i <= m; i++) {
+            if (M[n][i] > max)  {
+                max = M[n][i];
+                startI = n;
+                startJ = i;
+                startMatrix = "M";
+            }
+            if (Ix[n][i] > max) {
+                max = Ix[n][i];
+                startI = n;
+                startJ = i;
+                startMatrix = "Ix";
+            }
+            if (Iy[n][i] > max) {
+                max = Iy[n][i];
+                startI = n;
+                startJ = i;
+                startMatrix = "Iy";
+            }
+        }
+        for (int i = 0; i <= n; i++) {
+            if (M[i][m] > max)  {
+                max = M[i][m];
+                startI = i;
+                startJ = m;
+                startMatrix = "M";
+            }
+            if (Ix[i][m] > max) { max = Ix[i][m]; startI = i; startJ = m; startMatrix = "Ix"; }
+            if (Iy[i][m] > max) { max = Iy[i][m]; startI = i; startJ = m; startMatrix = "Iy"; }
+        }
+
+        StringBuilder ali1 = new StringBuilder();
+        StringBuilder ali2 = new StringBuilder();
+
+        for (int k = n; k > startI; k--) {
+            ali1.insert(0, seq1.charAt(k - 1));
+            ali2.insert(0, "-");
+        }
+        for (int k = m; k > startJ; k--) {
+            ali1.insert(0, "-");
+            ali2.insert(0, seq2.charAt(k - 1));
+        }
+
+        int i = startI;
+        int j = startJ;
+        String current = startMatrix;
+
+        while (i > 0 && j > 0) {
+            if (current.equals("M")) {
+                int score = substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, seq2.charAt(j - 1));
+                if      (M[i-1][j-1]  + score == M[i][j]) current = "M";
+                else if (Ix[i-1][j-1] + score == M[i][j]) current = "Ix";
+                else                                        current = "Iy";
+                i--; j--;
+
+            } else if (current.equals("Ix")) {
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, "-");
+                if (M[i-1][j] - go == Ix[i][j]) current = "M";
+                else                              current = "Ix";
+                i--;
+
+            } else { // Iy
+                ali1.insert(0, "-");
+                ali2.insert(0, seq2.charAt(j - 1));
+                if (M[i][j-1] - go == Iy[i][j]) current = "M";
+                else                              current = "Iy";
+                j--;
+            }
+        }
+        while (i > 0) {
+            ali1.insert(0, seq1.charAt(i - 1));
+            ali2.insert(0, "-");
+            i--;
+        }
+        while (j > 0) {
+            ali1.insert(0, "-");
+            ali2.insert(0, seq2.charAt(j - 1));
+            j--;
+        }
+
+        return new String[]{ali1.toString(), ali2.toString()};
     }
 }

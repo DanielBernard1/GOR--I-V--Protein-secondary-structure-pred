@@ -1,6 +1,6 @@
 public class Recursion extends Scoring{
     public Recursion(String seq1, String seq2, SubstitutionMatrix substitution_matrix, int gap, AlignmentType mode){
-        super(seq1, seq2, substitution_matrix, gap, mode);
+        super(seq1, seq2, substitution_matrix, gap, 0, mode);
     }
     public int scoreRec(){
         return f(seq1.length(), seq2.length());
