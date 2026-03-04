@@ -174,14 +174,23 @@ public class Gotoh extends Scoring{
 
 
     //LOCAL Gotoh
+
+    int bestLocal = 0;
+    int bestX = 0;
+    int bestY = 0;
+    State bestState = State.M;
+
     public int Local_score(){
         //brauchen 3 Matrizen
-        //1tens Alignment endet mit Match/Mismatch --> diag
+        //1tens Alignment endet mit Match/Missmatch --> diag
         int[][] M = new int[seq1.length()+1][seq2.length()+1];
+        prevM = new State[seq1.length()+1][seq2.length()+1];//pointer
         //2ten endet mit Gap in Seq1 --> up
         int[][] Gx = new int[seq1.length()+1][seq2.length()+1];
+        prevGx = new State[seq1.length()+1][seq2.length()+1];//pointer
         //3tens endet mit Gap in Seq2 --> left
         int[][] Gy = new int[seq1.length()+1][seq2.length()+1];
+        prevGy = new State[seq1.length()+1][seq2.length()+1];//pointer
 
         //erste Zeile auf 0 initialisieren
         for(int i=0; i<= seq1.length(); i++){
@@ -196,43 +205,147 @@ public class Gotoh extends Scoring{
             Gy[0][j] = 0;
         }
 
-        int bestLocal = 0;
+        //zurücksetzen
+        bestLocal = 0;
+        bestX = 0;
+        bestY = 0;
+        bestState = State.M;
 
         for(int i=1; i <= seq1.length(); i++){
             for(int j=1; j<= seq2.length(); j++){
-                int bestGxGy = Math.max(Gx[i-1][j-1], Gy[i-1][j-1]);
-                int best = Math.max(M[i-1][j-1], bestGxGy);
-                int maxVal = best + diaScore(i,j);
+                int fromM = M[i-1][j-1];
+                int fromGx = Gx[i-1][j-1];
+                int fromGy = Gy[i-1][j-1];
 
+                int best = fromM;
+                State preState = State.M;
+
+                if(fromGx > best){
+                    best = fromGx;
+                    preState = State.Gx;
+                }
+                if(fromGy > best){
+                    best = fromGy;
+                    preState = State.Gy;
+                }
+                //int bestGxGy = Math.max(Gx[i-1][j-1], Gy[i-1][j-1]);
+                //int best = Math.max(M[i-1][j-1], bestGxGy);
+                int maxVal = best + diaScore(i,j);
+                if(maxVal < 0){
+                    maxVal = 0; //alle negativen wert in matrix werden auf 0 gebracht
+                }
+                M[i][j] = maxVal;
+                prevM[i][j] = preState;
+
+                //Gap in seq2
                 int gxOpen = M[i-1][j] + go +ge;
                 int gxExtend = Gx[i-1][j] + ge;
-                int maxGapX = Math.max(gxOpen, gxExtend);
+                //int maxGapX = Math.max(gxOpen, gxExtend);
+                int gxVal;
+                if(gxOpen > gxExtend){
+                    gxVal = gxOpen;
+                    prevGx[i][j]= State.M;
+                }else{
+                    gxVal = gxExtend;
+                    prevGx[i][j] = State.Gx;
+                }
+                if(gxVal < 0){
+                    gxVal = 0;
+                }
+                Gx[i][j] = gxVal;
 
+                //gap in seq1
                 int gyOpen = M[i][j-1] +go +ge;
                 int gyExtend = Gy[i][j-1] + ge;
-                int maxGapY = Math.max(gyOpen, gyExtend);
+                //int maxGapY = Math.max(gyOpen, gyExtend);
 
-                //Darf nicht unter 0
-                maxVal = Math.max(0, maxVal);
-                maxGapX = Math.max(0, maxGapX);
-                maxGapY = Math.max(0, maxGapY);
+                int gyVal;
+                if(gyOpen > gyExtend){
+                    gyVal = gyOpen;
+                    prevGy[i][j]= State.M;
+                }else{
+                    gyVal = gyExtend;
+                    prevGy[i][j] = State.Gy;
+                }
+                if(gyVal < 0){
+                    gyVal = 0;
+                }
+                Gy[i][j] = gyVal;
 
-                //Matrizen füllen
-                M[i][j] = maxVal;
-                Gx[i][j] = maxGapX;
-                Gy[i][j] = maxGapY;
 
                 //was ist das beste
-                int maxGxGy = Math.max(maxGapX, maxGapY);
-                int einzelBest = Math.max(maxVal, maxGxGy);
+
+                int einzelBest = M[i][j];
+                State einzelState = State.M;
+
+                if(Gx[i][j]> einzelBest){
+                    einzelBest = Gx[i][j];
+                    einzelState = State.Gx;
+                }
+                if(Gy[i][j]> einzelBest){
+                    einzelBest = Gy[i][j];
+                    einzelState = State.Gy;
+                }
+
 
                 if(einzelBest > bestLocal){
                     bestLocal = einzelBest;
+                    bestX = i;
+                    bestY = j;
+                    bestState = einzelState;
                 }
             }
         }
+        //Matrizen abspeichern
+        this.M = M;
+        this.Gx = Gx;
+        this.Gy = Gy;
+
         return bestLocal;
     }
+
+    public String[] local_alignment(){
+        Local_score();
+        return local_alignment (bestX, bestY,bestState);
+    }
+
+    private String[] local_alignment(int i, int j, State state){
+        StringBuilder align1 = new StringBuilder();
+        StringBuilder align2 = new StringBuilder();
+
+        while(true){
+            if(state == State.M){
+                if(M[i][j] == 0){break;}
+                align1.append(seq1.charAt(i-1));
+                align2.append(seq2.charAt(j-1));
+                state = prevM[i][j];
+                i = i-1;
+                j = j-1;
+            }else{
+                if(state == State.Gx){
+                    if(Gx[i][j] == 0){break;}
+
+                    align1.append(seq1.charAt(i-1));
+                    align2.append("-");
+                    state = prevGx[i][j];
+                    i = i-1;
+                }else{
+                    if(Gy[i][j]==0){break;}
+                    align1.append("-");
+                    align2.append(seq2.charAt(j-1));
+                    state = prevGy[i][j];
+                    j = j-1;
+                }
+            }
+        }
+        String[] alignment = new String[2];
+        alignment[0] = align1.reverse().toString();
+        alignment[1] = align2.reverse().toString();
+        return alignment;
+    }
+
+
+    //Freeshift
 
     private void FS_Matrices() {
         int n = seq1.length();
