@@ -1,8 +1,14 @@
 public class GotohLa extends Scoring{
+    private enum State{M, Gx, Gy} //traceback
 
     private final int go;
     private final int ge;
     private final int min_unendlich = -10000000;
+
+    //Pointer für Traceback
+    private State[][] prevM;
+    private State[][] prevGx;
+    private State[][] prevGy;
 
     public GotohLa(String seq1, String seq2, SubstitutionMatrix matrix, int go, int ge, AlignmentType mode) {
         super(seq1, seq2, matrix, 0, mode);
@@ -15,10 +21,13 @@ public class GotohLa extends Scoring{
         //brauchen 3 Matrizen
         //1tens Alignment endet mit Match/Mismatch --> diag
         int[][] M = new int[seq1.length()+1][seq2.length()+1];
+        prevM = new State[seq1.length()+1][seq2.length()+1];//pointer
         //2ten endet mit Gap in Seq1 --> up
         int[][] Gx = new int[seq1.length()+1][seq2.length()+1];
+        prevGx = new State[seq1.length()+1][seq2.length()+1];//pointer
         //3tens endet mit Gap in Seq2 --> left
         int[][] Gy = new int[seq1.length()+1][seq2.length()+1];
+        prevGy = new State[seq1.length()+1][seq2.length()+1];//pointer
 
         M[0][0] = 0;
         Gx[0][0] = min_unendlich;
@@ -39,22 +48,101 @@ public class GotohLa extends Scoring{
         //noch mit einbeziehung Match/Mismatch --> Matrix M
         for(int i =1; i<= seq1.length(); i++){
             for(int j = 1; j<= seq2.length(); j++){
+
                 int bestGxy = Math.max(Gx[i-1][j-1],Gy[i-1][j-1]);
                 int best = Math.max(M[i-1][j-1], bestGxy);
                 M[i][j] = best + diaScore(i,j);
+
+                //Start Traceback pointer
+                int fromM = M[i-1][j-1];
+                int fromGx = Gx[i-1][j-1];
+                int fromGy = Gy[i-1][j-1];
+
+                int bestPrev = fromM;
+                State preState = State.M;
+
+                if(fromGx > bestPrev){
+                    bestPrev = fromGx;
+                    preState = State.Gx;
+                }
+                if(fromGy > bestPrev){
+                    bestPrev = fromGy;
+                    preState = State.Gy;
+                }
+
+                M[i][j] = bestPrev + diaScore(i,j);
+                prevM[i][j] = preState;
+                //Ende Tracebackpointer
+
                 //Gap in seq2 (up)
                 int gxOpen = M[i-1][j] + go +ge;
                 int gxExtend = Gx[i-1][j] + ge;
                 Gx[i][j] = Math.max(gxOpen, gxExtend);
+
+                //Pointer Gx
+                if(gxOpen >= gxExtend){
+                    Gx[i][j] = gxOpen;
+                    prevGx[i][j] = State.M;
+                }else{
+                    Gx[i][j] = gxExtend;
+                    prevGx[i][j] = State.Gx;
+                }
+
                 //Gap in seq1 (left)
                 int gyOpen = M[i][j-1] + go + ge;
                 int gyExtend = Gy[i][j-1] +ge;
                 Gy[i][j] = Math.max(gyOpen, gyExtend);
+
+                //Pointer Gy
+                if(gyOpen >= gyExtend){
+                    Gy[i][j] = gyOpen;
+                    prevGy[i][j] = State.M;
+                }else{
+                    Gy[i][j] = gyExtend;
+                    prevGy[i][j] = State.Gy;
+                }
             }
         }
         int maxGxGy = Math.max(Gx[seq1.length()][seq2.length()], Gy[seq1.length()][seq2.length()]);
         return Math.max(M[seq1.length()][seq2.length()], maxGxGy);
     }
+
+    //Traceback Global -->  bauen die alignments von hinten auf
+    private String[] tracebackGlobal(int i, int j, State state){
+        StringBuilder align1 = new StringBuilder();
+        StringBuilder align2 = new StringBuilder();
+        while(i>0 || j>0){
+            if(state == State.M){
+                align1.append(seq1.charAt(i-1));
+                align2.append(seq2.charAt(j-1));
+                state = prevM[i][j];
+                i= i-1;
+                j= j-1;
+            }
+            else{
+                if (state == State.Gx){
+                    align1.append(seq1.charAt(i-1));
+                    align2.append("-");
+                    state = prevGx[i][j];
+                    i = i-1;
+                }else{
+                    align1.append("-");
+                    align2.append(seq2.charAt(j-1));
+                    state = prevGy[i][j];
+                    j = j-1;
+                }
+            }
+        }
+        String[] alignment = new String[Math.max(seq1.length()+1,seq2.length()+1)];
+        String al1 = align1.reverse().toString();
+        String al2 = align2.reverse().toString();
+
+        alignment[0] = al1;
+        alignment[1] = al2;
+
+        return alignment;
+    }
+
 
     //LOCAL Gotoh
     public int scoreLocal(){
@@ -116,4 +204,6 @@ public class GotohLa extends Scoring{
         }
         return bestLocal;
     }
+
+
 }
