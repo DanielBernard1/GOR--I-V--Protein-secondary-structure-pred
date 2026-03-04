@@ -4,7 +4,7 @@ public class Gotoh extends Scoring{
 
     private final int go;
     private final int ge;
-    private final int min_unendlich = -10000000;
+    private final int min_inf = -10000000;
 
     //Pointer für Traceback
     private State[][] prevM;
@@ -31,23 +31,23 @@ public class Gotoh extends Scoring{
         prevGy = new State[seq1.length()+1][seq2.length()+1];//pointer
 
         M[0][0] = 0;
-        Gx[0][0] = min_unendlich;
-        Gy[0][0] = min_unendlich;
+        Gx[0][0] = min_inf;
+        Gy[0][0] = min_inf;
         prevM[0][0] = State.M;
 
         //gap in Seq1, nach links
         for(int j=1; j<=seq2.length(); j++){
-            M[0][j] = min_unendlich;
-            Gx[0][j] = min_unendlich;
+            M[0][j] = min_inf;
+            Gx[0][j] = min_inf;
             Gy[0][j] = go + j*ge;
 
             prevGy[0][j] = State.Gy;
         }
         //gap in Seq2, nach oben
         for(int i=1; i<=seq1.length(); i++){
-            M[i][0] = min_unendlich;
+            M[i][0] = min_inf;
             Gx[i][0] = go + i*ge;
-            Gy[i][0] = min_unendlich;
+            Gy[i][0] = min_inf;
 
             prevGx[i][0] = State.Gx;
         }
@@ -356,18 +356,18 @@ public class Gotoh extends Scoring{
         Gy = new int[n + 1][m + 1];
 
         M[0][0]  = 0;
-        Gx[0][0] = min_unendlich;
-        Gy[0][0] = min_unendlich;
+        Gx[0][0] = min_inf;
+        Gy[0][0] = min_inf;
 
         for (int i = 1; i <= n; i++) {
-            M[i][0]  = min_unendlich;
+            M[i][0]  = min_inf;
             Gx[i][0] = 0;
-            Gy[i][0] = min_unendlich;
+            Gy[i][0] = min_inf;
         }
 
         for (int i = 1; i <= m; i++) {
-            M[0][i]  = min_unendlich;
-            Gx[0][i] = min_unendlich;
+            M[0][i]  = min_inf;
+            Gx[0][i] = min_inf;
             Gy[0][i] = 0;
         }
 
@@ -387,7 +387,7 @@ public class Gotoh extends Scoring{
         FS_Matrices();
         int n = seq1.length();
         int m = seq2.length();
-        int max = min_unendlich;
+        int max = min_inf;
 
         for (int j = 0; j <= m; j++) {
             max = Math.max(max, Math.max(M[n][j], Math.max(Gx[n][j], Gy[n][j])));
@@ -401,7 +401,7 @@ public class Gotoh extends Scoring{
         FS_Matrices();
         int n = seq1.length();
         int m = seq2.length();
-        int max = min_unendlich;
+        int max = min_inf;
         int startI = n;
         int startJ = m;
         String startMatrix = "M";
