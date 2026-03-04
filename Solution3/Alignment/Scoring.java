@@ -9,7 +9,7 @@ public class Scoring{
         this.seq1 = seq1;
         this.seq2 = seq2;
         this.substitution_matrix = substitution_matrix;
-        this.gap = gap;
+        this.gap = gap * 100;
         this.mode = mode;
     }
     protected int diaScore (int i, int j){
@@ -29,7 +29,7 @@ public class Scoring{
                 score += substitution_matrix.getScore(x,y);
             }
         }
-        return score;
+        return score / 100;
     }
 
     public finalAlignment result() {
@@ -37,23 +37,23 @@ public class Scoring{
     }
 
     public int Rec_score(){
-        return new Recursion(seq1, seq2, substitution_matrix, gap, mode).score();
+        return new Recursion(seq1, seq2, substitution_matrix, gap, mode).score() / 100;
     }
 
     public int DP_score(){
         DynamicProgramming dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
         if (mode.isGlobal()){
-            return dynamicProgramming.NW_score();
+            return dynamicProgramming.NW_score() / 100;
         }
         if (mode.isLocal()){
-            return dynamicProgramming.SW_score();
+            return dynamicProgramming.SW_score() / 100;
         }
         if (mode.isFreeshift()) {
-            return dynamicProgramming.FS_score();
+            return dynamicProgramming.FS_score() / 100;
         }
         return Integer.MIN_VALUE;
     }
-    public String[] DP_alignments(){
+    public String[] DP_alignment(){
         DynamicProgramming dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
         if (mode.isGlobal()){
             return dynamicProgramming.NW_alignment();
@@ -66,4 +66,31 @@ public class Scoring{
         }
         return null;
     }
+    public int Gotoh_score(){
+        Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, -1, -1, mode);
+        if (mode.isGlobal()){
+            return gotoh.Global_score();
+        }
+        if (mode.isLocal()){
+            return gotoh.Local_score();
+        }
+        if (mode.isFreeshift()) {
+            return gotoh.FS_score();
+        }
+        return Integer.MIN_VALUE;
+    }
+
+//    public String[] Gotoh_alignment(){
+//        Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, -1, -1, mode);
+//        if (mode.isGlobal()){
+//            return gotoh.;
+//        }
+//        if (mode.isLocal()){
+//            return gotoh.;
+//        }
+//        if (mode.isFreeshift()) {
+//            return gotoh;
+//        }
+//        return null;
+//    }
 }
