@@ -239,23 +239,23 @@ public class Gotoh extends Scoring{
         int m = seq2.length();
 
         M  = new int[n + 1][m + 1];
-        Ix = new int[n + 1][m + 1];
-        Iy = new int[n + 1][m + 1];
+        Gx = new int[n + 1][m + 1];
+        Gy = new int[n + 1][m + 1];
 
         M[0][0]  = 0;
-        Ix[0][0] = min_unendlich;
-        Iy[0][0] = min_unendlich;
+        Gx[0][0] = min_unendlich;
+        Gy[0][0] = min_unendlich;
 
         for (int i = 1; i <= n; i++) {
             M[i][0]  = min_unendlich;
-            Ix[i][0] = 0;
-            Iy[i][0] = min_unendlich;
+            Gx[i][0] = 0;
+            Gy[i][0] = min_unendlich;
         }
 
         for (int i = 1; i <= m; i++) {
             M[0][i]  = min_unendlich;
-            Ix[0][i] = min_unendlich;
-            Iy[0][i] = 0;
+            Gx[0][i] = min_unendlich;
+            Gy[0][i] = 0;
         }
 
         for (int i = 1; i <= n; i++) {
@@ -263,9 +263,9 @@ public class Gotoh extends Scoring{
 
                 int score = substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
 
-                M[i][j]  = Math.max(Math.max(M[i-1][j-1], Ix[i-1][j-1]), Iy[i-1][j-1]) + score;
-                Ix[i][j] = Math.max(M[i-1][j] - go, Ix[i-1][j] - ge);
-                Iy[i][j] = Math.max(M[i][j-1] - go, Iy[i][j-1] - ge);
+                M[i][j]  = Math.max(Math.max(M[i-1][j-1], Gx[i-1][j-1]), Gy[i-1][j-1]) + score;
+                Gx[i][j] = Math.max(M[i-1][j] - go, Gx[i-1][j] - ge);
+                Gy[i][j] = Math.max(M[i][j-1] - go, Gy[i][j-1] - ge);
             }
         }
     }
@@ -277,10 +277,10 @@ public class Gotoh extends Scoring{
         int max = min_unendlich;
 
         for (int j = 0; j <= m; j++) {
-            max = Math.max(max, Math.max(M[n][j], Math.max(Ix[n][j], Iy[n][j])));
+            max = Math.max(max, Math.max(M[n][j], Math.max(Gx[n][j], Gy[n][j])));
         }
         for (int i = 0; i <= n; i++) {
-            max = Math.max(max, Math.max(M[i][m], Math.max(Ix[i][m], Iy[i][m])));
+            max = Math.max(max, Math.max(M[i][m], Math.max(Gx[i][m], Gy[i][m])));
         }
         return max;
     }
@@ -300,17 +300,17 @@ public class Gotoh extends Scoring{
                 startJ = i;
                 startMatrix = "M";
             }
-            if (Ix[n][i] > max) {
-                max = Ix[n][i];
+            if (Gx[n][i] > max) {
+                max = Gx[n][i];
                 startI = n;
                 startJ = i;
-                startMatrix = "Ix";
+                startMatrix = "Gx";
             }
-            if (Iy[n][i] > max) {
-                max = Iy[n][i];
+            if (Gy[n][i] > max) {
+                max = Gy[n][i];
                 startI = n;
                 startJ = i;
-                startMatrix = "Iy";
+                startMatrix = "Gy";
             }
         }
         for (int i = 0; i <= n; i++) {
@@ -320,8 +320,8 @@ public class Gotoh extends Scoring{
                 startJ = m;
                 startMatrix = "M";
             }
-            if (Ix[i][m] > max) { max = Ix[i][m]; startI = i; startJ = m; startMatrix = "Ix"; }
-            if (Iy[i][m] > max) { max = Iy[i][m]; startI = i; startJ = m; startMatrix = "Iy"; }
+            if (Gx[i][m] > max) { max = Gx[i][m]; startI = i; startJ = m; startMatrix = "Gx"; }
+            if (Gy[i][m] > max) { max = Gy[i][m]; startI = i; startJ = m; startMatrix = "Gy"; }
         }
 
         StringBuilder ali1 = new StringBuilder();
@@ -346,22 +346,22 @@ public class Gotoh extends Scoring{
                 ali1.insert(0, seq1.charAt(i - 1));
                 ali2.insert(0, seq2.charAt(j - 1));
                 if      (M[i-1][j-1]  + score == M[i][j]) current = "M";
-                else if (Ix[i-1][j-1] + score == M[i][j]) current = "Ix";
-                else                                        current = "Iy";
+                else if (Gx[i-1][j-1] + score == M[i][j]) current = "Gx";
+                else                                        current = "Gy";
                 i--; j--;
 
             } else if (current.equals("Ix")) {
                 ali1.insert(0, seq1.charAt(i - 1));
                 ali2.insert(0, "-");
-                if (M[i-1][j] - go == Ix[i][j]) current = "M";
-                else                              current = "Ix";
+                if (M[i-1][j] - go == Gx[i][j]) current = "M";
+                else                              current = "Gx";
                 i--;
 
             } else { // Iy
                 ali1.insert(0, "-");
                 ali2.insert(0, seq2.charAt(j - 1));
-                if (M[i][j-1] - go == Iy[i][j]) current = "M";
-                else                              current = "Iy";
+                if (M[i][j-1] - go == Gy[i][j]) current = "M";
+                else                              current = "Gy";
                 j--;
             }
         }
