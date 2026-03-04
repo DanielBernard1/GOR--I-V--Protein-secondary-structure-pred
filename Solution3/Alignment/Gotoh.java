@@ -36,7 +36,7 @@ public class Gotoh extends Scoring {
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
 
-                int score = matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                int score = substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
 
                 M[i][j]  = Math.max(Math.max(M[i-1][j-1], Ix[i-1][j-1]), Iy[i-1][j-1]) + score;
                 Ix[i][j] = Math.max(M[i-1][j] - gapOpen, Ix[i-1][j] - gapExtend);
