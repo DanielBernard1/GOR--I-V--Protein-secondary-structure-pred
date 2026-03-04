@@ -3,14 +3,14 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Alignment {
+public class alignment {
     //hier drüber wird alles abgerufen
     public static void main (String[] args) throws Exception {
         String pairsPath = null; // pro Zeile stehen 2 ids die miteinander Aligned werden sollen
         String seqlibPath = null;
         String matrixName = null;
         String modeStr = null;
-        String formatStr = null;
+        String format = null;
         String dpDir = null;
 
         int go = -12; //gap open
@@ -30,19 +30,26 @@ public class Alignment {
             if(a.equals("--seqlib")){seqlibPath = args[++i]; continue;}
             if(a.equals("-m")){matrixName = args[++i]; continue;} //soll das wirklich nur mit einem Strich angegeben werden
             if(a.equals("--mode")){modeStr = args[++i]; continue;}
-            if(a.equals("--format")){formatStr = args[++i]; continue;}
+            if(a.equals("--format")){format = args[++i];}
+        }
+
+        if (pairsPath == null || seqlibPath == null || matrixName == null
+                || modeStr == null || format == null) {
+            printHelp();
+            return;
         }
 
         AlignmentType mode = parseMode(modeStr);
         Map<String, String> seqlib = readSeqLib(seqlibPath);
-        int gap = go; //--nw falls = true
         SubstitutionMatrix m1 = new SubstitutionMatrix(matrixName);
-
-        readPairs(pairsPath, seqlib, mode, go, ge, m1);
+        readPairs(go, ge, dpDir, check, pairsPath, seqlib, m1, mode, useNW, format);
+    }
+    private static void printHelp(){
+        System.out.println("The output must be written to stdout in all cases");
     }
 
-    private static void readPairs(String path, Map<String, String> seqlib, AlignmentType mode, int go, int ge, SubstitutionMatrix matrix) throws Exception{
-        BufferedReader br = new BufferedReader(new FileReader(path));
+    private static void readPairs(int go, int ge, String dpPath, boolean check, String pairsPath, Map<String, String> seqlib, SubstitutionMatrix matrix, AlignmentType mode, boolean useNW, String format) throws Exception{
+        BufferedReader br = new BufferedReader(new FileReader(pairsPath));
         String line;
 
         while ((line = br.readLine())!= null){
@@ -54,8 +61,43 @@ public class Alignment {
             String seq1 = seqlib.get(id1);
             String seq2 = seqlib.get(id2);
 
-            Scoring s = new Scoring(seq1, seq2, matrix, go, ge, mode);
-            finalAlignment result = s.result();
+            Scoring scoring = new Scoring(seq1, seq2, matrix, go, ge, mode);
+
+            if (format.equals("scores")) {
+                System.out.print(id1 + "\t" + id2 + "\t");
+                if (useNW){
+                    System.out.println(scoring.DP_score());
+                }
+                else{
+                    System.out.println(scoring.Gotoh_score());
+                }
+            }
+            else if (format.equals("ali")){
+                String[] alignments;
+                System.out.print(">" + id1 + "\t" + id2 + "\t");
+
+                if (useNW){
+                    System.out.println(scoring.DP_score());
+                    alignments = scoring.DP_alignment();
+                }
+                else{
+                    System.out.println(scoring.Gotoh_score());
+                    alignments = scoring.Gotoh_alignment();
+                }
+
+                System.out.println(id1 + "\t" + alignments[0]);
+                System.out.println(id2 + "\t" + alignments[1]);
+            }
+            else if (format.equals("html")){
+                //TODO
+            }
+            if (check){
+                //TODO
+            }
+            if (dpPath != null){
+
+            }
+            finalAlignment result = scoring.result();
         }
         br.close();
     }

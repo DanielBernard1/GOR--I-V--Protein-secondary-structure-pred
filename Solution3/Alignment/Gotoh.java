@@ -136,7 +136,7 @@ public class Gotoh extends Scoring{
     }
 
     //Traceback Global -->  bauen die alignments von hinten auf
-    public String[] Global_alignment(int i, int j, State state){
+    private String[] Global_alignment(int i, int j, State state){
         StringBuilder align1 = new StringBuilder();
         StringBuilder align2 = new StringBuilder();
 

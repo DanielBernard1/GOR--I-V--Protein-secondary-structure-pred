@@ -82,17 +82,17 @@ public class Scoring{
         return Integer.MIN_VALUE;
     }
 
-//    public String[] Gotoh_alignment(){
-//        Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, -1, -1, mode);
-//        if (mode.isGlobal()){
-//            return gotoh.;
-//        }
-//        if (mode.isLocal()){
-//            return gotoh.;
-//        }
-//        if (mode.isFreeshift()) {
-//            return gotoh;
-//        }
-//        return null;
-//    }
+    public String[] Gotoh_alignment(){
+        Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
+        if (mode.isGlobal()){
+            return gotoh.Global_alignment();
+        }
+        if (mode.isLocal()){
+//            return gotoh.Local_alignment();
+        }
+        if (mode.isFreeshift()) {
+            return gotoh.FS_alignment();
+        }
+        return null;
+    }
 }
