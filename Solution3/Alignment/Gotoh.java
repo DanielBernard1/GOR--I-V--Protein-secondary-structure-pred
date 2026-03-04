@@ -12,7 +12,7 @@ public class Gotoh extends Scoring{
     private State[][] prevGy;
 
     public Gotoh(String seq1, String seq2, SubstitutionMatrix matrix, int go, int ge, AlignmentType mode) {
-        super(seq1, seq2, matrix, 0, mode);
+        super(seq1, seq2, matrix, go, ge, mode);
         this.go = go;
         this.ge = ge;
     }

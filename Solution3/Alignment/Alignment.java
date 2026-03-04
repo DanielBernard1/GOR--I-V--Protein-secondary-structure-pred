@@ -38,10 +38,10 @@ public class Alignment {
         int gap = go; //--nw falls = true
         SubstitutionMatrix m1 = new SubstitutionMatrix(matrixName);
 
-        readPairs(pairsPath, seqlib, mode, gap, m1);
+        readPairs(pairsPath, seqlib, mode, go, ge, m1);
     }
 
-    private static void readPairs(String path, Map<String, String> seqlib, AlignmentType mode, int gap, SubstitutionMatrix matrix) throws Exception{
+    private static void readPairs(String path, Map<String, String> seqlib, AlignmentType mode, int go, int ge, SubstitutionMatrix matrix) throws Exception{
         BufferedReader br = new BufferedReader(new FileReader(path));
         String line;
 
@@ -54,7 +54,7 @@ public class Alignment {
             String seq1 = seqlib.get(id1);
             String seq2 = seqlib.get(id2);
 
-            Scoring s = new Scoring(seq1, seq2, matrix, gap, mode);
+            Scoring s = new Scoring(seq1, seq2, matrix, go, ge, mode);
             finalAlignment result = s.result();
         }
         br.close();

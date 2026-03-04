@@ -2,14 +2,16 @@ public class Scoring{
     protected final String seq1;
     protected final String seq2;
     protected SubstitutionMatrix substitution_matrix;
-    protected int gap;
+    protected int gap, go, ge;
     protected AlignmentType mode;
 
-    public Scoring(String seq1, String seq2, SubstitutionMatrix substitution_matrix, int gap, AlignmentType mode){
+    public Scoring(String seq1, String seq2, SubstitutionMatrix substitution_matrix, int go, int ge, AlignmentType mode){
         this.seq1 = seq1;
         this.seq2 = seq2;
         this.substitution_matrix = substitution_matrix;
-        this.gap = gap * 100;
+        this.gap = go * 100;
+        this.go = go * 100;
+        this.ge = ge * 100;
         this.mode = mode;
     }
     protected int diaScore (int i, int j){
@@ -67,7 +69,7 @@ public class Scoring{
         return null;
     }
     public int Gotoh_score(){
-        Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, -1, -1, mode);
+        Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
         if (mode.isGlobal()){
             return gotoh.Global_score();
         }
