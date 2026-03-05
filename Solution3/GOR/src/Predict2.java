@@ -119,7 +119,7 @@ public class Predict2 extends GorPredictor {
     }
 
 
-    public static ProteinData predictionGor1prob(String sequence, String header, boolean probs){
+    public static ProteinData predictionGor2prob(String sequence, String header, boolean probs){
         StringBuilder seq = new StringBuilder();
         String overlapProof = "________" + sequence + "________";
         seq.append(overlapProof);
@@ -175,7 +175,7 @@ public class Predict2 extends GorPredictor {
             StringBuilder seq = new StringBuilder();
             seq.append(value);
 
-            ProteinData tempProtein = predictionGor1prob( seq.toString(), key, probs);
+            ProteinData tempProtein = predictionGor2prob( seq.toString(), key, probs);
             proteinsWithPrediction.add(tempProtein);
 
 

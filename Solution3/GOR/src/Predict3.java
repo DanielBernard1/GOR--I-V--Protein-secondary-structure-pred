@@ -1,6 +1,8 @@
 import javax.xml.stream.FactoryConfigurationError;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Predict3 extends GorPredictor{
@@ -111,36 +113,38 @@ public class Predict3 extends GorPredictor{
             System.err.println("An error occurred when reading the matrix file");
             e.printStackTrace();
         }
-
+        setCorrectedValues6D();
+        correctMatrix6D();
+        setCorrectedValues4D();
+        correctMatrix4D();
 
     }
-    public static void setCorrectedValues(){
+    public static void setCorrectedValues6D(){
         correctedValues = new Double[3][20][20];
         double eps = 0.001;
-        for (int struc = 0; struc < 3; struc++) {
-            for (int as1 = 0; as1 < 20; as1++) {
-                for (int as2 = 0; as2 < 20; as2++) {
-                    double countH = 0;
-                    double countE = 0;
-                    double countC = 0;
-                    for (int i = 0; i < 17; i++) {
-                        for (int row = 0; row < 20; row++) {
-                            for (int col = 0; col < 17; col++) {
-                                countH += matrixes[0][as1][as2][i][row][col];
-                                countE += matrixes[1][as1][as2][i][row][col];
-                                countC += matrixes[2][as1][as2][i][row][col];
-                            }
+
+        for (int as1 = 0; as1 < 20; as1++) {
+            for (int as2 = 0; as2 < 20; as2++) {
+                double countH = 0;
+                double countE = 0;
+                double countC = 0;
+                for (int i = 0; i < 17; i++) {
+                    for (int row = 0; row < 20; row++) {
+                        for (int col = 0; col < 17; col++) {
+                            countH += matrixes[0][as1][as2][i][row][col];
+                            countE += matrixes[1][as1][as2][i][row][col];
+                            countC += matrixes[2][as1][as2][i][row][col];
                         }
                     }
-                    double total = countH + countE + countC;
-                    correctedValues[0][as1][as2] = Math.log((total - countH + eps) / (countH + eps));
-                    correctedValues[1][as1][as2] = Math.log((total - countE + eps) / (countE + eps));
-                    correctedValues[2][as1][as2] = Math.log((total - countC + eps) / (countC + eps));
                 }
+                double total = countH + countE + countC;
+                correctedValues[0][as1][as2] = Math.log((total - countH + eps) / (countH + eps));
+                correctedValues[1][as1][as2] = Math.log((total - countE + eps) / (countE + eps));
+                correctedValues[2][as1][as2] = Math.log((total - countC + eps) / (countC + eps));
             }
         }
     }
-    public static void correctMatrix() {
+    public static void correctMatrix6D() {
         correctedMatrixes = new Double[3][20][20][WINDOW_SIZE][20][WINDOW_SIZE];
         double epsilon = 0.001;
         for (int as1 = 0; as1 < 20; as1++) {
@@ -150,64 +154,160 @@ public class Predict3 extends GorPredictor{
                         for (int col = 0; col < 17; col++) {
                             double h = matrixes[0][as1][as2][i][row][col] + epsilon;
                             double e = matrixes[1][as1][as2][i][row][col] + epsilon;
-                            double c = matrixes[3][as1][as2][i][row][col] + epsilon;
+                            double c = matrixes[2][as1][as2][i][row][col] + epsilon;
 
-                            correctedMatrixes[0][as1][as2][i][row][col] = Math.log(h / (e + c)) + correctedValues[0][row][col];
-                            correctedMatrixes[1][as1][as2][i][row][col] = Math.log(h / (e + c)) + correctedValues[1][row][col];
-                            correctedMatrixes[2][as1][as2][i][row][col] = Math.log(h / (e + c)) + correctedValues[2][row][col];
+                            correctedMatrixes[0][as1][as2][i][row][col] = Math.log(h /(e + c)) +correctedValues[0][as1][as2];
+                            correctedMatrixes[1][as1][as2][i][row][col] = Math.log(e / (h + c)) + correctedValues[1][as1][as2];
+                            correctedMatrixes[2][as1][as2][i][row][col] = Math.log(c / (h + e)) + correctedValues[2][as1][as2];
                         }
                     }
+                }
+            }
+        }
+    }
+    public static void setCorrectedValues4D(){
+        correctedValues2 = new Double[20][3];
+        for (int i = 0; i < 20; i++) {
+            double eps = 0.001;
+            double countH = 0;
+            double countE = 0;
+            double countC = 0;
+
+            for (int j = 0; j < 20; j++) {
+                for (int pos = 0; pos < WINDOW_SIZE; pos++) {
+                    countH += matrixes2[i][0][j][pos];
+                    countE += matrixes2[i][1][j][pos];
+                    countC += matrixes2[i][2][j][pos];
+                }
+            }
+            double total = countH + countE + countC;
+            correctedValues2[i][0] = Math.log((total - countH + eps) / (countH + eps));
+            correctedValues2[i][1] = Math.log((total - countE + eps) / (countE + eps));
+            correctedValues2[i][2] = Math.log((total - countC + eps) / (countC + eps));
+
+        }
+    }
+    public static void correctMatrix4D() {
+        correctedMatrixes2 = new Double[20][3][20][WINDOW_SIZE];
+        double epsilon = 0.001;
+
+        for (int i = 0; i < 20; i ++) {
+            for (int j = 0; j < 20; j++) {
+                for (int pos = 0; pos < WINDOW_SIZE; pos++) {
+                    double h = matrixes2[i][0][j][pos] +epsilon;
+                    double e = matrixes2[i][1][j][pos] +epsilon;
+                    double c = matrixes2[i][2][j][pos] +epsilon;
+
+                    correctedMatrixes2[i][0][j][pos] = Math.log(h / (e + c)) + correctedValues2[i][0];
+                    correctedMatrixes2[i][1][j][pos] = Math.log(e / (h + c)) + correctedValues2[i][1];
+                    correctedMatrixes2[i][2][j][pos] = Math.log(c / (h + e)) + correctedValues2[i][2];
                 }
             }
         }
 
     }
 
-    public static void printMatrixes() {
-        System.out.println("--- GOR IV Matrix (6D) ---");
-        for (int s = 0; s < 3; s++) {
-            for (int as1 = 0; as1 < 20; as1++) {
-                for (int as2 = 0; as2 < 20; as2++) {
-                    for (int posK = 0; posK < 17; posK++) {
-                        // prüfe ob dieser Block überhaupt Daten hat
-                        if (matrixes[s][as1][as2][posK][0][0] == null) continue;
 
-                        System.out.println("\nStruct[" + s + "] AS1[" + as1 + "] AS2[" + as2 + "] PosK[" + (posK - 8) + "]:");
-                        for (int asRow = 0; asRow < 20; asRow++) {
-                            for (int col = 0; col < 17; col++) {
-                                System.out.print(matrixes[s][as1][as2][posK][asRow][col] + " ");
-                            }
-                            System.out.println();
-                        }
+
+
+    public static ProteinData predictionGor2prob(String sequence, String header, boolean probs){
+        StringBuilder seq = new StringBuilder();
+        String overlapProof = "________" + sequence + "________";
+        seq.append(overlapProof);
+        StringBuilder struct = new StringBuilder();
+        StringBuilder builderH = new StringBuilder();
+        StringBuilder builderE = new StringBuilder();
+        StringBuilder builderC = new StringBuilder();
+
+        for (int i = STEPS; i < seq.length()-STEPS; i++) {
+            String window = seq.substring(i - STEPS, i + STEPS + 1);
+            char center = seq.charAt(i);
+            if (AS_TO_INDEX.get(center) == null){
+                struct.append("C");
+                builderH.append("0");
+                builderE.append("0");
+                builderC.append("9");
+                continue;
+            }
+            double valueC = 0;
+            double valueE = 0;
+            double valueH = 0;
+            HashSet<String> pairs = new HashSet<>();
+            for (int posA1 = 0; posA1 < window.length(); posA1++ ) {
+                for (int posA2 = posA1 + 1; posA2 < window.length(); posA2++) {
+                    char baseA = seq.charAt(posA1);
+                    char baseB = seq.charAt(posA1);
+                    if (AS_TO_INDEX.get(baseA) == null) continue;
+                    if (AS_TO_INDEX.get(baseB) == null) continue;
+                    int baseAint = getAsToIndex(baseA);
+                    int baseBint = getAsToIndex(baseB);
+                    String pairAB = baseA + "" + baseB + "" + posA1;
+                    String pairBA = baseB + "" + baseA + "" + posA1;
+
+                    if (!(pairs.contains(pairAB) || pairs.contains(pairBA))) {
+                        valueC += calculateWindow(correctedMatrixes[0][baseAint][baseBint][posA1], window);
+                        valueE += calculateWindow(correctedMatrixes[1][baseAint][baseBint][posA1], window);
+                        valueH += calculateWindow(correctedMatrixes[2][baseAint][baseBint][posA1], window);
                     }
+                    pairs.add(pairAB);
+                    pairs.add(pairBA);
+
+
                 }
             }
-        }
+            double korrigiert = (2/(2*STEPS+1));
+            valueC*= korrigiert;
+            valueE*= korrigiert;
+            valueH*= korrigiert;
 
-        System.out.println("\n--- GOR III Matrix (4D) ---");
-        for (int as = 0; as < 20; as++) {
-            for (int s = 0; s < 3; s++) {
-                if (matrixes2[as][s][0][0] == null) continue;
-                System.out.println("\nAS[" + as + "] Struct[" + s + "]:");
-                for (int asRow = 0; asRow < 20; asRow++) {
-                    for (int col = 0; col < WINDOW_SIZE; col++) {
-                        System.out.print(matrixes2[as][s][asRow][col] + " ");
-                    }
-                    System.out.println();
-                }
-            }
+            int indexOfCenterAs = getAsToIndex(center); //zweiter Teil
+
+
+            valueC -= calculateWindow(correctedMatrixes2[indexOfCenterAs][0] ,window);
+            valueE -= calculateWindow(correctedMatrixes2[indexOfCenterAs][1] ,window);
+            valueH -= calculateWindow(correctedMatrixes2[indexOfCenterAs][2] ,window);
+
+            double minValue = Math.min(valueE, Math.min(valueC, valueH));
+            double maxValue = Math.max(valueE, Math.max(valueC, valueH));
+            if (maxValue == valueE) {struct.append("E");}
+            else if (maxValue == valueH) {struct.append("H");}
+            else {struct.append("C");}
+            double total = valueC + valueE + valueH -(3*(minValue));
+
+            int H = (int) Math.round(((valueH -minValue)/ total) * 9);
+            int E = (int) Math.round(((valueE -minValue)/ total) * 9);
+            int C = (int) Math.round(((valueC -minValue)/ total) * 9);
+
+
+            builderH.append(H);
+            builderE.append(E);
+            builderC.append(C);
+
         }
+        if(!probs){return new ProteinData(header, seq.substring(8, seq.length()-8), struct.toString());}
+        ProteinData temp = new ProteinData(header, seq.substring(8, seq.length()-8),struct.toString(), builderH.toString(), builderE.toString(), builderC.toString());
+
+        return temp;
+
     }
+    public static ArrayList<ProteinData> predictionGor2FromFasta( boolean probs) {
+        HashMap<String,String> fastas = fastaReader(fasta);
+
+        ArrayList<ProteinData> proteinsWithPrediction = new ArrayList<>();
+        fastas.forEach((key, value) -> {
+            StringBuilder seq = new StringBuilder();
+            seq.append(value);
+
+            ProteinData tempProtein = predictionGor2prob( seq.toString(), key, probs);
+            proteinsWithPrediction.add(tempProtein);
+
+
+        });
+        return proteinsWithPrediction;
+
+    }
+
     public static void main(String[] args) {
-        File fasta = new File("C:\\1.Allgemein\\ProgrammierenIntelliJ\\propraGOR\\gor_examples\\1VZV\\1VZV.fasta~");
-        File matrix = new File("C:\\1.Allgemein\\Pycharm\\propra2.07\\GOR\\gor_examples\\gor4_cb513_model.txt");
-
-        Predict3 p = new Predict3(matrix, fasta);
-        p.matrixReader();
-        p.printMatrixes();
-
-/*
-
 
         String modelPath = null;
         String fastaPath = null;
@@ -231,11 +331,14 @@ public class Predict3 extends GorPredictor{
 
         }
 
-        //Predict2 hmm = new  Predict2(model, fasta);
-        //matrixReader();
 
-        //ArrayList<ProteinData> out = predictionGor2FromFasta( showProbs);
-        /*
+        Predict3 p3 = new Predict3(model, fasta);
+        p3.matrixReader();
+
+
+
+        ArrayList<ProteinData> out = p3.predictionGor2FromFasta( showProbs);
+
         for (ProteinData p : out) {
             if(showProbs) {
                 if (format.equalsIgnoreCase("txt")) {
@@ -252,7 +355,7 @@ public class Predict3 extends GorPredictor{
                 }
 
             }
-        }*/
+        }
 
     }
 }
