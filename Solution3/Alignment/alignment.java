@@ -177,7 +177,7 @@ public class alignment {
                 }
             }
         }
-        int width = 100; //Zeilenumbruch in 100er Blöcken
+        int width = 100; //Zeilenumbruch der Sequenz nach 100er Basen
         StringBuilder out = new StringBuilder();
         out.append("<!doctype html>\n<html>" +
                 "<head>" +
@@ -191,9 +191,12 @@ public class alignment {
 
         out.append("<pre>\n");
 
-        int pos1 = 0, pos2 = 0;
+        //müssen das ganze auch als Zeichenblöcke darstellne (BLAST stile)
+        int pos1 = 0;
+        int pos2 = 0;
         for (int i = 0; i < alignLen; i += width) {
             int jEnd = Math.min(alignLen, i + width);
+
             String s1 = alignment1.substring(i, jEnd);
             String sm = mid.substring(i, jEnd);
             String s2 = alignment2.substring(i, jEnd);
