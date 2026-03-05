@@ -10,7 +10,7 @@ import java.util.Random;
 public class benchmarking {
     static final int anz_align = 10000;
 
-    static final int[] laengen = {5,10, 15};
+    static final int[] laengen = {5, 8, 10};
 
     static final char[] as = "ARNDCQEGHILKMFPSTWYV".toCharArray(); //alle Aminosäuren
 
@@ -40,10 +40,10 @@ public class benchmarking {
             double dp = (System.nanoTime() - t0)/1000.0/anz_align;
 
             long t1 = System.nanoTime();
-            for(int t = 0; t<anz_align; t++){
+            for(int t = 0; t<100; t++){
                 new Recursion(s1[t], s2[t], matrix, ge, AlignmentType.global).score();
             }
-            double rec = (System.nanoTime() - t1)/1000.0/anz_align;
+            double rec = (System.nanoTime() - t1)/1000.0/100;
 
             csv.write(String.format("%d,%.4f,%.4f%n",(len),dp,rec));//reddit
 
