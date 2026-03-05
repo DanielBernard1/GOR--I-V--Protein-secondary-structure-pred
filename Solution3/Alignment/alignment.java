@@ -129,6 +129,9 @@ public class alignment {
                 printHelp();
                 return;
             }
+            if (dpPath != null){
+
+            }
         }
         br.close();
     }
