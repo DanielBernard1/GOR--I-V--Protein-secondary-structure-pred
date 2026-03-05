@@ -132,16 +132,37 @@ public class DynamicProgramming extends Scoring {
     }
     public String[] SW_alignment(){
         int[] coords = SW_coords();
-        String[] aligned = traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
+        int endI = coords[0];
+        int endJ = coords[1];
+
+        String[] aligned = traceback(endI, endJ, new StringBuilder(), new StringBuilder(), mode);
+
+        int consumedI = endI - aligned[0].replace("-", "").length();
+        int consumedJ = endJ - aligned[1].replace("-", "").length();
+
+        StringBuilder head1 = new StringBuilder(seq1.substring(0, consumedI));
+        StringBuilder head2 = new StringBuilder(seq2.substring(0, consumedJ));
+
+        int headDiff = head1.length() - head2.length();
+        if (headDiff > 0) {
+            for (int g = 0; g < headDiff; g++) head2.insert(0, '-');
+        } else if (headDiff < 0) {
+            for (int g = 0; g < -headDiff; g++) head1.insert(0, '-');
+        }
 
         StringBuilder tail1 = new StringBuilder();
         StringBuilder tail2 = new StringBuilder();
-        for (int k = coords[0]; k < seq1.length(); k++) tail1.append(seq1.charAt(k));
-        for (int k = coords[1]; k < seq2.length(); k++) tail2.append(seq2.charAt(k));
-        while (tail1.length() < tail2.length()) tail1.append('-');
-        while (tail2.length() < tail1.length()) tail2.append('-');
+        for (int k = endI; k < seq1.length(); k++) tail1.append(seq1.charAt(k));
+        for (int k = endJ; k < seq2.length(); k++) tail2.append(seq2.charAt(k));
 
-        return new String[]{aligned[0] + tail1, aligned[1] + tail2};
+        int tailDiff = tail1.length() - tail2.length();
+        if (tailDiff > 0) {
+            for (int g = 0; g < tailDiff; g++) tail2.append('-');
+        } else if (tailDiff < 0) {
+            for (int g = 0; g < -tailDiff; g++) tail1.append('-');
+        }
+
+        return new String[]{head1 + aligned[0] + tail1, head2 + aligned[1] + tail2};
     }
     public String[] FS_alignment(){
         int[] coords = fs_coords();
@@ -164,16 +185,7 @@ public class DynamicProgramming extends Scoring {
             return new String[]{ali1.toString(), ali2.toString()};
         }
         if (mode == AlignmentType.local && scoring_matrix[i][j] == 0) {
-            while (i > 0) {
-                ali1.insert(0, seq1.charAt(i - 1));
-                ali2.insert(0, '-');
-                i--;
-            }
-            while (j > 0) {
-                ali1.insert(0, '-');
-                ali2.insert(0, seq2.charAt(j - 1));
-                j--;
-            }
+            return new String[]{ali1.toString(), ali2.toString()};
         }
         if (mode == AlignmentType.freeshift && (i == 0 || j == 0)) {
             while (i > 0) {
