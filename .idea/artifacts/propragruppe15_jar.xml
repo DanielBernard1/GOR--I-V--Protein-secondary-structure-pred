@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="propragruppe15:jar">
+    <output-path>$PROJECT_DIR$/Solution3/Alignment</output-path>
+    <root id="archive" name="propragruppe15.jar">
+      <element id="dir-copy" path="$PROJECT_DIR$/Solution3/Alignment" />
+    </root>
+  </artifact>
+</component>

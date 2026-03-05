@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="alignmentsNW">
+    <output-path>$PROJECT_DIR$/Solution3/Alignment</output-path>
+    <root id="archive" name="propragruppe15.jar">
+      <element id="module-output" name="propragruppe15" />
+    </root>
+  </artifact>
+</component>
