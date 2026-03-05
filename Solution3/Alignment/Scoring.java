@@ -9,9 +9,9 @@ public class Scoring{
         this.seq1 = seq1;
         this.seq2 = seq2;
         this.substitution_matrix = substitution_matrix;
-        this.gap = go * 100;
-        this.go = go * 100;
-        this.ge = ge * 100;
+        this.gap = go;
+        this.go = go;
+        this.ge = ge;
         this.mode = mode;
     }
     protected int diaScore (int i, int j){
@@ -84,13 +84,13 @@ public class Scoring{
     public int Gotoh_score(){
         Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
         if (mode.isGlobal()){
-            return gotoh.Global_score();
+            return gotoh.Global_score()/100;
         }
         if (mode.isLocal()){
-            return gotoh.Local_score();
+            return gotoh.Local_score()/100;
         }
         if (mode.isFreeshift()) {
-            return gotoh.FS_score();
+            return gotoh.FS_score()/100;
         }
         return Integer.MIN_VALUE;
     }

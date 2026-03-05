@@ -15,6 +15,8 @@ public class alignment {
 
         int go = -12; //gap open
         int ge = -1; //gap extend
+        go*=100;
+        ge*=100;
         boolean useNW = false;
         boolean check = false;
 
