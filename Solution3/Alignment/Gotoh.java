@@ -249,9 +249,6 @@ public class Gotoh extends Scoring{
                     gxVal = gxExtend;
                     prevGx[i][j] = State.Gx;
                 }
-                if(gxVal < 0){
-                    gxVal = 0;
-                }
                 Gx[i][j] = gxVal;
 
                 //gap in seq1
@@ -266,9 +263,6 @@ public class Gotoh extends Scoring{
                 }else{
                     gyVal = gyExtend;
                     prevGy[i][j] = State.Gy;
-                }
-                if(gyVal < 0){
-                    gyVal = 0;
                 }
                 Gy[i][j] = gyVal;
 

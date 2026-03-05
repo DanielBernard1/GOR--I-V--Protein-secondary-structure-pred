@@ -43,6 +43,10 @@ public class alignment {
         }
 
         AlignmentType mode = parseMode(modeStr);
+        if(mode == null) {
+            printHelp();
+            return;
+        }
         Map<String, String> seqlib = readSeqLib(seqlibPath);
         SubstitutionMatrix m1 = new SubstitutionMatrix(matrixName);
         readPairs(go, ge, dpDir, check, pairsPath, seqlib, m1, mode, useNW, format);
@@ -101,8 +105,8 @@ public class alignment {
             String[] alignments = new String[]{res.getAlign1(), res.getAlign2()};
 
             if(check){
-                int cs = scoring.checkScore(res.getAlign1(), res.getAlign2());
-                if(cs == res.getScore()){
+                double cs = scoring.checkScore(res.getAlign1(), res.getAlign2());
+                if(Math.abs(cs - res.getScore()) < 0.001){
                     continue;
                 }
             }
@@ -161,7 +165,7 @@ public class alignment {
                 .append("len1: ").append(seq1.length()).append(", len2: ").append(seq2.length()).append("<br>\n")
                 .append("alignment length: ").append(alignLen).append("<br>\n")
                 .append("#matches: ").append(matches).append("<br>\n").append("</p>");
-                //.append("%identity: ").append(String.format("%.2f", identity)).append("<br>\n");
+        //.append("%identity: ").append(String.format("%.2f", identity)).append("<br>\n");
 
         out.append("<pre>\n");
 
