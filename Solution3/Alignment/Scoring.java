@@ -117,4 +117,8 @@ public class Scoring{
         }
         return null;
     }
+    public int[][] getScoring_matrix() {
+        DynamicProgramming dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
+        return dynamicProgramming.getScoring_matrix();
+    }
 }

@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -129,9 +131,21 @@ public class alignment {
                 printHelp();
                 return;
             }
-//            if (dpPath != null){
-//
-//            }
+            if (dpPath != null){
+                File file = new File(dpPath);
+                if (file.isDirectory()){
+                    file = new File(file, "scoring_matrix.txt");
+                }
+                int[][] scoring_matrix = scoring.getScoring_matrix();
+                try (FileWriter fw = new FileWriter(file)) {
+                    for (int i = 0; i < scoring_matrix.length; i++) {
+                        for (int j = 0; j < scoring_matrix[0].length; j++) {
+                            fw.write(scoring_matrix[i][j] + "\t");
+                        }
+                        fw.write("\n");
+                    }
+                }
+            }
         }
         br.close();
     }

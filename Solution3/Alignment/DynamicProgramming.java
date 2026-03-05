@@ -8,6 +8,19 @@ public class DynamicProgramming extends Scoring {
         scoring_matrix = new int[seq1.length() + 1][seq2.length() + 1];
     }
 
+    public int[][] getScoring_matrix() {
+        if (mode.isGlobal()){
+            calculate_alignment_matrix_NW();
+        }
+        if (mode.isLocal()){
+            calculate_alignment_matrix_SW();
+        }
+        if (mode.isFreeshift()){
+            calculate_alignment_matrix_FS();
+        }
+        return scoring_matrix;
+    }
+
     public void calculate_alignment_matrix_NW() {
         for (int i = 0; i < scoring_matrix.length; i++) {
             scoring_matrix[i][0] = i * gap;
