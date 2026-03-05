@@ -21,17 +21,24 @@ public class Scoring{
     }
 
     public int checkScore(String al1, String al2){
-        int score = 0;
-        for (int i=0; i<al1.length(); i++){
+        int gapLen = 0;
+        for (int i=0;i<al1.length();i++){
             char x = al1.charAt(i);
             char y = al2.charAt(i);
-            if (x == '-'||y=='-'){
-                score += gap;
+
+            if(x=='-' || y=='-'){
+                gapLen++;
             }else{
+                if(gapLen>0){
+                    score += go + ge*(gapLen-1);
+                    gapLen=0;
+                }
                 score += substitution_matrix.getScore(x,y);
             }
         }
-        return score / 100;
+        if(gapLen>0){
+            score += go + ge*(gapLen-1);
+        }
     }
 
     public finalAlignment result(boolean useNW) {

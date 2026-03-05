@@ -43,6 +43,10 @@ public class alignment {
         }
 
         AlignmentType mode = parseMode(modeStr);
+        if(mode == null) {
+            printHelp();
+            return;
+        }
         Map<String, String> seqlib = readSeqLib(seqlibPath);
         SubstitutionMatrix m1 = new SubstitutionMatrix(matrixName);
         readPairs(go, ge, dpDir, check, pairsPath, seqlib, m1, mode, useNW, format);
@@ -208,7 +212,7 @@ public class alignment {
         if(s.equals("local")){
             return AlignmentType.local;
         }
-        if(s.equals("freeshidt")){
+        if(s.equals("freeshift")){
             return AlignmentType.freeshift;
 
         }
