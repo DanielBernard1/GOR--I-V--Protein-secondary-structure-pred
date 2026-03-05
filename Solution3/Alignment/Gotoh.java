@@ -377,8 +377,8 @@ public class Gotoh extends Scoring{
                 int score = substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
 
                 M[i][j]  = Math.max(Math.max(M[i-1][j-1], Gx[i-1][j-1]), Gy[i-1][j-1]) + score;
-                Gx[i][j] = Math.max(M[i-1][j] - go, Gx[i-1][j] - ge);
-                Gy[i][j] = Math.max(M[i][j-1] - go, Gy[i][j-1] - ge);
+                Gx[i][j] = Math.max(M[i-1][j] + go +ge, Gx[i-1][j] + ge); // habe ich geändert du hattest hier - aber gap penalty ist negativ deswegen plus
+                Gy[i][j] = Math.max(M[i][j-1] +go + ge, Gy[i][j-1] + ge);
             }
         }
     }
@@ -463,17 +463,17 @@ public class Gotoh extends Scoring{
                 else                                        current = "Gy";
                 i--; j--;
 
-            } else if (current.equals("Ix")) {
+            } else if (current.equals("Gx")) {
                 ali1.insert(0, seq1.charAt(i - 1));
                 ali2.insert(0, "-");
-                if (M[i-1][j] - go == Gx[i][j]) current = "M";
+                if (M[i-1][j] +go + ge == Gx[i][j]) current = "M"; //hab auch hier auf + geändert
                 else                              current = "Gx";
                 i--;
 
             } else { // Iy
                 ali1.insert(0, "-");
                 ali2.insert(0, seq2.charAt(j - 1));
-                if (M[i][j-1] - go == Gy[i][j]) current = "M";
+                if (M[i][j-1] + ge + go == Gy[i][j]) current = "M"; // hier auch
                 else                              current = "Gy";
                 j--;
             }

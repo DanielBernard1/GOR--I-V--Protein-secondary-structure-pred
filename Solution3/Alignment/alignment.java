@@ -15,8 +15,6 @@ public class alignment {
 
         int go = -12; //gap open
         int ge = -1; //gap extend
-        go*=100;
-        ge*=100;
         boolean useNW = false;
         boolean check = false;
 
@@ -34,6 +32,9 @@ public class alignment {
             if(a.equals("--mode")){modeStr = args[++i]; continue;}
             if(a.equals("--format")){format = args[++i];}
         }
+
+        go*=100;
+        ge*=100;
 
         if (pairsPath == null || seqlibPath == null || matrixName == null
                 || modeStr == null || format == null) {
@@ -207,6 +208,10 @@ public class alignment {
         if(s.equals("local")){
             return AlignmentType.local;
         }
-        return AlignmentType.freeshift; //darf ich so
+        if(s.equals("freeshidt")){
+            return AlignmentType.freeshift;
+
+        }
+        return null;
     }
 }
