@@ -151,13 +151,16 @@ public class DynamicProgramming extends Scoring {
             return new String[]{ali1.toString(), ali2.toString()};
         }
         if (mode == AlignmentType.local && scoring_matrix[i][j] == 0) {
-            StringBuilder lead1 = new StringBuilder();
-            StringBuilder lead2 = new StringBuilder();
-            for (int k = 0; k < i; k++) lead1.append(seq1.charAt(k));
-            for (int k = 0; k < j; k++) lead2.append(seq2.charAt(k));
-            while (lead1.length() < lead2.length()) lead1.insert(0, '-');
-            while (lead2.length() < lead1.length()) lead2.insert(0, '-');
-            return new String[]{lead1.append(ali1).toString(), lead2.append(ali2).toString()};
+            while (i > 0) {
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, '-');
+                i--;
+            }
+            while (j > 0) {
+                ali1.insert(0, '-');
+                ali2.insert(0, seq2.charAt(j - 1));
+                j--;
+            }
         }
         if (mode == AlignmentType.freeshift && (i == 0 || j == 0)) {
             while (i > 0) {
