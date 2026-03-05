@@ -113,8 +113,23 @@ public class DynamicProgramming extends Scoring {
         int[] coords = fs_coords();
         return scoring_matrix[coords[0]][coords[1]];
     }
+    public String[] NW_alignment(){
+        calculate_alignment_matrix_NW();
+        return traceback(seq1.length(), seq2.length(), new StringBuilder(), new StringBuilder(), mode);
+    }
+    public String[] SW_alignment(){
+        calculate_alignment_matrix_SW();
+        int[] coords = SW_coords();
+        return traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
+    }
+    public String[] FS_alignment(){
+        calculate_alignment_matrix_SW();
+        int[] coords = fs_coords();
+        return traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
+    }
 
-    private String[] traceback(int i, int j, StringBuilder ali1, StringBuilder ali2, String[] results, AlignmentType mode) {
+
+    private String[] traceback(int i, int j, StringBuilder ali1, StringBuilder ali2, AlignmentType mode) {
 
         if (mode == AlignmentType.global && i == 0 && j == 0) {
             return new String[]{ali1.toString(), ali2.toString()};

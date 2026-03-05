@@ -35,34 +35,34 @@ public class Scoring{
     }
 
     public finalAlignment result(boolean useNW) {
-        int score;
+        double score;
         String[] align;
 
         if(useNW){
-            score = DP_score();
+            score = DP_score() / 100;
             align = DP_alignment();
         }else{
-            score = Gotoh_score();
+            score = Gotoh_score() / 100;
             align = Gotoh_alignment();
         }
 
-        return new finalAlignment(align[0], align[1], score);
+        return new finalAlignment(align[0], align[1], (int) score);
     }
 
     public int Rec_score(){
         return new Recursion(seq1, seq2, substitution_matrix, gap, mode).score() / 100;
     }
 
-    public int DP_score(){
+    public double DP_score(){
         DynamicProgramming dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
         if (mode.isGlobal()){
-            return dynamicProgramming.NW_score() / 100;
+            return (double)(dynamicProgramming.NW_score()) / 100;
         }
         if (mode.isLocal()){
-            return dynamicProgramming.SW_score() / 100;
+            return (double) (dynamicProgramming.SW_score()) / 100;
         }
         if (mode.isFreeshift()) {
-            return dynamicProgramming.FS_score() / 100;
+            return (double) (dynamicProgramming.FS_score()) / 100;
         }
         return Integer.MIN_VALUE;
     }
