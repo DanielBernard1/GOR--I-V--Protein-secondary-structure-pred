@@ -303,41 +303,78 @@ public class Gotoh extends Scoring{
         return local_alignment (bestX, bestY,bestState);
     }
 
-    private String[] local_alignment(int i, int j, State state){
+    private String[] local_alignment(int i, int j, State state) {
         StringBuilder align1 = new StringBuilder();
         StringBuilder align2 = new StringBuilder();
 
-        while(true){
-            if(state == State.M){
-                if(M[i][j] == 0){break;}
-                align1.append(seq1.charAt(i-1));
-                align2.append(seq2.charAt(j-1));
-                state = prevM[i][j];
-                i = i-1;
-                j = j-1;
-            }else{
-                if(state == State.Gx){
-                    if(Gx[i][j] == 0){break;}
+        //müssen uns merken wo das lokale Alignment enden
+        //das ist der startpunkt unseres tracebacks
 
-                    align1.append(seq1.charAt(i-1));
+        int suffixStart1 = i;
+        int suffixStart2 = j;
+
+        while (true) {
+            if (state == State.M) {
+                if (M[i][j] == 0) {
+                    break;
+                }
+                align1.append(seq1.charAt(i - 1));
+                align2.append(seq2.charAt(j - 1));
+                state = prevM[i][j];
+                i = i - 1;
+                j = j - 1;
+            } else {
+                if (state == State.Gx) {
+                    if (Gx[i][j] == 0) {
+                        break;
+                    }
+
+                    align1.append(seq1.charAt(i - 1));
                     align2.append("-");
                     state = prevGx[i][j];
-                    i = i-1;
-                }else{
-                    if(Gy[i][j]==0){break;}
+                    i = i - 1;
+                } else {
+                    if (Gy[i][j] == 0) {
+                        break;
+                    }
                     align1.append("-");
-                    align2.append(seq2.charAt(j-1));
+                    align2.append(seq2.charAt(j - 1));
                     state = prevGy[i][j];
-                    j = j-1;
+                    j = j - 1;
                 }
             }
         }
+            //nicht allaniert vor lokalem Allignemt
+
+        while (i > 0) {
+            align1.append(seq1.charAt(i - 1));
+            align2.append("-");
+            i = i - 1;
+        }
+        while (j > 0) {
+            align1.append("-");
+            align2.append(seq2.charAt(j - 1));
+            j = j - 1;
+        }
+        align1.reverse();
+        align2.reverse();
+
+        //nicht allaniert nach lokalem Alignment
+        for (int g = suffixStart1; g < seq1.length(); g++) {
+            align1.append(seq1.charAt(g));
+            align2.append("-");
+        }
+        for (int g = suffixStart2; g < seq2.length(); g++) {
+            align1.append("-");
+            align2.append(seq2.charAt(g));
+        }
+
+
         String[] alignment = new String[2];
-        alignment[0] = align1.reverse().toString();
-        alignment[1] = align2.reverse().toString();
+        alignment[0] = align1.toString();
+        alignment[1] = align2.toString();
         return alignment;
     }
-
 
     //Freeshift
 
