@@ -175,6 +175,7 @@ public class Gotoh extends Scoring{
 
     //LOCAL Gotoh
 
+    //globale Max der Matrix --> Start Traceback
     int bestLocal = 0;
     int bestX = 0;
     int bestY = 0;
@@ -310,8 +311,8 @@ public class Gotoh extends Scoring{
         //müssen uns merken wo das lokale Alignment enden
         //das ist der startpunkt unseres tracebacks
 
-        int suffixStart1 = i;
-        int suffixStart2 = j;
+        int suffixStart1 = i; //i=bestX
+        int suffixStart2 = j; //j = bestY
 
         while (true) {
             if (state == State.M) {
@@ -371,8 +372,8 @@ public class Gotoh extends Scoring{
 
 
         String[] alignment = new String[2];
-        alignment[0] = align1.toString();
-        alignment[1] = align2.toString();
+        alignment[0] = align1.toString(); //erste Seq
+        alignment[1] = align2.toString(); //zweite Seq
         return alignment;
     }
 

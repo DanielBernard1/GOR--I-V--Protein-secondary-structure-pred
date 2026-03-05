@@ -15,13 +15,14 @@ public class alignment {
         String format = null;
         String dpDir = null;
 
-        int go = -12; //gap open
-        int ge = -1; //gap extend
-        boolean useNW = false;
+        int go = -12; //default gap open
+        int ge = -1; //default gap extend
+        boolean useNW = false;//wenn true --> dp statt gotoh
         boolean check = false;
 
         for(int i=0; i < args.length; i++){
             String a = args[i];
+
             if(a.equals("--nw")){useNW = true; continue;}
             if(a.equals("--check")){check = true; continue;}
             if(a.equals("--go")){go = Integer.parseInt(args[++i]); continue;}
@@ -35,6 +36,7 @@ public class alignment {
             if(a.equals("--format")){format = args[++i];}
         }
 
+        //maybe in score schlauer
         go*=100;
         ge*=100;
 
@@ -161,13 +163,16 @@ public class alignment {
             char c2 = alignment2.charAt(i);
 
             if(c1 == c2 && c1 != '-'){
+
                 matches ++;
                 mid.append('|');
             }else{
                 if(c1 != '-' && c2 != '-'){
+                    // Substitution (verschieden, keine gap)
                     int s = matrix.getScore(c1,c2);
                     mid.append(s>0? '+' : ' ');
                 }else{
+                    //Mindestens 1 Gap --> Leer
                     mid.append(' ');
                 }
             }
