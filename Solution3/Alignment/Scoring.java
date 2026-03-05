@@ -46,7 +46,7 @@ public class Scoring{
             align = Gotoh_alignment();
         }
 
-        return new finalAlignment(align[0], align[1], (int) score);
+        return new finalAlignment(align[0], align[1], score);
     }
 
     public int Rec_score(){

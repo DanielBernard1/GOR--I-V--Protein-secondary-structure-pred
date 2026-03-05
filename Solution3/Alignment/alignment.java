@@ -96,7 +96,7 @@ public class alignment {
 
             finalAlignment res = scoring.result(useNW);
 
-            int score = res.getScore();
+            double score = res.getScore();
 
             String[] alignments = new String[]{res.getAlign1(), res.getAlign2()};
 
@@ -107,7 +107,7 @@ public class alignment {
                 }
             }
 
-            String scoreStr = String.format("%.4f", (double) score);
+            String scoreStr = String.format("%.4f", score);
 
             if (format.equals("scores")) {
                 System.out.println(id1 + " " + id2 + " " + scoreStr);
@@ -130,7 +130,7 @@ public class alignment {
     }
 
 
-    private static String buildHtmlOutput(String id1, String id2, String seq1, String seq2, int score, String alignment1, String alignment2, SubstitutionMatrix matrix) {
+    private static String buildHtmlOutput(String id1, String id2, String seq1, String seq2, double score, String alignment1, String alignment2, SubstitutionMatrix matrix) {
         int matches = 0;
         int alignLen = alignment1.length();
 
