@@ -34,8 +34,19 @@ public class Scoring{
         return score / 100;
     }
 
-    public finalAlignment result() {
-        return null;
+    public finalAlignment result(boolean useNW) {
+        int score = 0;
+        String[] align = new String[2];
+
+        if(useNW){
+            score = DP_score();
+            align = DP_alignment();
+        }else{
+            score = Gotoh_score();
+            align = Gotoh_alignment();
+        }
+
+        return new finalAlignment(align[0], align[1], score);
     }
 
     public int Rec_score(){
@@ -55,6 +66,7 @@ public class Scoring{
         }
         return Integer.MIN_VALUE;
     }
+
     public String[] DP_alignment(){
         DynamicProgramming dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
         if (mode.isGlobal()){
@@ -68,6 +80,7 @@ public class Scoring{
         }
         return null;
     }
+
     public int Gotoh_score(){
         Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
         if (mode.isGlobal()){
@@ -88,7 +101,7 @@ public class Scoring{
             return gotoh.Global_alignment();
         }
         if (mode.isLocal()){
-//            return gotoh.Local_alignment();
+            return gotoh.local_alignment();
         }
         if (mode.isFreeshift()) {
             return gotoh.FS_alignment();
