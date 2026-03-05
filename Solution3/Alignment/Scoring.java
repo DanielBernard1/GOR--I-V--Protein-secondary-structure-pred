@@ -9,7 +9,7 @@ public class Scoring{
         this.seq1 = seq1;
         this.seq2 = seq2;
         this.substitution_matrix = substitution_matrix;
-        this.gap = go;
+        this.gap = ge;
         this.go = go;
         this.ge = ge;
         this.mode = mode;
@@ -35,8 +35,8 @@ public class Scoring{
     }
 
     public finalAlignment result(boolean useNW) {
-        int score = 0;
-        String[] align = new String[2];
+        int score;
+        String[] align;
 
         if(useNW){
             score = DP_score();
@@ -81,16 +81,16 @@ public class Scoring{
         return null;
     }
 
-    public int Gotoh_score(){
+    public double Gotoh_score(){
         Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
         if (mode.isGlobal()){
-            return gotoh.Global_score()/100;
+            return (double)(gotoh.Global_score()) / 100;
         }
         if (mode.isLocal()){
-            return gotoh.Local_score()/100;
+            return (double)(gotoh.Local_score()) / 100;
         }
         if (mode.isFreeshift()) {
-            return gotoh.FS_score()/100;
+            return (double)(gotoh.FS_score()) / 100;
         }
         return Integer.MIN_VALUE;
     }

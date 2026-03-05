@@ -1,10 +1,11 @@
 import java.util.Arrays;
+import java.util.List;
 
 public class DynamicProgramming extends Scoring {
     private int[][] scoring_matrix;
 
     public DynamicProgramming(String seq1, String seq2, SubstitutionMatrix matrix, int gap, AlignmentType mode) {
-        super(seq1, seq2, matrix, gap, 0,  mode);
+        super(seq1, seq2, matrix, 0, gap,  mode);
         scoring_matrix = new int[seq1.length() + 1][seq2.length() + 1];
     }
 
@@ -32,47 +33,6 @@ public class DynamicProgramming extends Scoring {
         return scoring_matrix[seq1.length()][seq2.length()];
     }
 
-    public String[] NW_alignment() {
-        calculate_alignment_matrix_NW();
-        StringBuilder ali1 = new StringBuilder();
-        StringBuilder ali2 = new StringBuilder();
-        int i = seq1.length();
-        int j = seq2.length();
-        while (i > 0 && j > 0) {
-            int current = scoring_matrix[i][j];
-            int diag = scoring_matrix[i - 1][j - 1];
-            int up = scoring_matrix[i - 1][j];
-            int left = scoring_matrix[i][j - 1];
-
-            if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
-                ali1.insert(0, seq1.charAt(i - 1));
-                ali2.insert(0, seq2.charAt(j - 1));
-                i--; j--;
-            }
-            else if (current == up + gap){
-                ali1.insert(0, seq1.charAt(i - 1));
-                ali2.insert(0, "-");
-                i--;
-            }
-            else if (current == left + gap){
-                ali1.insert(0, "-");
-                ali2.insert(0, seq2.charAt(j - 1));
-                j--;
-            }
-        }
-        while (i > 0) {
-            ali1.insert(0, seq1.charAt(i - 1));
-            ali2.insert(0, "-");
-            i--;
-        }
-        while (j > 0) {
-            ali1.insert(0, "-");
-            ali2.insert(0, seq2.charAt(j - 1));
-            j--;
-        }
-        return new String[]{ali1.toString(), ali2.toString()};
-    }
-
     public void calculate_alignment_matrix_SW() {
         for (int i = 0; i < scoring_matrix.length; i++) {
             scoring_matrix[i][0] = 0;
@@ -89,7 +49,7 @@ public class DynamicProgramming extends Scoring {
             }
         }
     }
-    private int[] find_max_coords(){
+    private int[] SW_coords(){
         calculate_alignment_matrix_SW();
         int[] coords = new int[2];
         int max = Integer.MIN_VALUE;
@@ -106,39 +66,8 @@ public class DynamicProgramming extends Scoring {
     }
 
     public int SW_score() {
-        int[] coords = find_max_coords();
+        int[] coords = SW_coords();
         return scoring_matrix[coords[0]][coords[1]];
-    }
-
-    public String[] SW_alignment() {
-        int[] coords = find_max_coords();
-        StringBuilder ali1 = new StringBuilder();
-        StringBuilder ali2 = new StringBuilder();
-        int i = coords[0];
-        int j = coords[1];
-        while (i > 0 && j > 0 && scoring_matrix[i][j] > 0) {
-            int current = scoring_matrix[i][j];
-            int diag = scoring_matrix[i - 1][j - 1];
-            int up = scoring_matrix[i - 1][j];
-            int left = scoring_matrix[i][j - 1];
-
-            if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
-                ali1.insert(0, seq1.charAt(i - 1));
-                ali2.insert(0, seq2.charAt(j - 1));
-                i--; j--;
-            }
-            else if (current == up + gap){
-                ali1.insert(0, seq1.charAt(i - 1));
-                ali2.insert(0, "-");
-                i--;
-            }
-            else if (current == left + gap){
-                ali1.insert(0, "-");
-                ali2.insert(0, seq2.charAt(j - 1));
-                j--;
-            }
-        }
-        return new String[]{ali1.toString(), ali2.toString()};
     }
 
     public void calculate_alignment_matrix_FS() {
@@ -185,56 +114,158 @@ public class DynamicProgramming extends Scoring {
         return scoring_matrix[coords[0]][coords[1]];
     }
 
-    public String[] FS_alignment() {
-        StringBuilder ali1 = new StringBuilder();
-        StringBuilder ali2 = new StringBuilder();
-        int[] coords = fs_coords();
-        int i = coords[0];
-        int j = coords[1];
+    private String[] traceback(int i, int j, StringBuilder ali1, StringBuilder ali2, String[] results, AlignmentType mode) {
 
-        int lastRow = scoring_matrix.length - 1;
-        int lastCol = scoring_matrix[0].length - 1;
-
-        for (int k = lastRow; k > i; k--) {
-            ali1.insert(0, seq1.charAt(k - 1));
-            ali2.insert(0, "-");
+        if (mode == AlignmentType.global && i == 0 && j == 0) {
+            return new String[]{ali1.toString(), ali2.toString()};
         }
-        for (int k = lastCol; k > j; k--) {
-            ali1 = new StringBuilder("-" + ali2);
-            ali2.insert(0, seq2.charAt(k - 1));
+        if (mode == AlignmentType.local && scoring_matrix[i][j] == 0) {
+            return new String[]{ali1.toString(), ali2.toString()};
         }
-        while (i > 0 && j > 0) {
-            int current = scoring_matrix[i][j];
-            int diag = scoring_matrix[i - 1][j - 1];
-            int up = scoring_matrix[i - 1][j];
-            int left = scoring_matrix[i][j - 1];
+        if (mode == AlignmentType.freeshift && (i == 0 || j == 0)) {
+            while (i > 0) { ali1.insert(0, seq1.charAt(i-1)); ali2.insert(0, '-'); i--; }
+            while (j > 0) { ali1.insert(0, '-'); ali2.insert(0, seq2.charAt(j-1)); j--; }
+            return new String[]{ali1.toString(), ali2.toString()};
+        }
 
-            if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
-                ali1.insert(0, seq1.charAt(i - 1));
-                ali2.insert(0, seq2.charAt(j - 1));
-                i--; j--;
-            }
-            else if (current == up + gap){
-                ali1.insert(0, seq1.charAt(i - 1));
-                ali2.insert(0, "-");
-                i--;
-            }
-            else if (current == left + gap){
-                ali1.insert(0, "-");
-                ali2.insert(0, seq2.charAt(j - 1));
-                j--;
+        if (i > 0 && j > 0) {
+            int diagScore = scoring_matrix[i-1][j-1] + substitution_matrix.getScore(seq1.charAt(i-1), seq2.charAt(j-1));
+            if (scoring_matrix[i][j] == diagScore) {
+                traceback(i - 1, j - 1, new StringBuilder(seq1.charAt(i - 1) + ali1.toString()), new StringBuilder(seq2.charAt(j - 1) + ali2.toString()), results, mode);
             }
         }
-        while (i > 0) {
-            ali1.insert(0, seq1.charAt(i - 1));
-            ali2.insert(0, "-");
-            i--;
+        else if (i > 0 && scoring_matrix[i][j] == scoring_matrix[i-1][j] + gap) {
+            traceback(i - 1, j, new StringBuilder(seq1.charAt(i - 1) + ali1.toString()), new StringBuilder("-" + ali2.toString()), results, mode);
         }
-        while (j > 0) {
-            ali1.insert(0, "-");
-            ali2.insert(0, seq2.charAt(j - 1));
-            j--;
+        else if (j > 0 && scoring_matrix[i][j] == scoring_matrix[i][j-1] + gap) {
+            traceback(i, j - 1, new StringBuilder("-" + ali1.toString()), new StringBuilder(seq2.charAt(j - 1) + ali2.toString()), results, mode);
         }
         return new String[]{ali1.toString(), ali2.toString()};
     }
+
+//    public String[] NW_alignment() {
+//        calculate_alignment_matrix_NW();
+//        StringBuilder ali1 = new StringBuilder();
+//        StringBuilder ali2 = new StringBuilder();
+//        int i = seq1.length();
+//        int j = seq2.length();
+//        while (i > 0 && j > 0) {
+//            int current = scoring_matrix[i][j];
+//            int diag = scoring_matrix[i - 1][j - 1];
+//            int up = scoring_matrix[i - 1][j];
+//            int left = scoring_matrix[i][j - 1];
+//
+//            if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
+//                ali1.insert(0, seq1.charAt(i - 1));
+//                ali2.insert(0, seq2.charAt(j - 1));
+//                i--; j--;
+//            }
+//            if (current == up + gap){
+//                ali1.insert(0, seq1.charAt(i - 1));
+//                ali2.insert(0, "-");
+//                i--;
+//            }
+//            if (current == left + gap){
+//                ali1.insert(0, "-");
+//                ali2.insert(0, seq2.charAt(j - 1));
+//                j--;
+//            }
+//        }
+//        while (i > 0) {
+//            ali1.insert(0, seq1.charAt(i - 1));
+//            ali2.insert(0, "-");
+//            i--;
+//        }
+//        while (j > 0) {
+//            ali1.insert(0, "-");
+//            ali2.insert(0, seq2.charAt(j - 1));
+//            j--;
+//        }
+//        return new String[]{ali1.toString(), ali2.toString()};
+//    }
+
+
+//    public String[] SW_alignment() {
+//        int[] coords = find_max_coords();
+//        StringBuilder ali1 = new StringBuilder();
+//        StringBuilder ali2 = new StringBuilder();
+//        int i = coords[0];
+//        int j = coords[1];
+//        while (i > 0 && j > 0 && scoring_matrix[i][j] > 0) {
+//            int current = scoring_matrix[i][j];
+//            int diag = scoring_matrix[i - 1][j - 1];
+//            int up = scoring_matrix[i - 1][j];
+//            int left = scoring_matrix[i][j - 1];
+//
+//            if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
+//                ali1.insert(0, seq1.charAt(i - 1));
+//                ali2.insert(0, seq2.charAt(j - 1));
+//                i--; j--;
+//            }
+//            if (current == up + gap){
+//                ali1.insert(0, seq1.charAt(i - 1));
+//                ali2.insert(0, "-");
+//                i--;
+//            }
+//            if (current == left + gap){
+//                ali1.insert(0, "-");
+//                ali2.insert(0, seq2.charAt(j - 1));
+//                j--;
+//            }
+//        }
+//        return new String[]{ali1.toString(), ali2.toString()};
+//    }
+
+//    public String[] FS_alignment() {
+//        StringBuilder ali1 = new StringBuilder();
+//        StringBuilder ali2 = new StringBuilder();
+//        int[] coords = fs_coords();
+//        int i = coords[0];
+//        int j = coords[1];
+//
+//        int lastRow = scoring_matrix.length - 1;
+//        int lastCol = scoring_matrix[0].length - 1;
+//
+//        for (int k = lastRow; k > i; k--) {
+//            ali1.insert(0, seq1.charAt(k - 1));
+//            ali2.insert(0, "-");
+//        }
+//        for (int k = lastCol; k > j; k--) {
+//            ali1 = new StringBuilder("-" + ali2);
+//            ali2.insert(0, seq2.charAt(k - 1));
+//        }
+//        while (i > 0 && j > 0) {
+//            int current = scoring_matrix[i][j];
+//            int diag = scoring_matrix[i - 1][j - 1];
+//            int up = scoring_matrix[i - 1][j];
+//            int left = scoring_matrix[i][j - 1];
+//
+//            if (current == diag + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))){
+//                ali1.insert(0, seq1.charAt(i - 1));
+//                ali2.insert(0, seq2.charAt(j - 1));
+//                i--; j--;
+//            }
+//            if (current == up + gap){
+//                ali1.insert(0, seq1.charAt(i - 1));
+//                ali2.insert(0, "-");
+//                i--;
+//            }
+//            if (current == left + gap){
+//                ali1.insert(0, "-");
+//                ali2.insert(0, seq2.charAt(j - 1));
+//                j--;
+//            }
+//        }
+//        while (i > 0) {
+//            ali1.insert(0, seq1.charAt(i - 1));
+//            ali2.insert(0, "-");
+//            i--;
+//        }
+//        while (j > 0) {
+//            ali1.insert(0, "-");
+//            ali2.insert(0, seq2.charAt(j - 1));
+//            j--;
+//        }
+//        return new String[]{ali1.toString(), ali2.toString()};
+//    }
 }

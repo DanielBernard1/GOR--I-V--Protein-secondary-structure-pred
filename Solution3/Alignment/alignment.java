@@ -208,7 +208,7 @@ public class alignment {
         if(s.equals("local")){
             return AlignmentType.local;
         }
-        if(s.equals("freeshidt")){
+        if(s.equals("freeshift")){
             return AlignmentType.freeshift;
 
         }
