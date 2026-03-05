@@ -122,7 +122,7 @@ public class DynamicProgramming extends Scoring {
         return traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
     }
     public String[] FS_alignment(){
-        calculate_alignment_matrix_SW();
+        calculate_alignment_matrix_FS();
         int[] coords = fs_coords();
         return traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
     }
@@ -145,14 +145,14 @@ public class DynamicProgramming extends Scoring {
         if (i > 0 && j > 0) {
             int diagScore = scoring_matrix[i-1][j-1] + substitution_matrix.getScore(seq1.charAt(i-1), seq2.charAt(j-1));
             if (scoring_matrix[i][j] == diagScore) {
-                traceback(i - 1, j - 1, new StringBuilder(seq1.charAt(i - 1) + ali1.toString()), new StringBuilder(seq2.charAt(j - 1) + ali2.toString()), mode);
+                return traceback(i - 1, j - 1, new StringBuilder(seq1.charAt(i - 1) + ali1.toString()), new StringBuilder(seq2.charAt(j - 1) + ali2.toString()), mode);
             }
         }
-        else if (i > 0 && scoring_matrix[i][j] == scoring_matrix[i-1][j] + gap) {
-            traceback(i - 1, j, new StringBuilder(seq1.charAt(i - 1) + ali1.toString()), new StringBuilder("-" + ali2.toString()), mode);
+        if (i > 0 && scoring_matrix[i][j] == scoring_matrix[i-1][j] + gap) {
+            return traceback(i - 1, j, new StringBuilder(seq1.charAt(i - 1) + ali1.toString()), new StringBuilder("-" + ali2.toString()), mode);
         }
-        else if (j > 0 && scoring_matrix[i][j] == scoring_matrix[i][j-1] + gap) {
-            traceback(i, j - 1, new StringBuilder("-" + ali1.toString()), new StringBuilder(seq2.charAt(j - 1) + ali2.toString()), mode);
+        if (j > 0 && scoring_matrix[i][j] == scoring_matrix[i][j-1] + gap) {
+            return traceback(i, j - 1, new StringBuilder("-" + ali1.toString()), new StringBuilder(seq2.charAt(j - 1) + ali2.toString()), mode);
         }
         return new String[]{ali1.toString(), ali2.toString()};
     }

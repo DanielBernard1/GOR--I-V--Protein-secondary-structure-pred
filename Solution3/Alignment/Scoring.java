@@ -48,10 +48,10 @@ public class Scoring{
         String[] align;
 
         if(useNW){
-            score = DP_score() / 100.0;
+            score = DP_score();
             align = DP_alignment();
         }else{
-            score = Gotoh_score() / 100.0;
+            score = Gotoh_score();
             align = Gotoh_alignment();
         }
 
