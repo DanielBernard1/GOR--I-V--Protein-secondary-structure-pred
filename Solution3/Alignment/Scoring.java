@@ -20,7 +20,7 @@ public class Scoring{
         return substitution_matrix.getScore(x,y);
     }
 
-    public int checkScore(String al1, String al2){
+    public double checkScore(String al1, String al2){
         int score = 0;
         int gapLen = 0;
         for (int i=0;i<al1.length();i++){
@@ -31,20 +31,20 @@ public class Scoring{
                 gapLen++;
             }else{
                 if(gapLen>0){
-                    score += go + ge*(gapLen-1);
+                    score += go + ge*gapLen;
                     gapLen=0;
                 }
                 score += substitution_matrix.getScore(x,y);
             }
         }
         if(gapLen>0){
-            score += go + ge*(gapLen-1);
+            score += go + ge*gapLen;
         }
-        return score/100;
+        return score/100.0;
     }
 
     public finalAlignment result(boolean useNW) {
-        int score = 0;
+        double score = 0;
         String[] align = new String[2];
 
         if(useNW){
@@ -58,20 +58,20 @@ public class Scoring{
         return new finalAlignment(align[0], align[1], score);
     }
 
-    public int Rec_score(){
-        return new Recursion(seq1, seq2, substitution_matrix, gap, mode).score() / 100;
+    public double Rec_score(){
+        return new Recursion(seq1, seq2, substitution_matrix, gap, mode).score() / 100.0;
     }
 
-    public int DP_score(){
+    public double DP_score(){
         DynamicProgramming dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
         if (mode.isGlobal()){
-            return dynamicProgramming.NW_score() / 100;
+            return dynamicProgramming.NW_score() / 100.0;
         }
         if (mode.isLocal()){
-            return dynamicProgramming.SW_score() / 100;
+            return dynamicProgramming.SW_score() / 100.0;
         }
         if (mode.isFreeshift()) {
-            return dynamicProgramming.FS_score() / 100;
+            return dynamicProgramming.FS_score() / 100.0;
         }
         return Integer.MIN_VALUE;
     }
@@ -90,16 +90,16 @@ public class Scoring{
         return null;
     }
 
-    public int Gotoh_score(){
+    public double Gotoh_score(){
         Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
         if (mode.isGlobal()){
-            return gotoh.Global_score()/100;
+            return gotoh.Global_score()/100.0;
         }
         if (mode.isLocal()){
-            return gotoh.Local_score()/100;
+            return gotoh.Local_score()/100.0;
         }
         if (mode.isFreeshift()) {
-            return gotoh.FS_score()/100;
+            return gotoh.FS_score()/100.0;
         }
         return Integer.MIN_VALUE;
     }

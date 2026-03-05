@@ -2,9 +2,9 @@ public class finalAlignment {
     protected String align1;
     protected String align2;
 
-    protected int score;
+    protected double score;
 
-    public finalAlignment(String align1, String align2, int score){
+    public finalAlignment(String align1, String align2, double score){
         this.align1 = align1;
         this.align2 = align2;
         this.score = score;
@@ -16,7 +16,7 @@ public class finalAlignment {
     public String getAlign2(){
         return align2;
     }
-    public int getScore(){
+    public double getScore(){
         return score;
     }
 

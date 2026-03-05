@@ -100,18 +100,18 @@ public class alignment {
 
             finalAlignment res = scoring.result(useNW);
 
-            int score = res.getScore();
+            double score = res.getScore();
 
             String[] alignments = new String[]{res.getAlign1(), res.getAlign2()};
 
             if(check){
-                int cs = scoring.checkScore(res.getAlign1(), res.getAlign2());
-                if(cs == res.getScore()){
+                double cs = scoring.checkScore(res.getAlign1(), res.getAlign2());
+                if(Math.abs(cs - res.getScore()) < 0.001){
                     continue;
                 }
             }
 
-            String scoreStr = String.format("%.4f", (double) score);
+            String scoreStr = String.format("%.4f", score);
 
             if (format.equals("scores")) {
                 System.out.println(id1 + " " + id2 + " " + scoreStr);
@@ -134,7 +134,7 @@ public class alignment {
     }
 
 
-    private static String buildHtmlOutput(String id1, String id2, String seq1, String seq2, int score, String alignment1, String alignment2, SubstitutionMatrix matrix) {
+    private static String buildHtmlOutput(String id1, String id2, String seq1, String seq2, double score, String alignment1, String alignment2, SubstitutionMatrix matrix) {
         int matches = 0;
         int alignLen = alignment1.length();
 
@@ -165,7 +165,7 @@ public class alignment {
                 .append("len1: ").append(seq1.length()).append(", len2: ").append(seq2.length()).append("<br>\n")
                 .append("alignment length: ").append(alignLen).append("<br>\n")
                 .append("#matches: ").append(matches).append("<br>\n").append("</p>");
-                //.append("%identity: ").append(String.format("%.2f", identity)).append("<br>\n");
+        //.append("%identity: ").append(String.format("%.2f", identity)).append("<br>\n");
 
         out.append("<pre>\n");
 

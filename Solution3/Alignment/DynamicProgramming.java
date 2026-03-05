@@ -58,6 +58,10 @@ public class DynamicProgramming extends Scoring {
                 ali1.insert(0, "-");
                 ali2.insert(0, seq2.charAt(j - 1));
                 j--;
+            }else{
+                ali1.insert(0, seq1.charAt(i - 1));
+                ali2.insert(0, "-");
+                i--;
             }
         }
         while (i > 0) {
