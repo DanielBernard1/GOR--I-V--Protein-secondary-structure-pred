@@ -200,7 +200,7 @@ public class DynamicProgramming extends Scoring {
             ali2.insert(0, "-");
         }
         for (int k = lastCol; k > j; k--) {
-            ali1.insert("-" + ali2); //hier stand davor Stringbuilder
+            ali1.insert(0, "-"); //hier stand davor Stringbuilder
             ali2.insert(0, seq2.charAt(k - 1));
         }
         while (i > 0 && j > 0) {

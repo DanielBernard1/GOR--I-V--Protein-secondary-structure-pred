@@ -21,6 +21,7 @@ public class Scoring{
     }
 
     public int checkScore(String al1, String al2){
+        int score = 0;
         int gapLen = 0;
         for (int i=0;i<al1.length();i++){
             char x = al1.charAt(i);
@@ -39,6 +40,7 @@ public class Scoring{
         if(gapLen>0){
             score += go + ge*(gapLen-1);
         }
+        return score/100;
     }
 
     public finalAlignment result(boolean useNW) {
