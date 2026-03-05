@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class DynamicProgramming extends Scoring {
-    private int[][] scoring_matrix;
+    protected int[][] scoring_matrix;
 
     public DynamicProgramming(String seq1, String seq2, SubstitutionMatrix matrix, int gap, AlignmentType mode) {
         super(seq1, seq2, matrix, 0, gap,  mode);
@@ -119,11 +119,29 @@ public class DynamicProgramming extends Scoring {
     }
     public String[] SW_alignment(){
         int[] coords = SW_coords();
-        return traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
+        String[] aligned = traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
+
+        StringBuilder tail1 = new StringBuilder();
+        StringBuilder tail2 = new StringBuilder();
+        for (int k = coords[0]; k < seq1.length(); k++) tail1.append(seq1.charAt(k));
+        for (int k = coords[1]; k < seq2.length(); k++) tail2.append(seq2.charAt(k));
+        while (tail1.length() < tail2.length()) tail1.append('-');
+        while (tail2.length() < tail1.length()) tail2.append('-');
+
+        return new String[]{aligned[0] + tail1, aligned[1] + tail2};
     }
     public String[] FS_alignment(){
         int[] coords = fs_coords();
-        return traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
+        String[] aligned = traceback(coords[0], coords[1], new StringBuilder(), new StringBuilder(), mode);
+
+        StringBuilder tail1 = new StringBuilder();
+        StringBuilder tail2 = new StringBuilder();
+        for (int k = coords[0]; k < seq1.length(); k++) tail1.append(seq1.charAt(k));
+        for (int k = coords[1]; k < seq2.length(); k++) tail2.append(seq2.charAt(k));
+        while (tail1.length() < tail2.length()) tail1.append('-');
+        while (tail2.length() < tail1.length()) tail2.append('-');
+
+        return new String[]{aligned[0] + tail1, aligned[1] + tail2};
     }
 
 
@@ -133,7 +151,13 @@ public class DynamicProgramming extends Scoring {
             return new String[]{ali1.toString(), ali2.toString()};
         }
         if (mode == AlignmentType.local && scoring_matrix[i][j] == 0) {
-            return new String[]{ali1.toString(), ali2.toString()};
+            StringBuilder lead1 = new StringBuilder();
+            StringBuilder lead2 = new StringBuilder();
+            for (int k = 0; k < i; k++) lead1.append(seq1.charAt(k));
+            for (int k = 0; k < j; k++) lead2.append(seq2.charAt(k));
+            while (lead1.length() < lead2.length()) lead1.insert(0, '-');
+            while (lead2.length() < lead1.length()) lead2.insert(0, '-');
+            return new String[]{lead1.append(ali1).toString(), lead2.append(ali2).toString()};
         }
         if (mode == AlignmentType.freeshift && (i == 0 || j == 0)) {
             while (i > 0) {
