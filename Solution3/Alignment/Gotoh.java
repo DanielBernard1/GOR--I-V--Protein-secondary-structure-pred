@@ -55,10 +55,6 @@ public class Gotoh extends Scoring{
         for(int i =1; i<= seq1.length(); i++){
             for(int j = 1; j<= seq2.length(); j++){
 
-                //int bestGxy = Math.max(Gx[i-1][j-1],Gy[i-1][j-1]);
-                //int best = Math.max(M[i-1][j-1], bestGxy);
-                //M[i][j] = best + diaScore(i,j);
-
                 //Start Traceback pointer
                 int fromM = M[i-1][j-1];
                 int fromGx = Gx[i-1][j-1];
@@ -81,31 +77,37 @@ public class Gotoh extends Scoring{
                 //Ende Tracebackpointer
 
                 //Gap in seq2 (up)
-                int gxOpen = M[i-1][j] + go +ge;
-                int gxExtend = Gx[i-1][j] + ge;
-                //Gx[i][j] = Math.max(gxOpen, gxExtend);
+                int gxOpen_M  = M[i-1][j]  + go + ge;
+                int gxOpen_Gy = Gy[i-1][j] + go + ge; // habe vergessen diesen case miteinzubeziehen grrrr
+                int gxExtend      = Gx[i-1][j] + ge;
 
-                //Pointer Gx
-                if(gxOpen >= gxExtend){
-                    Gx[i][j] = gxOpen;
-                    prevGx[i][j] = State.M;
-                }else{
-                    Gx[i][j] = gxExtend;
+                int gxBest = Math.max(gxOpen_M, Math.max(gxOpen_Gy, gxExtend));
+                Gx[i][j] = gxBest;
+
+                // Pointer Gx: extend bevorzugt, dann Gy-Öffnung, dann M-Öffnung
+                if(gxExtend >= gxOpen_M && gxExtend >= gxOpen_Gy){
                     prevGx[i][j] = State.Gx;
+                }else if(gxOpen_Gy >= gxOpen_M){
+                    prevGx[i][j] = State.Gy; // neu
+                }else{
+                    prevGx[i][j] = State.M;
                 }
 
                 //Gap in seq1 (left)
-                int gyOpen = M[i][j-1] + go + ge;
-                int gyExtend = Gy[i][j-1] +ge;
-                //Gy[i][j] = Math.max(gyOpen, gyExtend);
+                int gyOpen_M  = M[i][j-1]  + go + ge;
+                int gyOpen_Gx = Gx[i][j-1] + go + ge; // und diesen hier auch
+                int gyExtend      = Gy[i][j-1] + ge;
 
-                //Pointer Gy
-                if(gyOpen >= gyExtend){
-                    Gy[i][j] = gyOpen;
-                    prevGy[i][j] = State.M;
-                }else{
-                    Gy[i][j] = gyExtend;
+                int gyBest = Math.max(gyOpen_M, Math.max(gyOpen_Gx, gyExtend));
+                Gy[i][j] = gyBest;
+
+                // Pointer Gy: extend bevorzugt, dann Gx-Öffnung, dann M-Öffnung
+                if(gyExtend >= gyOpen_M && gyExtend >= gyOpen_Gx){
                     prevGy[i][j] = State.Gy;
+                }else if(gyOpen_Gx >= gyOpen_M){
+                    prevGy[i][j] = State.Gx; // neu
+                }else{
+                    prevGy[i][j] = State.M;
                 }
             }
         }
@@ -229,8 +231,6 @@ public class Gotoh extends Scoring{
                     best = fromGy;
                     preState = State.Gy;
                 }
-                //int bestGxGy = Math.max(Gx[i-1][j-1], Gy[i-1][j-1]);
-                //int best = Math.max(M[i-1][j-1], bestGxGy);
                 int maxVal = best + diaScore(i,j);
                 if(maxVal < 0){
                     maxVal = 0; //alle negativen wert in matrix werden auf 0 gebracht
@@ -239,33 +239,36 @@ public class Gotoh extends Scoring{
                 prevM[i][j] = preState;
 
                 //Gap in seq2
-                int gxOpen = M[i-1][j] + go +ge;
-                int gxExtend = Gx[i-1][j] + ge;
-                //int maxGapX = Math.max(gxOpen, gxExtend);
-                int gxVal;
-                if(gxOpen > gxExtend){
-                    gxVal = gxOpen;
-                    prevGx[i][j]= State.M;
-                }else{
-                    gxVal = gxExtend;
-                    prevGx[i][j] = State.Gx;
-                }
+                int gxOpen_M  = M[i-1][j]  + go + ge;
+                int gxOpen_Gy = Gy[i-1][j] + go + ge; // hier genauso wie bei global
+                int gxExtend      = Gx[i-1][j] + ge;
+
+                int gxVal = Math.max(gxOpen_M, Math.max(gxOpen_Gy, gxExtend));
                 Gx[i][j] = gxVal;
 
-                //gap in seq1
-                int gyOpen = M[i][j-1] +go +ge;
-                int gyExtend = Gy[i][j-1] + ge;
-                //int maxGapY = Math.max(gyOpen, gyExtend);
-
-                int gyVal;
-                if(gyOpen > gyExtend){
-                    gyVal = gyOpen;
-                    prevGy[i][j]= State.M;
+                if(gxExtend >= gxOpen_M && gxExtend >= gxOpen_Gy){
+                    prevGx[i][j] = State.Gx;
+                }else if(gxOpen_Gy >= gxOpen_M){
+                    prevGx[i][j] = State.Gy; // neu
                 }else{
-                    gyVal = gyExtend;
-                    prevGy[i][j] = State.Gy;
+                    prevGx[i][j] = State.M;
                 }
+
+                //gap in seq1
+                int gyOpen_M  = M[i][j-1]  + go + ge;
+                int gyOpen_Gx = Gx[i][j-1] + go + ge; // hier genauso
+                int gyExtend      = Gy[i][j-1] + ge;
+
+                int gyVal = Math.max(gyOpen_M, Math.max(gyOpen_Gx, gyExtend));
                 Gy[i][j] = gyVal;
+
+                if(gyExtend >= gyOpen_M && gyExtend >= gyOpen_Gx){
+                    prevGy[i][j] = State.Gy;
+                }else if(gyOpen_Gx >= gyOpen_M){
+                    prevGy[i][j] = State.Gx; // neu
+                }else{
+                    prevGy[i][j] = State.M;
+                }
 
 
                 //was ist das beste
@@ -345,7 +348,7 @@ public class Gotoh extends Scoring{
                 }
             }
         }
-            //nicht allaniert vor lokalem Allignemt
+        //nicht allaniert vor lokalem Allignemt
 
         while (i > 0) {
             align1.append(seq1.charAt(i - 1));
