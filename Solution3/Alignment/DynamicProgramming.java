@@ -174,6 +174,8 @@ public class DynamicProgramming extends Scoring {
                 ali2.insert(0, seq2.charAt(j - 1));
                 j--;
             }
+            return new String[]{ali1.toString(), ali2.toString()};
+
         }
         if (mode == AlignmentType.freeshift && (i == 0 || j == 0)) {
             while (i > 0) {
