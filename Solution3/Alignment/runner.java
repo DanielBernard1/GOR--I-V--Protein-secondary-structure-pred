@@ -3,11 +3,11 @@ import java.io.IOException;
 public class runner {
     public static void main(String[] args) throws IOException {
         SubstitutionMatrix substitutionMatrix = new SubstitutionMatrix("/Users/davidhuynhngoc/Downloads/dayhoff-2.mat");
-        DynamicProgramming dynamicProgramming = new DynamicProgramming("GPLDVQVTEDAVRRYLTRKPMTTKDLLKKFQTKKTGLSSEQTVNVLAQILKRLNPERKMINDKMHFSLK", "MEEAKQKVVDFLNSKSKSKFYFNDFTDLFPDMKQREVKKILTALVNDEVLEYWSSGSTTMYGLKG", substitutionMatrix, -200, AlignmentType.freeshift);
+        DynamicProgramming dynamicProgramming = new DynamicProgramming("PLDTEVTALSEDEYFSAGVVKGHRKESGELYYSIEKEGQRKWYKRMAVILSLEQGNRLREQYG", "GSSGSSGVENLKAQALCSWTAKKDNHLNFSKHDIITVLEQQENWWFGEVHGGRGWFPKSYVKIIPGSESGPSS", substitutionMatrix, -200, AlignmentType.local);
 
-        System.out.println(dynamicProgramming.FS_score() / 100.0);
-        System.out.println(dynamicProgramming.FS_alignment()[0]);
-        System.out.println(dynamicProgramming.FS_alignment()[1]);
+        System.out.println(dynamicProgramming.SW_score() / 100.0);
+        System.out.println(dynamicProgramming.SW_alignment()[0]);
+        System.out.println(dynamicProgramming.SW_alignment()[1]);
 
         StringBuilder scoreMatrix = new StringBuilder();
         scoreMatrix.append("Score Matrix: \n");
@@ -18,6 +18,6 @@ public class runner {
             scoreMatrix.append("\n");
         }
         scoreMatrix.append("\n");
-        //System.out.println(scoreMatrix.toString());
+        System.out.println(scoreMatrix.toString());
     }
 }

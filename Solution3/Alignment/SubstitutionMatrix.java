@@ -21,7 +21,7 @@ public class SubstitutionMatrix {
                     int[] rowValues = new int[parts.length - 1];
                     for (int i = 1; i < parts.length; i++) {
                         String val = parts[i].replaceAll("\\.$", "");
-                        rowValues[i - 1] = (int)(Math.round(Double.parseDouble(val) * 100)) ;
+                        rowValues[i - 1] = (int)(Math.round(Double.parseDouble(val) * 100.0)) ;
                     }
                     rows.add(rowValues);
                 }
