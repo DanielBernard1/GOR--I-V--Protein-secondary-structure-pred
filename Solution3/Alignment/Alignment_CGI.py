@@ -90,11 +90,15 @@ output = subprocess.run(["java", "-jar", alignment_jar, "--pairs", pairs_file, "
                          "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt],
                         capture_output=True, text=True)
 
+if output:
+    print(output.stdout)
+    print(output.stderr)
+
 print(f"""<!DOCTYPE html>
 <html>
 <body>
     <h1>Alignment</h1>
-    <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> #haben nicht .py
+    <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> 
         <input type="text" name="id1" value="{id1}">
         <input type="text" name="id2" value="{id2}"><br>
         <textarea name="seq1">{seq1}</textarea>
