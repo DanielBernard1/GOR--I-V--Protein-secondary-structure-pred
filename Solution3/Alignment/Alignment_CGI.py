@@ -12,24 +12,65 @@ form = mycgi.Form()
 
 output = None
 
-seq1 = form["seq1"]
-seq2 = form["seq2"]
-id1 = form["id1"]
-id2 = form["id2"]
-matrix = form["matrix"]
-mode = form["mode"]
-fmt = form["format"]
-go = form["go"]
-ge = form["ge"]
-check = form["check"]
-show_dp = form["show_dp"]
-#use_nw = form["use_nw"]
+if "seq1" in form:
+    seq1 = form["seq1"].value
+else:
+    seq1 = ""
 
-ref_align1 = form["ref_align1"]
-ref_align2 = form["ref_align2"]
-db_id1 = form["db_id1"]
-db_id2 = form["db_id2"]
-show_dp = form["show_dp"]
+if "seq2" in form:
+    seq2 = form["seq2"].value
+else:
+    seq2 = ""
+
+if "id1" in form:
+    id1 = form["id1"].value
+else:
+    id1 = "seq1"
+
+if "id2" in form:
+    id2 = form["id2"].value
+else:
+    id2 = "seq2"
+
+if "matrix" in form:
+    matrix = form["matrix"].value
+else:
+    matrix = "dayhoff.mat"
+
+if "mode" in form:
+    mode = form["mode"].value
+else:
+    mode = "global"
+
+if "format" in form:
+    fmt = form["format"].value
+else:
+    fmt = "ali"
+
+if "go" in form:
+    go = form["go"].value
+else:
+    go = "-12"
+
+if "ge" in form:
+    ge = form["ge"].value
+else:
+    ge = "-1"
+
+if "use_nw" in form:
+    use_nw = True
+else:
+    use_nw = False
+
+if "check" in form:
+    check = True
+else:
+    check = False
+
+if "show_dp" in form:
+    show_dp = True
+else:
+    show_dp = False
 
 #Einlesen:
 alignment_jar = "../finaljars/alignment.jar"
