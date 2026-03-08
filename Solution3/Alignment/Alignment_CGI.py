@@ -13,47 +13,47 @@ form = mycgi.Form()
 output = None
 
 if "seq1" in form:
-    seq1 = form["seq1"]
+    seq1 = form["seq1"].value
 else:
     seq1 = ""
 
 if "seq2" in form:
-    seq2 = form["seq2"]
+    seq2 = form["seq2"].value
 else:
     seq2 = ""
 
 if "id1" in form:
-    id1 = form["id1"]
+    id1 = form["id1"].value
 else:
     id1 = "seq1"
 
 if "id2" in form:
-    id2 = form["id2"]
+    id2 = form["id2"].value
 else:
     id2 = "seq2"
 
 if "matrix" in form:
-    matrix = form["matrix"]
+    matrix = form["matrix"].value
 else:
     matrix = "dayhoff.mat"
 
 if "mode" in form:
-    mode = form["mode"]
+    mode = form["mode"].value
 else:
     mode = "global"
 
 if "format" in form:
-    fmt = form["format"]
+    fmt = form["format"].value
 else:
     fmt = "ali"
 
 if "go" in form:
-    go = form["go"]
+    go = form["go"].value
 else:
     go = "-12"
 
 if "ge" in form:
-    ge = form["ge"]
+    ge = form["ge"].value
 else:
     ge = "-1"
 
