@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/biopython
 #quelle w3school html-tutorial
 
 #Autor Laura Martin+
