@@ -12,20 +12,16 @@ form = mycgi.Form()
 
 output = None
 
-if "seq1" in form:
-    seq1 = form["seq1"].value
-else:
-    seq1 = ""
 
-if "seq2" in form:
-    seq2 = form["seq2"].value
-else:
-    seq2 = ""
+seq1 = form["seq1"].value
 
-if "id1" in form:
-    id1 = form["id1"].value
-else:
-    id1 = "seq1"
+
+seq2 = form["seq2"].value
+
+
+
+id1 = form["id1"].value
+
 
 if "id2" in form:
     id2 = form["id2"].value
@@ -157,8 +153,9 @@ print(f"""<!DOCTYPE html>
 
 if output:
     print(mode)
+    print("")
     print(output.stdout)
-    print(matrix_path)
+    print(matrix)
 
 print(f"""
         </pre>
