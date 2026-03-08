@@ -32,16 +32,16 @@ show_dp = form["show_dp"]
 #Einlesen:
 alignment_jar = "../finaljars/alignment.jar"
 matrix_path = "../matrices/" + matrix
-seqlib_file = "../tmp/seqlib.txt"
-pairs_file = "../tmp/pairs.txt"
+seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
+pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
 
 
 with open(pairs_file, "w") as f:
     f.write(f"{id1} {id2}\n")
 
 with open(seqlib_file, "w") as f:
-    f.write(f"{id1}:{seq1.strip()}\n")
-    f.write(f"{id2}:{seq2.strip()}\n")
+    f.write(f"{id1}:{seq1}\n")
+    f.write(f"{id2}:{seq2}\n")
 
 output = subprocess.run(["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
                          "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt],
@@ -57,9 +57,11 @@ print(f"""<!DOCTYPE html>
         <textarea name="seq1">{seq1}</textarea>
         <textarea name="seq2">{seq2}</textarea><br>
         
-        <select name="matrix">
-            <option value="blosum62.mat"> <p>BLOSUM62</p> </option>
+        <select name="matrix"> #alle Matrizen die auf Server liegen
             <option value="dayhoff.mat"> <p>dayhoff</p> </option>
+            <option value="BlakeCohenMatrix.mat"> <p>BlakeCohenMatrix</p> </option>
+            <option value="blosum62.mat"> <p>BLOSUM62</p> </option>
+            <option value="pam250.mat"> <p>pam250</p> </option>
         </select>
         
         <select name="mode">
@@ -77,6 +79,7 @@ print(f"""<!DOCTYPE html>
             <input type="text" name="go" value="{go}">
             <input type="text" name="ge" value="{ge}"><br>
             <input type="submit" value="Alignment berechnen">
+            
         <section>
             <input type="checkbox" name="check"> <p>check</p> <br>
             <input type="checkbox" name="show_dp"> <p>DP-Matrix</p> <br>
