@@ -61,6 +61,7 @@ alignment_jar = "../finaljars/alignment.jar"
 matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
 seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
 pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
+dp_path = "dp_matrix.txt"
 
 
 with open(pairs_file, "w") as f:
@@ -70,10 +71,21 @@ with open(seqlib_file, "w") as f:
     f.write(f"{id1}:{seq1}\n")
     f.write(f"{id2}:{seq2}\n")
 
+with open("") as f:
+    print("<h3>DP-Matrix:</h3><pre>")
+    print(f.read())
+    print("</pre>")
+
+
+
 input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
                          "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt]
 if use_nw =="nw":
     input.append("--nw")
+
+dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
+print("<h2>DP-Matrix:</h2><pre>")
+print(dp_vis.stdout)
 
 output = subprocess.run(input, capture_output=True, text=True)
 
@@ -138,6 +150,8 @@ if output:
     print("")
     print(output.stdout)
     print(matrix)
+    print("<h2>Benchmark</h2>")
+    print("<img src='benchmark.png'>")
 
 print(f"""
         </pre>
