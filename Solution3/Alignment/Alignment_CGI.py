@@ -107,9 +107,13 @@ print(f"""<!DOCTYPE html>
     <h1>Alignment</h1>
     <h2>New Searchrequest:</h2>
     <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> 
+        <p>Id1: </p>
         <input type="text" name="id1" value="{id1}">
+        <p>Id2: </p>
         <input type="text" name="id2" value="{id2}"><br>
+        <p>Sequenz1: </p>
         <textarea name="seq1">{seq1}</textarea>
+        <p>Sequenz2: </p>
         <textarea name="seq2">{seq2}</textarea><br>
         
         <select name="matrix"> #alle Matrizen die auf Server liegen
@@ -118,18 +122,18 @@ print(f"""<!DOCTYPE html>
             <option value="blosum62.mat"> <p>BLOSUM62</p> </option>
             <option value="pam250.mat"> <p>pam250</p> </option>
         </select>
-        
+        <br><br>
         <select name="mode">
             <option value="global"> <p>global</p> </option>
             <option value="local"> <p>local</p> </option>
             <option value="freeshift"> <p>freeshift</p> </option>
         </select>
-        
+        <br><br>
         <select name="format">
             <option value="ali"> <p>ali</p> </option>
             <option value="scores"> <p>scores</p> </option>
             <option value="html"> <p>html</p> </option>
-        </select></br>
+        </select><br>
             
         <section>
             <input type="checkbox" name="check"> <p>check</p> <br>
@@ -138,10 +142,10 @@ print(f"""<!DOCTYPE html>
         
         <select name="use_nw">
             <option value="gotoh"> <p>Gotoh</p> </option>
-            <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option>
-        </select>
+            <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option> 
+        </select><br>
         
-        <input type="text" name="go" value="{go}">
+        <input type="text" name="go" value="{go}"><br>
         <input type="text" name="ge" value="{ge}"><br>
         <input type="submit" value="Calculate Alignment">
         
