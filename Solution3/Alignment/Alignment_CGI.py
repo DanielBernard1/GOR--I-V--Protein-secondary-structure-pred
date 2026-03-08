@@ -19,11 +19,20 @@ seq2 = form["seq2"].value
 id1 = form["id1"].value
 id2 = form["id2"].value
 
-matrix = form["matrix"].value
+if "matrix" in form:
+    matrix = form["matrix"].value
+else:
+    matrix = "dayhoff.mat"
 
-mode = form["mode"].value
+if "mode" in form:
+    mode = form["mode"].value
+else:
+    mode = "global"
 
-fmt = form["format"].value
+if "format" in form:
+    fmt = form["format"].value
+else:
+    fmt = "ali"
 
 go = form["go"].value
 ge = form["ge"].value
