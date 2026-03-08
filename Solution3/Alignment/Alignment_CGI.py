@@ -146,11 +146,12 @@ print(f"""<!DOCTYPE html>
 """)
 
 if output:
-    print(mode)
+    print("<h4>mode</h4>")
     print("")
-    print(output.stdout)
-    print(matrix)
-    print("<h2>Benchmark</h2>")
+    print("<h2>output.stdout</h2>")
+    print("<h4>matrix</h4>")
+    print("")
+    print("<h4>Benchmark</h4>")
     print("<img src='benchmark.png'>")
 
 print(f"""
