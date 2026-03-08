@@ -28,7 +28,8 @@ fmt = form["format"].value
 go = form["go"].value
 ge = form["ge"].value
 
-use_nw = form["use_nw"].value
+
+
 
 if "check" in form:
     check = True
@@ -39,6 +40,12 @@ if "show_dp" in form:
     show_dp = True
 else:
     show_dp = False
+
+if "use_nw" in form:
+    use_nw = form["use_nw"].value
+else:
+    use_nw = "gotoh"
+
 
 #Einlesen:
 alignment_jar = "../finaljars/alignment.jar"
@@ -107,7 +114,7 @@ print(f"""<!DOCTYPE html>
             <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option> 
         </select><br>
         
-        <input type="text" name="go" value="{go} "><br>
+        <input type="text" name="go" value="{go}"><br>
         <input type="text" name="ge" value="{ge}"><br>
         <input type="submit" value="Calculate Alignment">
         
