@@ -30,7 +30,7 @@ db_id2 = form["db_id2"]
 show_dp = form["show_dp"]
 
 #Einlesen:
-alignment_jar = "finaljars/alignment.jar"
+alignment_jar = "../finaljars/alignment.jar"
 matrix_path = "matrices/" + matrix
 seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
 pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
