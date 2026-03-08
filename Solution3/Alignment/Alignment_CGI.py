@@ -151,7 +151,8 @@ if output:
     print(output.stdout)
     print(matrix)
     print("")
-    print("<h4>Benchmark</h4>")
+    print("")
+    print("<h2>Benchmark</h2>")
     print("<img src='benchmark.png'>")
 
 print(f"""
