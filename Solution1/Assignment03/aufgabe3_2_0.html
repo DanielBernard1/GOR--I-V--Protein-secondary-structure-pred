@@ -104,13 +104,13 @@
             <h1>Aufgabe 3, Blatt 3 - Alignment</h1>
             <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~huynhngoc/propragruppe15/Solution3/Alignment/alignment.cgi">
                 <p>ID 1:</p>
-                <input type="text" name="id1" value="seq1">
+                <input type="text" name="id1" value="seq1" required>
                 <p>ID 2:</p>
-                <input type="text" name="id2" value="seq2"><br><br>
+                <input type="text" name="id2" value="seq2" required><br><br>
                 <p>Sequenz 1:</p>
-                <textarea name="seq1" rows="3" cols="50"></textarea><br>
+                <textarea name="seq1" required></textarea><br>
                 <p>Sequenz 2:</p>
-                <textarea name="seq2" rows="3" cols="50"></textarea><br><br>
+                <textarea name="seq2" required></textarea><br><br>
                 <p>Matrix:</p>
                 <select name="matrix">
                     <option value="dayhoff.mat">dayhoff</option>
