@@ -156,7 +156,9 @@ print(f"""<!DOCTYPE html>
 """)
 
 if output:
+    print(mode)
     print(output.stdout)
+    print(matrix_path)
 
 print(f"""
         </pre>
