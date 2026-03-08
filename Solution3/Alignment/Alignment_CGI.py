@@ -14,49 +14,21 @@ output = None
 
 
 seq1 = form["seq1"].value
-
-
 seq2 = form["seq2"].value
 
-
-
 id1 = form["id1"].value
+id2 = form["id2"].value
 
+matrix = form["matrix"].value
 
-if "id2" in form:
-    id2 = form["id2"].value
-else:
-    id2 = "seq2"
+mode = form["mode"].value
 
-if "matrix" in form:
-    matrix = form["matrix"].value
-else:
-    matrix = "dayhoff.mat"
+fmt = form["format"].value
 
-if "mode" in form:
-    mode = form["mode"].value
-else:
-    mode = "global"
+go = form["go"].value
+ge = form["ge"].value
 
-if "format" in form:
-    fmt = form["format"].value
-else:
-    fmt = "ali"
-
-if "go" in form:
-    go = form["go"].value
-else:
-    go = "-12"
-
-if "ge" in form:
-    ge = form["ge"].value
-else:
-    ge = "-1"
-
-if "use_nw" in form:
-    use_nw = True
-else:
-    use_nw = False
+use_nw = form["use_nw"].value
 
 if "check" in form:
     check = True
@@ -67,12 +39,6 @@ if "show_dp" in form:
     show_dp = True
 else:
     show_dp = False
-
-if "use_nw" in form:
-    use_nw = form["use_nw"].value
-else:
-    use_nw = "gotoh"
-
 
 #Einlesen:
 alignment_jar = "../finaljars/alignment.jar"
@@ -141,7 +107,7 @@ print(f"""<!DOCTYPE html>
             <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option> 
         </select><br>
         
-        <input type="text" name="go" value="{go}"><br>
+        <input type="text" name="go" value="{go} "><br>
         <input type="text" name="ge" value="{ge}"><br>
         <input type="submit" value="Calculate Alignment">
         
