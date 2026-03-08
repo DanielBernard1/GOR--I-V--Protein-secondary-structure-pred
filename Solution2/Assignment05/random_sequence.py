@@ -2,6 +2,8 @@
 import argparse
 from random import *
 
+#Autor Laura Martin
+
 #Input: Länge, gc Gehalt (in Prozent), optional: Sequenzname
 #Output:
     # Sequenzname

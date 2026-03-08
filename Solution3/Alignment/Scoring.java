@@ -1,3 +1,5 @@
+//Autor David und Laura (50/50)
+
 public class Scoring{
     protected final String seq1;
     protected final String seq2;

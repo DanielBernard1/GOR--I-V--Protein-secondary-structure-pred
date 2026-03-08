@@ -3,7 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.13 (Python)" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="liberica-21" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/Solution3/Alignment" />
-  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="bioinfo" project-jdk-type="Python SDK" />
 </project>

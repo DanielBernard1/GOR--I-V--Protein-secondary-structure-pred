@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 
-
+#autor: Laura Martin
 class FASTAreader:
     def read_fasta_function(self, filepath):
         self.motifs = {}

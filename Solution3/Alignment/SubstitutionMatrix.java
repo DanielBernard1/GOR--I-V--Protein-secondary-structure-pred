@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.*;
+
+//Autor: David
 public class SubstitutionMatrix {
     private String index = "ARNDCQEGHILKMFPSTWYV";
     private int[][] submatrix = new int[20][20];

@@ -1,3 +1,5 @@
+//Autor Laura Martin
+
 public class finalAlignment {
     protected String align1;
     protected String align2;

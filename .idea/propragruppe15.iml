@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Solution3/Alignment" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Solution3/Alignment/out/production/Alignment" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="corretto-17" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="bioinfo" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

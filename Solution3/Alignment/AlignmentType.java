@@ -1,3 +1,5 @@
+//Autor: Laura Martin
+
 public enum AlignmentType {
     //alle möglichen Arten die sich von der Anwendung unterscheiden
 

@@ -2,6 +2,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
+//Autor: Laura Martin
+
 //muss eigtl aus git bash machen aber kb, ich hasse git
 //habe gegoogelt und gefunden dass man es mit Subtraktion von System.nanoTime() machen kann
 

@@ -1,3 +1,5 @@
+//Autor: Laura Martin
+
 public class Gotoh extends Scoring{
     private enum State{M, Gx, Gy} //traceback
     private int[][] M, Gx, Gy;
@@ -380,7 +382,7 @@ public class Gotoh extends Scoring{
         return alignment;
     }
 
-    //Freeshift
+    //Freeshift --> Autor: David
 
     private void FS_Matrices() {
         int n = seq1.length();

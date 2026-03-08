@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 #quelle w3school html-tutorial
+
+#Autor Laura Martin+
 import subprocess
 
 import mycgi
@@ -56,26 +58,29 @@ print(f"""<!DOCTYPE html>
         <textarea name="seq2">{seq2}</textarea><br>
         
         <select name="matrix">
-            <option value="blosum62.mat">BLOSUM62</option>
-            <option value="dayhoff.mat">dayhoff</option>
+            <option value="blosum62.mat"> <p>BLOSUM62</p> </option>
+            <option value="dayhoff.mat"> <p>dayhoff</p> </option>
         </select>
         
         <select name="mode">
-            <option value="global">global</option>
-            <option value="local">local</option>
-            <option value="freeshift">freeshift</option>
+            <option value="global"> <p>global</p> </option>
+            <option value="local"> <p>local</p> </option>
+            <option value="freeshift"> <p>freeshift</p> </option>
         </select>
         
         <select name="format">
-            <option value="ali">ali</option>
-            <option value="scores">scores</option>
-            <option value="html">html</option>
+            <option value="ali"> <p>ali</p> </option>
+            <option value="scores"> <p>scores</p> </option>
+            <option value="html"> <p>html</p> </option>
         </select></br>
         
             <input type="text" name="go" value="{go}">
             <input type="text" name="ge" value="{ge}"><br>
             <input type="submit" value="Alignment berechnen">
-        
+        <section>
+            <input type="checkbox" name="check"> <p>check</p> <br>
+            <input type="checkbox" name="show_dp"> <p>DP-Matrix</p> <br>
+        </section>
     </form>
     
     <h2>Output</h2>

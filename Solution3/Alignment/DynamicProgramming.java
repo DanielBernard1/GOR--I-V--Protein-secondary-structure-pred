@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+//Autor: David
+
 public class DynamicProgramming extends Scoring {
     protected int[][] scoring_matrix;
     private char[][] traceback_matrix;

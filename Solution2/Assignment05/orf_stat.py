@@ -2,6 +2,7 @@
 import argparse
 import matplotlib.pyplot as plt
 
+#Autor Laura Martin
 
 class FASTAreader:
     def read_fasta_function(self, filepath):

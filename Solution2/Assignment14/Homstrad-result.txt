@@ -1,3 +1,5 @@
+#Autor: Laura Martin
+
 #1. Anzahl Familien:
 #Ist Familie = Alignment?
 #SELECT COUNT(DISTINCT family) FROM alignment_sequences;

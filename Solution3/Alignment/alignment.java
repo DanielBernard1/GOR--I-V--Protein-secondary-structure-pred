@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+//Autor Laura Martin
 public class alignment {
     //hier drüber wird alles abgerufen
     public static void main (String[] args) throws Exception {
