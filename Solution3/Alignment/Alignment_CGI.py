@@ -146,10 +146,10 @@ print(f"""<!DOCTYPE html>
 """)
 
 if output:
-    print("<h4>mode</h4>")
+    print(mode)
     print("")
-    print("<h2>output.stdout</h2>")
-    print("<h4>matrix</h4>")
+    print(output.stdout)
+    print(matrix)
     print("")
     print("<h4>Benchmark</h4>")
     print("<img src='benchmark.png'>")
