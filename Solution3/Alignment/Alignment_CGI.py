@@ -12,15 +12,50 @@ form = mycgi.Form()
 
 output = None
 
-seq1 = form["seq1"]
-seq2 = form["seq2"]
-id1 = form["id1"]
-id2 = form["id2"]
-matrix = form["matrix"]
-mode = form["mode"]
-fmt = form["format"]
-go = form["go"]
-ge = form["ge"]
+if "seq1" in form:
+    seq1 = form["seq1"].value
+else:
+    seq1 = ""
+
+if "seq2" in form:
+    seq2 = form["seq2"].value
+else:
+    seq2 = ""
+
+if "id1" in form:
+    id1 = form["id1"].value
+else:
+    id1 = "seq1"
+
+if "id2" in form:
+    id2 = form["id2"].value
+else:
+    id2 = "seq2"
+
+if "matrix" in form:
+    matrix = form["matrix"].value
+else:
+    matrix = "dayhoff.mat"
+
+if "mode" in form:
+    mode = form["mode"].value
+else:
+    mode = "global"
+
+if "format" in form:
+    fmt = form["format"].value
+else:
+    fmt = "ali"
+
+if "go" in form:
+    go = form["go"].value
+else:
+    go = "-12"
+
+if "ge" in form:
+    ge = form["ge"].value
+else:
+    ge = "-1"
 
 if "use_nw" in form:
     use_nw = True
@@ -52,12 +87,10 @@ with open(seqlib_file, "w") as f:
     f.write(f"{id2}:{seq2}\n")
 
 output = subprocess.run(["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
-                         "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt],
+                         "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt, ""],
                         capture_output=True, text=True)
 
-if output:
-    print(output.stdout)
-    print(output.stderr)
+
 
 print(f"""<!DOCTYPE html>
 <html>
