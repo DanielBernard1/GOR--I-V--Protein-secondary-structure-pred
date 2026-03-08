@@ -130,10 +130,6 @@ print(f"""<!DOCTYPE html>
             <option value="scores"> <p>scores</p> </option>
             <option value="html"> <p>html</p> </option>
         </select></br>
-        
-            <input type="text" name="go" value="{go}">
-            <input type="text" name="ge" value="{ge}"><br>
-            <input type="submit" value="Calculate Alignment">
             
         <section>
             <input type="checkbox" name="check"> <p>check</p> <br>
@@ -144,6 +140,11 @@ print(f"""<!DOCTYPE html>
             <option value="gotoh"> <p>Gotoh</p> </option>
             <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option>
         </select>
+        
+        <input type="text" name="go" value="{go}">
+        <input type="text" name="ge" value="{ge}"><br>
+        <input type="submit" value="Calculate Alignment">
+        
     </form>
     
     <h2>Final Alignment</h2>
