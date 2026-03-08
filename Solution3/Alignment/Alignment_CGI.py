@@ -51,7 +51,7 @@ print(f"""<!DOCTYPE html>
 <html>
 <body>
     <h1>Alignment</h1>
-    <form method="post" enctype="multipart/form-data" action="Alignment.py"> #haben nicht .py
+    <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> #haben nicht .py
         <input type="text" name="id1" value="{id1}">
         <input type="text" name="id2" value="{id2}"><br>
         <textarea name="seq1">{seq1}</textarea>
