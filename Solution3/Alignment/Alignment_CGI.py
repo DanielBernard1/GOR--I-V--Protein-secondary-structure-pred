@@ -83,11 +83,11 @@ input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqli
 if use_nw =="nw":
     input.append("--nw")
 
-dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
-print("<h2>DP-Matrix:</h2><pre>")
-print(dp_vis.stdout)
+#dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
+#print("<h2>DP-Matrix:</h2><pre>")
+#print(dp_vis.stdout)
 
-output = subprocess.run(input, capture_output=True, text=True)
+#output = subprocess.run(input, capture_output=True, text=True)
 
 
 
