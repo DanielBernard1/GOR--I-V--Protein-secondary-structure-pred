@@ -74,7 +74,7 @@ else:
 
 #Einlesen:
 alignment_jar = "../finaljars/alignment.jar"
-matrix_path = "matrices/" + matrix
+matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
 seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
 pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
 
