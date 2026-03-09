@@ -6,8 +6,7 @@ import sys
 with open(sys.argv[1]) as f:
     lines = f.readlines()
 
-min = map(int, lines[0].strip().split("\t"))
-max = map(int, lines[0].strip().split("\t"))
+min, max = map(int, lines[0].strip().split("\t"))
 
 outputMatrix = []
 for line in lines[1:]:

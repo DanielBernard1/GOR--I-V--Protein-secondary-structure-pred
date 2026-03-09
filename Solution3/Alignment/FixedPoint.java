@@ -73,7 +73,7 @@ public class FixedPoint {
 
         int [][] ScoreFP = new int[seq1.length()][seq2.length()];
         int min = Integer.MAX_VALUE;
-        int max = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
 
         for(int i =0; i < seq1.length(); i++){
             for(int j=0; j<seq2.length(); j++){

@@ -13,6 +13,7 @@ public class alignment {
         String seqlibPath = null;
         String matrixName = null;
         String modeStr = null;
+
         String format = null;
         String dpDir = null;
 
