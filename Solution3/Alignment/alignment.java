@@ -198,60 +198,68 @@ public class alignment {
         int matches = 0;
         int alignLen = alignment1.length();
 
-        StringBuilder mid = new StringBuilder((alignLen));
-        for(int i = 0; i < alignLen; i++){
+        StringBuilder mid = new StringBuilder(alignLen);
+        for (int i = 0; i < alignLen; i++) {
             char c1 = alignment1.charAt(i);
             char c2 = alignment2.charAt(i);
-
-            if(c1 == c2 && c1 != '-'){
-
-                matches ++;
+            if (c1 == c2 && c1 != '-') {
+                matches++;
                 mid.append('|');
-            }else{
-                if(c1 != '-' && c2 != '-'){
-                    // Substitution (verschieden, keine gap)
-                    int s = matrix.getScore(c1,c2);
-                    mid.append(s>0? '+' : ' ');
-                }else{
-                    //Mindestens 1 Gap --> Leer
-                    mid.append(' ');
-                }
+            } else if (c1 != '-' && c2 != '-') {
+                int s = matrix.getScore(c1, c2);
+                mid.append(s > 0 ? '+' : ' ');
+            } else {
+                mid.append(' ');
             }
         }
-        int width = 100; //Zeilenumbruch der Sequenz nach 100er Basen
+
+        int width = 100;
+        String pad = " ".repeat(id1.length() + 2); // dynamisch, passt sich an ID-Länge an
+
         StringBuilder out = new StringBuilder();
-        out.append("<!doctype html>\n<html>" +
-                "<head>" +
-                "<meta charset=\"utf-8\"><title>").append(id1).append(" vs ").append(id2).append("</title></head><body>\n");
+        out.append("<!doctype html>\n<html>\n<head>\n")
+                .append("<meta charset=\"utf-8\">")
+                .append("<title>").append(id1).append(" vs ").append(id2).append("</title>")
+                .append("<style>")
+                .append("pre { font-family: 'Courier New', monospace; font-size: 20px; line-height: 1.6; white-space: pre; overflow-x: auto; }")
+                .append("body { max-width: 1200px; margin: auto; padding: 20px; background: #f0f6fc; border-left: 4px solid #2c5f8a; }")
+                .append("</style>")
+                .append("\n</head>\n<body>\n");
+
         out.append("<p><b>").append(id1).append("</b> vs <b>").append(id2).append("</b><br>\n")
                 .append("score: ").append(score).append("<br>\n")
                 .append("len1: ").append(seq1.length()).append(", len2: ").append(seq2.length()).append("<br>\n")
                 .append("alignment length: ").append(alignLen).append("<br>\n")
-                .append("#matches: ").append(matches).append("<br>\n").append("</p>");
-        //.append("%identity: ").append(String.format("%.2f", identity)).append("<br>\n");
+                .append("#matches: ").append(matches).append("<br>\n</p>");
 
         out.append("<pre>\n");
 
-        //müssen das ganze auch als Zeichenblöcke darstellne (BLAST stile)
         int pos1 = 0;
         int pos2 = 0;
         for (int i = 0; i < alignLen; i += width) {
             int jEnd = Math.min(alignLen, i + width);
 
-            String s1 = alignment1.substring(i, jEnd);
-            String sm = mid.substring(i, jEnd);
-            String s2 = alignment2.substring(i, jEnd);
+            String s1  = alignment1.substring(i, jEnd);
+            String sm  = mid.substring(i, jEnd);       // <-- sm wird hier definiert
+            String s2  = alignment2.substring(i, jEnd);
 
             for (int k = 0; k < s1.length(); k++) if (s1.charAt(k) != '-') pos1++;
             for (int k = 0; k < s2.length(); k++) if (s2.charAt(k) != '-') pos2++;
 
-            //BLAST like
+            // coloredMid hier im Loop bauen, weil sm hier verfügbar ist
+            StringBuilder coloredMid = new StringBuilder();
+            for (char c : sm.toCharArray()) {
+                if      (c == '|') coloredMid.append("<span style='color:#2a9d2a'>|</span>");
+                else if (c == '+') coloredMid.append("<span style='color:#e08000'>+</span>");
+                else               coloredMid.append(c);
+            }
+
             out.append(id1).append(": ").append(s1).append(" ").append(pos1).append("\n");
-            out.append("      ").append(sm).append("\n");
+            out.append(pad).append(coloredMid).append("\n");
             out.append(id2).append(": ").append(s2).append(" ").append(pos2).append("\n\n");
         }
 
-        out.append("</pre>\n</body></html>\n");
+        out.append("</pre>\n</body>\n</html>\n");
         return out.toString();
     }
 

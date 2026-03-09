@@ -111,17 +111,6 @@ print(f"""<!DOCTYPE html>
         section {{ margin-bottom: 40px; }}
         textarea, input[type=text], select {{ padding: 5px; width: 100%; }}
         pre {{ white-space: pre-wrap; overflow-wrap: break-word; }}
-        pre.result {{ 
-    font-family: 'Courier New', monospace; 
-    font-size: 20px; 
-    line-height: 1.6; 
-    white-space: pre;
-    overflow-x: auto;
-    background: #f0f6fc; 
-    border-left: 4px solid #2c5f8a; 
-    padding: 16px; 
-    border-radius: 4px; 
-}}
     </style>
 </head>
 <body>
