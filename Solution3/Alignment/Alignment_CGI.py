@@ -4,9 +4,7 @@
 #Autor Laura Martin+
 import subprocess
 import mycgi
-import MySQLdb
-
-#import mysql.connector
+import mysql.connector
 
 print ("Content-type: text/html\n")
 
@@ -15,11 +13,11 @@ form = mycgi.Form()
 output = None
 
 def get_sequence_from_db(pdb_id):
-    db = MySQLdb.connector.connect(
+    db = mysql.connector.connect(
         host="mysql2-ext.bio.ifi.lmu.de",
         port=3307,
         user="bioprakt15",
-        passwd="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
+        password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
         database="bioprakt15"
     )
     cursor = db.cursor()
