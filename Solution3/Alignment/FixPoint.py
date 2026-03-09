@@ -16,7 +16,7 @@ for line in lines[1:]:
         matrix.append(list(map(int, line.strip().split("\t"))))
 
 data = np.array(matrix, dtype=float)
-threshold = min + (max - min) * 0.6
+threshold = min + (max - min) * 0.9
 data[data < threshold] = np.nan
 
 
