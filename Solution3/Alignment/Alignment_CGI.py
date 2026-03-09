@@ -178,7 +178,7 @@ output = subprocess.run(input, capture_output=True, text=True)
 #print(dp_vis.stdout)
 
 fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
-fp_png  = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
+fp_png  = "fixedpoint_" + id1 + "_" + id2 + ".png"
 
 subprocess.run(["python3", "FixPoint.py", fp_file, fp_png])
 print("<h2>Fixed Point Alignment</h2>")
