@@ -10,7 +10,7 @@ import java.util.Random;
 //Ausgabe csv Datei die das Ergebnis von Benchmark ausgibt
 //Das ganze soll dann in Python aufgenommen werden, wo man dann mit matplot den Plot erstellt
 public class benchmarking {
-    static final int anz_align = 10000;
+    static final int anz_align = 10000; //Anzahl ALignment pro Länge --> desto kleiner desto größeren Einfluss hat die JVM auf unser Ergebnis
 
     static final int[] laengen = {5, 8, 10};
 

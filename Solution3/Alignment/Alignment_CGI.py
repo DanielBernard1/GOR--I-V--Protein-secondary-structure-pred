@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/biopython
 #quelle w3school html-tutorial
 
 #Autor Laura Martin+
@@ -12,83 +12,148 @@ form = mycgi.Form()
 
 output = None
 
-seq1 = form["seq1"]
-seq2 = form["seq2"]
-id1 = form["id1"]
-id2 = form["id2"]
-matrix = form["matrix"]
-mode = form["mode"]
-fmt = form["fmt"]
-go = form["go"]
-ge = form["ge"]
-use_nw = form["use_nw"]
 
-ref_align1 = form["ref_align1"]
-ref_align2 = form["ref_align2"]
-db_id1 = form["db_id1"]
-db_id2 = form["db_id2"]
-show_dp = form["show_dp"]
+seq1 = form["seq1"].value
+seq2 = form["seq2"].value
+
+id1 = form["id1"].value
+id2 = form["id2"].value
+
+if "matrix" in form:
+    matrix = form["matrix"].value
+else:
+    matrix = "dayhoff.mat"
+
+if "mode" in form:
+    mode = form["mode"].value
+else:
+    mode = "global"
+
+if "format" in form:
+    fmt = form["format"].value
+else:
+    fmt = "ali"
+
+go = form["go"].value
+ge = form["ge"].value
+
+
+
+
+if "check" in form:
+    check = True
+else:
+    check = False
+
+if "show_dp" in form:
+    show_dp = True
+else:
+    show_dp = False
+
+if "use_nw" in form:
+    use_nw = form["use_nw"].value
+else:
+    use_nw = "gotoh"
+
 
 #Einlesen:
 alignment_jar = "../finaljars/alignment.jar"
-matrix_path = "../matrices/" + matrix
-seqlib_file = "../tmp/seqlib.txt"
-pairs_file = "../tmp/pairs.txt"
+matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
+seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
+pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
+#dp_path = "dp_matrix.txt"
 
 
 with open(pairs_file, "w") as f:
     f.write(f"{id1} {id2}\n")
 
 with open(seqlib_file, "w") as f:
-    f.write(f"{id1}:{seq1.strip()}\n")
-    f.write(f"{id2}:{seq2.strip()}\n")
+    f.write(f"{id1}:{seq1}\n")
+    f.write(f"{id2}:{seq2}\n")
 
-output = subprocess.run(["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
-                         "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt],
-                        capture_output=True, text=True)
+#with open("") as f:
+#    print("<h3>DP-Matrix:</h3><pre>")
+#    print(f.read())
+#    print("</pre>")
+
+
+
+input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
+                         "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt]
+if use_nw =="nw":
+    input.append("--nw")
+
+#dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
+#print("<h2>DP-Matrix:</h2><pre>")
+#print(dp_vis.stdout)
+
+output = subprocess.run(input, capture_output=True, text=True)
+
+
 
 print(f"""<!DOCTYPE html>
 <html>
 <body>
     <h1>Alignment</h1>
-    <form method="post" enctype="multipart/form-data" action="Alignment.py"> #haben nicht .py
+    <h2>New Searchrequest:</h2>
+    <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> 
+        <p>Id1: </p>
         <input type="text" name="id1" value="{id1}">
+        <p>Id2: </p>
         <input type="text" name="id2" value="{id2}"><br>
+        <p>Sequenz1: </p>
         <textarea name="seq1">{seq1}</textarea>
+        <p>Sequenz2: </p>
         <textarea name="seq2">{seq2}</textarea><br>
         
-        <select name="matrix">
-            <option value="blosum62.mat"> <p>BLOSUM62</p> </option>
+        <select name="matrix"> #alle Matrizen die auf Server liegen
             <option value="dayhoff.mat"> <p>dayhoff</p> </option>
+            <option value="BlakeCohenMatrix.mat"> <p>BlakeCohenMatrix</p> </option>
+            <option value="blosum62.mat"> <p>BLOSUM62</p> </option>
+            <option value="pam250.mat"> <p>pam250</p> </option>
         </select>
-        
+        <br><br>
         <select name="mode">
             <option value="global"> <p>global</p> </option>
             <option value="local"> <p>local</p> </option>
             <option value="freeshift"> <p>freeshift</p> </option>
         </select>
-        
+        <br><br>
         <select name="format">
             <option value="ali"> <p>ali</p> </option>
             <option value="scores"> <p>scores</p> </option>
             <option value="html"> <p>html</p> </option>
-        </select></br>
-        
-            <input type="text" name="go" value="{go}">
-            <input type="text" name="ge" value="{ge}"><br>
-            <input type="submit" value="Alignment berechnen">
+        </select><br>
+            
         <section>
             <input type="checkbox" name="check"> <p>check</p> <br>
             <input type="checkbox" name="show_dp"> <p>DP-Matrix</p> <br>
         </section>
+        
+        <select name="use_nw">
+            <option value="gotoh"> <p>Gotoh</p> </option>
+            <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option> 
+        </select><br>
+        
+        <input type="text" name="go" value="{go}"><br>
+        <input type="text" name="ge" value="{ge}"><br>
+        <input type="submit" value="Calculate Alignment">
+        
     </form>
     
-    <h2>Output</h2>
+    <h2>Final Alignment</h2>
     <pre>
 """)
 
 if output:
+    print(mode)
+    print("")
     print(output.stdout)
+    print(matrix)
+    print("")
+    print("")
+    print("<h2>Benchmark</h2>")
+    print("<img src='benchmark.png'>")
 
 print(f"""
         </pre>
