@@ -15,9 +15,10 @@ for line in lines[1:]:
     if line.strip():
         matrix.append(list(map(int, line.strip().split("\t"))))
 
-data = np.array(matrix)
+data = np.array(matrix, dtype=float)
 threshold = min + (max - min) * 0.6
 data[data < threshold] = np.nan
+
 
 plt.imshow(data, cmap='rainbow', aspect='auto')
 plt.colorbar()
