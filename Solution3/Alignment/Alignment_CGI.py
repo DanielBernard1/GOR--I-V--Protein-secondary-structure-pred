@@ -110,6 +110,8 @@ print(f"""<!DOCTYPE html>
         button, input[type=submit] {{background: #2c5f8a; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }}
         section {{ margin-bottom: 40px; }}
         textarea, input[type=text], select {{ padding: 5px; width: 100%; }}
+        pre {{ white-space: pre-wrap; overflow-wrap: break-word; }}
+        pre.result {{ font-family: 'Courier New', monospace; font-size: 20px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: break-word; background: #f0f6fc; border-left: 4px solid #2c5f8a; padding: 16px; border-radius: 4px; }}
     </style>
 </head>
 <body>
@@ -167,6 +169,7 @@ print(f"""<!DOCTYPE html>
     </form>
     
     <h2>Final Alignment</h2>
+    <pre class="result">
     <pre>
 """)
 
