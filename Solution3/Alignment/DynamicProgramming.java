@@ -1,15 +1,19 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 //Autor: David
 
 public class DynamicProgramming extends Scoring {
     protected int[][] scoring_matrix;
+    protected List<String> traceback_indexes;
     private char[][] traceback_matrix;
 
     public DynamicProgramming(String seq1, String seq2, SubstitutionMatrix matrix, int gap, AlignmentType mode) {
         super(seq1, seq2, matrix, 0, gap,  mode);
         scoring_matrix = new int[seq1.length() + 1][seq2.length() + 1];
         traceback_matrix = new char[seq1.length() + 1][seq2.length() + 1];
+        traceback_indexes = new ArrayList<>();
     }
 
     public int[][] getScoring_matrix() {
@@ -23,6 +27,10 @@ public class DynamicProgramming extends Scoring {
             calculate_alignment_matrix_FS();
         }
         return scoring_matrix;
+    }
+
+    public List<String> getTraceback_indexes() {
+        return traceback_indexes;
     }
 
     public void calculate_alignment_matrix_NW() {
@@ -224,6 +232,7 @@ public class DynamicProgramming extends Scoring {
 
 
     private String[] traceback(int i, int j, StringBuilder ali1, StringBuilder ali2, AlignmentType mode) {
+        traceback_indexes.add("(" + i + ", " + j + ")");
         if (mode == AlignmentType.global && i == 0 && j == 0) {
             return new String[]{ali1.toString(), ali2.toString()};
         }

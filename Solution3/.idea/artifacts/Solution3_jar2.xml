@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Solution3:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/Solution3_jar2</output-path>
+    <root id="archive" name="alignment.jar">
+      <element id="module-output" name="Solution3" />
+      <element id="module-source" name="Solution3" />
+    </root>
+  </artifact>
+</component>

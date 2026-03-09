@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -97,6 +95,7 @@ public class validateAli {
         int templateCounter = -1;
         int targetCounter = -1;
 
+        //alle alignierten basen in candidate
         for (int col = 0; col < candidate1.length(); col++) {
             char i = candidate2.charAt(col);
             char j = candidate1.charAt(col);
@@ -110,6 +109,7 @@ public class validateAli {
         }
         templateCounter = -1;
         targetCounter = -1;
+        //alle alignierten basen in reference
         for (int col = 0; col < ref1.length(); col++) {
             char i = ref2.charAt(col);
             char j = ref1.charAt(col);
@@ -129,34 +129,38 @@ public class validateAli {
         double shift_counter = 0;
         Set<Integer> candidate_targets = new HashSet<>();
         for (Tuple a : candidate_set){
+            //alle alignierten basen, die in beiden sets existieren
             if (reference_set.contains(a)){
                 counter++;
             }
 
             for (Tuple b : reference_set){
+                //MSE shifts
                 if (a.getVal1() == b.getVal1()){
                     shift_index += Math.abs(a.getVal2() - b.getVal2());
-
                     shift_counter++;
                 }
+                //IMSE shifts
                 if (a.getVal2() == b.getVal2()){
                     inverse_shift_index += Math.abs(a.getVal1() - b.getVal1());
                     inverse_shift_counter++;
                 }
             }
+
             candidate_targets.add(a.getVal1());
         }
         Set<Integer> ref_targets = new HashSet<>();
         for (Tuple a : reference_set){
             ref_targets.add(a.getVal1());
         }
+
         candidate_targets.retainAll(ref_targets);
 
-        values[0] = counter / (double) reference_set.size();
-        values[1] = counter / (double) candidate_set.size();
-        values[2] = candidate_targets.size() / (double) candidate_set.size();
-        values[3] = shift_index / shift_counter;
-        values[4] = inverse_shift_index / inverse_shift_counter;
+        values[0] = counter / (double) reference_set.size(); //sensitivity
+        values[1] = counter / (double) candidate_set.size(); // specificity
+        values[2] = candidate_targets.size() / (double) candidate_set.size(); //coverage
+        values[3] = shift_index / shift_counter; //MSE
+        values[4] = inverse_shift_index / inverse_shift_counter; //IMSE
 
         return values;
     }
