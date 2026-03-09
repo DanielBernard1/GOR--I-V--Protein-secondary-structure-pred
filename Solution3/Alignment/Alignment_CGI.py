@@ -4,6 +4,7 @@
 #Autor Laura Martin+
 import subprocess
 import mycgi
+import mysql.connector
 
 print ("Content-type: text/html\n")
 
@@ -11,8 +12,28 @@ form = mycgi.Form()
 
 output = None
 
+def get_sequence_from_db(pdb_id):
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="dein_user",
+        password="dein_passwort",
+        database="deine_datenbank"
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT sequence FROM homestead WHERE pdb = %s", (pdb_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return row[0] if row else None
 
-if "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
+if "pdb1" in form:
+    id1 = form["pdb1"].value
+    id2 = form["pdb2"].value
+    seq1 = get_sequence_from_db(id1)
+    seq2 = get_sequence_from_db(id2)
+    if seq1 is None or seq2 is None:
+        print("<p style='color:red'>Fehler: PDB-ID nicht in der Datenbank gefunden.</p>")
+
+elif "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
     content = form["seqfile"].file.read().decode("utf-8")
     entries = []
     current_id, current_seq = None, []
@@ -129,6 +150,10 @@ print(f"""<!DOCTYPE html>
         <p>Upload Fasta-File for multiple Alignments:</p>
         <input type="file" name="seqfile" > <br><br>
         <br><br>
+        
+        <p>Or Upload PDB-IDs from the Database:</p>
+        <input type="text" name="pdb1" placeholder="z.B. 1HBA">
+        <input type="text" name="pdb2" placeholder="z.B. 2HBB"><br>
         <p>Matrix:</p>
         <select name="matrix"> #alle Matrizen die auf Server liegen
             <option value="dayhoff.mat"> <p>dayhoff</p> </option>
@@ -151,10 +176,6 @@ print(f"""<!DOCTYPE html>
             <option value="scores"> <p>scores</p> </option>
         </select><br>
             
-        #<section>
-        #    <input type="checkbox" name="check"> <p>check</p> <br>
-        #    <input type="checkbox" name="show_dp"> <p>DP-Matrix</p> <br>
-        #</section>
         
         <select name="use_nw">
             <option value="gotoh"> <p>Gotoh</p> </option>
