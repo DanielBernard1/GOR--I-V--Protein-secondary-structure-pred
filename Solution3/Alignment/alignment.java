@@ -80,9 +80,7 @@ public class alignment {
                 --dpmatrices <directory> output dynamic programming matrices
                 --check calculate checkscores for all alignments
                 and output only incorrect alignments
-                The Gotoh algorithm should be used as default, if --nw is not set. If called with no (or
-                wrong) parameters, your command line tool must output this help text. The output must
-                be written to stdout in all cases.""");
+                """);
     }
 
 
