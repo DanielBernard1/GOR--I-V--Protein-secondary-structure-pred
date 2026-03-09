@@ -4,7 +4,9 @@
 #Autor Laura Martin+
 import subprocess
 import mycgi
-import mysql.connector
+import mysql
+
+#import mysql.connector
 
 print ("Content-type: text/html\n")
 
@@ -13,28 +15,45 @@ form = mycgi.Form()
 output = None
 
 def get_sequence_from_db(pdb_id):
-    conn = mysql.connector.connect(
-        host="localhost",
-        user="dein_user",
-        password="dein_passwort",
-        database="deine_datenbank"
+    db = mysql.connector.connect(
+        host="mysql2-ext.bio.ifi.lmu.de",
+        port=3307,
+        user="bioprakt15",
+        password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
+        database="bioprakt15"
     )
-    cursor = conn.cursor()
+    cursor = db.cursor()
     cursor.execute("SELECT sequence FROM homestead WHERE pdb = %s", (pdb_id,))
     row = cursor.fetchone()
-    conn.close()
+    db.close()
     return row[0] if row else None
 
-if "pdb1" in form and form["pdb1"].value.strip():
+if "input_type" in form:
+    input_type = form["input_type"].value
+else:
+    input_type = "text"
+
+
+seq1= ""
+seq2 = ""
+id1 =""
+id2 = ""
+
+if input_type == "pdb" and "pdb1" in form and form["pdb1"].value.strip():
     id1 = form["pdb1"].value
     id2 = form["pdb2"].value
     seq1 = get_sequence_from_db(id1)
     seq2 = get_sequence_from_db(id2)
     if seq1 is None or seq2 is None:
-        print("<p style='color:red'>Fehler: PDB-ID nicht in der Datenbank gefunden.</p>")
+        print("<p> ERROR: PDB-ID not found</p>")
+        seq1 = ""
+        seq2 = ""
+        id1 = ""
+        id2 = ""
 
-elif "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
+elif input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
     content = form["seqfile"].file.read().decode("utf-8")
+
     entries = []
     current_id, current_seq = None, []
     for line in content.splitlines():
@@ -48,6 +67,9 @@ elif "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].
             current_seq.append(line)
     if current_id:
         entries.append((current_id, "".join(current_seq)))
+
+    if len(entries) < 2:
+        print("<p> ERROR: Not enough sequences in the file. </p>")
     id1, seq1 = entries[0]
     id2, seq2 = entries[1]
 else:
@@ -57,6 +79,7 @@ else:
         print("<p style='color:red'>Fehler: Pls insert a seq</p>")
     id1 = form["id1"].value
     id2 = form["id2"].value
+
 if "matrix" in form:
     matrix = form["matrix"].value
 else:
@@ -135,27 +158,50 @@ print(f"""<!DOCTYPE html>
         textarea, input[type=text], select {{ padding: 5px; width: 100%; }}
         pre {{ white-space: pre-wrap; overflow-wrap: break-word; }}
     </style>
+    <script>
+    function switchInput(type) {{
+        document.getElementById('input_text').style.display = type === 'text' ? 'block' : 'none';
+        document.getElementById('input_file').style.display = type === 'file' ? 'block' : 'none';
+        document.getElementById('input_pdb').style.display  = type === 'pdb'  ? 'block' : 'none';
+    }}
+    </script>
 </head>
 <body>
     <h1>Alignment</h1>
     <h2>New Searchrequest:</h2>
     <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> 
-        <p>Id1: </p>
-        <input type="text" name="id1" value="{id1}">
-        <p>Id2: </p>
-        <input type="text" name="id2" value="{id2}"><br>
-        <p>Sequenz1: </p>
-        <textarea name="seq1">{seq1}</textarea>
-        <p>Sequenz2: </p>
-        <textarea name="seq2">{seq2}</textarea><br>
-        
-        <p>Upload Fasta-File for multiple Alignments:</p>
-        <input type="file" name="seqfile" > <br><br>
+        <p>Input-Type:</p>
+        <input type="radio" name="input_type" value="text" onclick="switchInput('text')">
+        <input type="radio" name="input_type" value="file" onclick="switchInput('file')">
+        <input type="radio" name="input_type" value="pdb" onclick="switchInput('pdb')">
         <br><br>
         
-        <p>Or Upload PDB-IDs from the Database:</p>
-        <input type="text" name="pdb1" placeholder="z.B. 1HBA">
-        <input type="text" name="pdb2" placeholder="z.B. 2HBB"><br>
+        <div id="input_text" style="display: block;">
+            <p>Id1: </p>
+            <input type="text" name="id1" value="{id1}">
+            <p>Id2: </p>
+            <input type="text" name="id2" value="{id2}"><br>
+            <p>Sequenz1: </p>
+            <textarea name="seq1">{seq1}</textarea>
+            <p>Sequenz2: </p>
+            <textarea name="seq2">{seq2}</textarea><br>
+        </div>
+        
+        <div id="input_file" style="display: block;">
+            <p>Upload Fasta-File for multiple Alignments:</p>
+            <input type="file" name="seqfile" > 
+        </div>
+        <br><br>
+        
+        <div id="input_pdb" style="display: block;">
+            <p>Upload PDB-IDs out of the Database</p>
+            <p>PDB-ID1: </p>
+            <input type="text" name="pdb1" placeholder="z.B. 1HBA">
+            <p>PDB-ID2: </p>
+            <input type="text" name="pdb2" placeholder="z.B. 2HBB">
+        </div>
+        <br><br>
+        
         <p>Matrix:</p>
         <select name="matrix"> #alle Matrizen die auf Server liegen
             <option value="dayhoff.mat"> <p>dayhoff</p> </option>
@@ -164,6 +210,7 @@ print(f"""<!DOCTYPE html>
             <option value="pam250.mat"> <p>pam250</p> </option>
         </select>
         <br><br>
+        
         <p>Mode:</p>
         <select name="mode">
             <option value="global"> <p>global</p> </option>
@@ -171,6 +218,7 @@ print(f"""<!DOCTYPE html>
             <option value="freeshift"> <p>freeshift</p> </option>
         </select>
         <br><br>
+        
         <p>Output-Format:</p>
         <select name="format">
             <option value="html"> <p>html</p> </option>
@@ -178,14 +226,17 @@ print(f"""<!DOCTYPE html>
             <option value="scores"> <p>scores</p> </option>
         </select><br>
             
-        
+        <p>Algorithm:</p>
         <select name="use_nw">
             <option value="gotoh"> <p>Gotoh</p> </option>
             <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option> 
         </select><br>
         
+        <p>Gap Open:</p>
         <input type="text" name="go" value="{go}"><br>
+        <p>Gap Extension:</p>
         <input type="text" name="ge" value="{ge}"><br>
+        <br><br>
         <input type="submit" value="Calculate Alignment">
         
     </form>
