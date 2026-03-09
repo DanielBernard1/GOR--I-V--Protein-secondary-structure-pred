@@ -125,9 +125,9 @@ print(f"""<!DOCTYPE html>
         <p>Sequenz2: </p>
         <textarea name="seq2">{seq2}</textarea><br>
         
-        <p>Oder Fasta-File hochladen für multiples Alignment:</p>
+        <p>Upload Fasta-File for multiple Alignments:</p>
         <input type="file" name="seqfile" > <br><br>
-        
+        <br><br>
         <select name="matrix"> #alle Matrizen die auf Server liegen
             <option value="dayhoff.mat"> <p>dayhoff</p> </option>
             <option value="BlakeCohenMatrix.mat"> <p>BlakeCohenMatrix</p> </option>
