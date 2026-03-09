@@ -89,13 +89,14 @@ public class FixedPoint {
             }
         }
 
-        FileWriter fw = new FileWriter(filepath);
-        fw.write(min + "\t" +max + "\n");
-        for(int i=0; i<seq1.length(); i++){
-            for(int j=0; j<seq2.length(); j++){
-                fw.write(ScoreFP[i][j] + "\t");
+        try (FileWriter fw = new FileWriter(filepath)) {
+            fw.write(min + "\t" + max + "\n");
+            for(int i=0; i<seq1.length(); i++){
+                for(int j=0; j<seq2.length(); j++){
+                    fw.write(ScoreFP[i][j] + "\t");
+                }
+                fw.write("\n");
             }
-            fw.write("\n");
         }
     }
 }
