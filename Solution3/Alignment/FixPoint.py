@@ -8,7 +8,7 @@ import numpy as np
 with open(sys.argv[1]) as f:
     lines = f.readlines()
 
-min_val, max_val = map(int, lines[0].strip().split("\t"))
+min, max = map(int, lines[0].strip().split("\t"))
 
 matrix = []
 for line in lines[1:]:
@@ -16,6 +16,12 @@ for line in lines[1:]:
         matrix.append(list(map(int, line.strip().split("\t"))))
 
 data = np.array(matrix)
+threshold = min + (max - min) * 0.6
+data[data < threshold] = np.nan
+
 plt.imshow(data, cmap='rainbow', aspect='auto')
 plt.colorbar()
+
+plt.title("Fix Point Alignment")
 plt.savefig(sys.argv[2])  # output pfad als zweites argument
+plt.close()
