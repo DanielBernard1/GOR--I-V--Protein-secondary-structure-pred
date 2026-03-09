@@ -55,10 +55,10 @@ ge = form["ge"].value
 
 
 
-if "check" in form:
-    check = True
-else:
-    check = False
+#if "check" in form:
+#    check = True
+#else:
+#    check = False
 
 if "show_dp" in form:
     show_dp = True
@@ -128,6 +128,7 @@ print(f"""<!DOCTYPE html>
         <p>Upload Fasta-File for multiple Alignments:</p>
         <input type="file" name="seqfile" > <br><br>
         <br><br>
+        <p>Matrix:</p>
         <select name="matrix"> #alle Matrizen die auf Server liegen
             <option value="dayhoff.mat"> <p>dayhoff</p> </option>
             <option value="BlakeCohenMatrix.mat"> <p>BlakeCohenMatrix</p> </option>
@@ -135,22 +136,24 @@ print(f"""<!DOCTYPE html>
             <option value="pam250.mat"> <p>pam250</p> </option>
         </select>
         <br><br>
+        <p>Mode:</p>
         <select name="mode">
             <option value="global"> <p>global</p> </option>
             <option value="local"> <p>local</p> </option>
             <option value="freeshift"> <p>freeshift</p> </option>
         </select>
         <br><br>
+        <p>Output-Format:</p>
         <select name="format">
+            <option value="html"> <p>html</p> </option>
             <option value="ali"> <p>ali</p> </option>
             <option value="scores"> <p>scores</p> </option>
-            <option value="html"> <p>html</p> </option>
         </select><br>
             
-        <section>
-            <input type="checkbox" name="check"> <p>check</p> <br>
-            <input type="checkbox" name="show_dp"> <p>DP-Matrix</p> <br>
-        </section>
+        #<section>
+        #    <input type="checkbox" name="check"> <p>check</p> <br>
+        #    <input type="checkbox" name="show_dp"> <p>DP-Matrix</p> <br>
+        #</section>
         
         <select name="use_nw">
             <option value="gotoh"> <p>Gotoh</p> </option>
