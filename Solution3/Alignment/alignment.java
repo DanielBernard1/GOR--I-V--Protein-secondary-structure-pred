@@ -170,7 +170,7 @@ public class alignment {
                 printHelp();
                 return;
             }
-            if (dpPath != null){
+            if (dpPath != null && format.equals("html")){
                 File file = new File(dpPath);
                 File fpFile = new File(new File(dpPath), "fixedpoint_" + id1 + "_" + id2 + ".txt");
 
