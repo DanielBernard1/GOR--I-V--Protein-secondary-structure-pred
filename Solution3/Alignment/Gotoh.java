@@ -259,7 +259,7 @@ public class Gotoh extends Scoring{
                 //gap in seq1
                 int gyOpen_M  = M[i][j-1]  + go + ge;
                 int gyOpen_Gx = Gx[i][j-1] + go + ge; // hier genauso
-                int gyExtend      = Gy[i][j-1] + ge;
+                int gyExtend  = Gy[i][j-1]      + ge;
 
                 int gyVal = Math.max(gyOpen_M, Math.max(gyOpen_Gx, gyExtend));
                 Gy[i][j] = gyVal;
@@ -414,8 +414,8 @@ public class Gotoh extends Scoring{
                 int score = substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
 
                 M[i][j]  = Math.max(Math.max(M[i-1][j-1], Gx[i-1][j-1]), Gy[i-1][j-1]) + score;
-                Gx[i][j] = Math.max(M[i-1][j] + go +ge, Gx[i-1][j] + ge); // habe ich geändert du hattest hier - aber gap penalty ist negativ deswegen plus
-                Gy[i][j] = Math.max(M[i][j-1] +go + ge, Gy[i][j-1] + ge);
+                Gx[i][j] = Math.max(M[i-1][j] + go + ge, Math.max(Gx[i-1][j] + ge, Gy[i-1][j] + go + ge)); // habe ich geändert du hattest hier - aber gap penalty ist negativ deswegen plus
+                Gy[i][j] = Math.max(M[i][j-1] + go + ge, Math.max(Gx[i][j-1] + go + ge, Gy[i][j-1] + ge));
             }
         }
     }
@@ -470,8 +470,12 @@ public class Gotoh extends Scoring{
                 startJ = m;
                 startMatrix = "M";
             }
-            if (Gx[i][m] > max) { max = Gx[i][m]; startI = i; startJ = m; startMatrix = "Gx"; }
-            if (Gy[i][m] > max) { max = Gy[i][m]; startI = i; startJ = m; startMatrix = "Gy"; }
+            if (Gx[i][m] > max) {
+                max = Gx[i][m]; startI = i; startJ = m; startMatrix = "Gx";
+            }
+            if (Gy[i][m] > max) {
+                max = Gy[i][m]; startI = i; startJ = m; startMatrix = "Gy";
+            }
         }
 
         StringBuilder ali1 = new StringBuilder();
@@ -495,9 +499,15 @@ public class Gotoh extends Scoring{
                 int score = substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
                 ali1.insert(0, seq1.charAt(i - 1));
                 ali2.insert(0, seq2.charAt(j - 1));
-                if      (M[i-1][j-1]  + score == M[i][j]) current = "M";
-                else if (Gx[i-1][j-1] + score == M[i][j]) current = "Gx";
-                else                                        current = "Gy";
+                if (M[i-1][j-1]  + score == M[i][j]) {
+                    current = "M";
+                }
+                else if (Gx[i-1][j-1] + score == M[i][j]) {
+                    current = "Gx";
+                }
+                else {
+                    current = "Gy";
+                }
                 i--; j--;
 
             } else if (current.equals("Gx")) {
@@ -510,8 +520,12 @@ public class Gotoh extends Scoring{
             } else { // Iy
                 ali1.insert(0, "-");
                 ali2.insert(0, seq2.charAt(j - 1));
-                if (M[i][j-1] + ge + go == Gy[i][j]) current = "M"; // hier auch
-                else                              current = "Gy";
+                if (M[i][j-1] + ge + go == Gy[i][j]) {
+                    current = "M"; // hier auch
+                }
+                else {
+                    current = "Gy";
+                }
                 j--;
             }
         }
