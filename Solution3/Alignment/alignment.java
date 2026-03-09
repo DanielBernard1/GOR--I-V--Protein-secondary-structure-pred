@@ -134,6 +134,10 @@ public class alignment {
             }
             if (dpPath != null){
                 File file = new File(dpPath);
+                File fpFile = new File(new File(dpPath), "fixedpoint_" + id1 + "_" + id2 + ".txt");
+
+                FixedPoint fp = new FixedPoint(seq1, seq2, matrix, ge);
+                fp.fixedPointScores(fpFile.getPath());
                 if (file.isDirectory()){
                     file = new File(file, "scoring_matrix.txt");
                 }

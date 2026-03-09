@@ -3,7 +3,6 @@
 
 #Autor Laura Martin+
 import subprocess
-
 import mycgi
 
 print ("Content-type: text/html\n")
@@ -32,7 +31,7 @@ else:
 if "format" in form:
     fmt = form["format"].value
 else:
-    fmt = "ali"
+    fmt = "html"
 
 go = form["go"].value
 ge = form["ge"].value
@@ -61,7 +60,8 @@ alignment_jar = "../finaljars/alignment.jar"
 matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
 seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
 pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
-#dp_path = "dp_matrix.txt"
+dp_path = "dp_matrix.txt"
+fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
 
 
 with open(pairs_file, "w") as f:
@@ -83,6 +83,11 @@ input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqli
 if use_nw =="nw":
     input.append("--nw")
 
+fp_result = subprocess.run(["python3", "fp_visualizer.py", fp_file], capture_output=True, text=True)
+print("<h2>Fixed Point Alignment</h2>")
+print(fp_result.stdout)
+
+
 #dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
 #print("<h2>DP-Matrix:</h2><pre>")
 #print(dp_vis.stdout)
@@ -93,6 +98,15 @@ output = subprocess.run(input, capture_output=True, text=True)
 
 print(f"""<!DOCTYPE html>
 <html>
+<head>
+    <style>
+        body {{ font-family: Arial; max-width: 900px; margin: auto; padding: 20px; }}
+        h1 {{ color: #2c5f8a; border-bottom: 2px solid #2c5f8a; }}
+        button, input[type=submit] {{background: #2c5f8a; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }}
+        section {{ margin-bottom: 40px; }}
+        textarea, input[type=text], select {{ padding: 5px; width: 100%; }}
+    </style>
+</head>
 <body>
     <h1>Alignment</h1>
     <h2>New Searchrequest:</h2>
