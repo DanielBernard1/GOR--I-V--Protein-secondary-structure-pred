@@ -12,7 +12,7 @@ import java.util.Random;
 public class benchmarking {
     static final int anz_align = 10000; //Anzahl ALignment pro Länge --> desto kleiner desto größeren Einfluss hat die JVM auf unser Ergebnis
 
-    static final int[] laengen = {5, 8, 10};
+    static final int[] laengen = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
     static final char[] as = "ARNDCQEGHILKMFPSTWYV".toCharArray(); //alle Aminosäuren
 
