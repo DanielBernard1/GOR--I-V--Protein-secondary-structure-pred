@@ -3,8 +3,6 @@
 
 #Autor Laura Martin+
 import subprocess
-
-import family
 import mycgi
 
 print ("Content-type: text/html\n")
