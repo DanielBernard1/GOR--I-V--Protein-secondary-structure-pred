@@ -15,6 +15,12 @@ public class DynamicProgramming extends Scoring {
         traceback_matrix = new char[seq1.length() + 1][seq2.length() + 1];
         traceback_indexes = new ArrayList<>();
     }
+    public DynamicProgramming(String seq1, String seq2, String sseq1, String sseq2, SubstitutionMatrix matrix, SecondaryStructureMatrix secondaryStructureMatrix,int gap, AlignmentType mode) {
+        super(seq1, seq2, sseq1, sseq2, matrix, secondaryStructureMatrix, 0, gap,  mode);
+        scoring_matrix = new int[seq1.length() + 1][seq2.length() + 1];
+        traceback_matrix = new char[seq1.length() + 1][seq2.length() + 1];
+        traceback_indexes = new ArrayList<>();
+    }
 
     public int[][] getScoring_matrix() {
         if (mode.isGlobal()){
@@ -45,8 +51,16 @@ public class DynamicProgramming extends Scoring {
         traceback_matrix[0][0] = '0';
         for (int i = 1; i < scoring_matrix.length; i++) {
             for (int j = 1; j < scoring_matrix[0].length; j++) {
+                int match;
+                if (secStruct){
+                    match = scoring_matrix[i - 1][j - 1]
+                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 70
+                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 30) / 100;
+                }
+                else {
+                    match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                }
 
-                int match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
                 int delete = scoring_matrix[i - 1][j] + gap;
                 int insert = scoring_matrix[i][j - 1] + gap;
 
@@ -80,8 +94,15 @@ public class DynamicProgramming extends Scoring {
 
         for (int i = 1; i < scoring_matrix.length; i++) {
             for (int j = 1; j < scoring_matrix[0].length; j++) {
-
-                int match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                int match;
+                if (secStruct){
+                    match = scoring_matrix[i - 1][j - 1]
+                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 70
+                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 30) / 100;
+                }
+                else {
+                    match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                }
                 int delete = scoring_matrix[i - 1][j] + gap;
                 int insert = scoring_matrix[i][j - 1] + gap;
 
@@ -134,8 +155,15 @@ public class DynamicProgramming extends Scoring {
 
         for (int i = 1; i < scoring_matrix.length; i++) {
             for (int j = 1; j < scoring_matrix[0].length; j++) {
-
-                int match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                int match;
+                if (secStruct){
+                    match = scoring_matrix[i - 1][j - 1]
+                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 70
+                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 30) / 100;
+                }
+                else {
+                    match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                }
                 int delete = scoring_matrix[i - 1][j] + gap;
                 int insert = scoring_matrix[i][j - 1] + gap;
 

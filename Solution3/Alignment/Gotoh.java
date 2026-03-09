@@ -18,6 +18,11 @@ public class Gotoh extends Scoring{
         this.go = go;
         this.ge = ge;
     }
+    public Gotoh(String seq1, String seq2, String sseq1, String sseq2, SubstitutionMatrix matrix, SecondaryStructureMatrix secondaryStructureMatrix, int go, int ge, AlignmentType mode) {
+        super(seq1, seq2, sseq1, sseq2, matrix, secondaryStructureMatrix, go, ge, mode);
+        this.go = go;
+        this.ge = ge;
+    }
 
     //GLOBAL Gotoh
     public int Global_score(){
@@ -410,8 +415,14 @@ public class Gotoh extends Scoring{
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
-
-                int score = substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                int score;
+                if (secStruct){
+                    score = ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 70
+                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 30) / 100;
+                }
+                else {
+                    score = substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
+                }
 
                 M[i][j]  = Math.max(Math.max(M[i-1][j-1], Gx[i-1][j-1]), Gy[i-1][j-1]) + score;
                 Gx[i][j] = Math.max(M[i-1][j] + go + ge, Math.max(Gx[i-1][j] + ge, Gy[i-1][j] + go + ge)); // habe ich geändert du hattest hier - aber gap penalty ist negativ deswegen plus

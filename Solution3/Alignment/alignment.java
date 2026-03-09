@@ -1,8 +1,7 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //Autor Laura Martin
@@ -13,6 +12,8 @@ public class alignment {
         String seqlibPath = null;
         String matrixName = null;
         String modeStr = null;
+        boolean secStruct = false;
+        String secStructPath = null;
 
         String format = null;
         String dpDir = null;
@@ -30,12 +31,14 @@ public class alignment {
             if(a.equals("--go")){go = Integer.parseInt(args[++i]); continue;}
             if(a.equals("--ge")){ge = Integer.parseInt(args[++i]); continue;}
             if(a.equals("--dpmatrices")){dpDir = args[++i]; continue;}
+            if(a.equals("--ss")){secStruct = true; secStructPath = args[++i]; continue;}
             //mandatory
             if(a.equals("--pairs")){pairsPath = args[++i]; continue;}
             if(a.equals("--seqlib")){seqlibPath = args[++i]; continue;}
             if(a.equals("-m")){matrixName = args[++i]; continue;} //soll das wirklich nur mit einem Strich angegeben werden
             if(a.equals("--mode")){modeStr = args[++i]; continue;}
             if(a.equals("--format")){format = args[++i];}
+
         }
 
         //maybe in score schlauer
@@ -55,7 +58,13 @@ public class alignment {
         }
         Map<String, String> seqlib = readSeqLib(seqlibPath);
         SubstitutionMatrix m1 = new SubstitutionMatrix(matrixName);
-        readPairs(go, ge, dpDir, check, pairsPath, seqlib, m1, mode, useNW, format);
+        SecondaryStructureMatrix secondaryStructureMatrix = new SecondaryStructureMatrix();
+        if (secStruct){
+            Map<String, List<String>> SecStructLib = readStructLib(secStructPath);
+        }
+        else {
+            readPairs(go, ge, dpDir, check, pairsPath, seqlib, m1, mode, useNW, format);
+        }
     }
     private static void printHelp(){
         System.out.println("""
@@ -83,7 +92,35 @@ public class alignment {
                 and output only incorrect alignments
                 """);
     }
-
+    private static Map<String, List<String>> readStructLib(String filepath) throws IOException {
+        Map<String, List<String>> map = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader(filepath));
+        String line, header = null, aseq = null, sseq = null;
+        int counter = 0;
+        while ((line = br.readLine())!=null){
+            line = line.trim();
+            if (line.startsWith(">")){
+                header = line.replace(">", "");
+                counter = 1;
+            }
+            else if (line.startsWith("AS")){
+                aseq = line.substring(3);
+                counter = 2;
+            }
+            else if (line.startsWith("SS")){
+                sseq = line.substring(3);
+                counter = 3;
+            }
+            if (counter == 3){
+                List<String> list = new ArrayList<>();
+                list.add(aseq);
+                list.add(sseq);
+                map.put(header, list);
+            }
+        }
+        br.close();
+        return map;
+    }
 
     private static void readPairs(int go, int ge, String dpPath, boolean check, String pairsPath, Map<String, String> seqlib, SubstitutionMatrix matrix, AlignmentType mode, boolean useNW, String format) throws Exception{
         BufferedReader br = new BufferedReader(new FileReader(pairsPath));
