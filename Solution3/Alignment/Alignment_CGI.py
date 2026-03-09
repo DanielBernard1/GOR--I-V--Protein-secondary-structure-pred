@@ -115,7 +115,8 @@ print(f"""<!DOCTYPE html>
     font-family: 'Courier New', monospace; 
     font-size: 20px; 
     line-height: 1.6; 
-    overflow-x: auto;        
+    white-space: pre;
+    overflow-x: auto;
     background: #f0f6fc; 
     border-left: 4px solid #2c5f8a; 
     padding: 16px; 
