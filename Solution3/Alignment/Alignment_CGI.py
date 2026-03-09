@@ -25,7 +25,7 @@ def get_sequence_from_db(pdb_id):
     conn.close()
     return row[0] if row else None
 
-if "pdb1" in form:
+if "pdb1" in form and form["pdb1"].value.strip():
     id1 = form["pdb1"].value
     id2 = form["pdb2"].value
     seq1 = get_sequence_from_db(id1)
@@ -53,6 +53,8 @@ elif "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].
 else:
     seq1 = form["seq1"].value
     seq2 = form["seq2"].value
+    if not seq1 or not seq2:
+        print("<p style='color:red'>Fehler: Pls insert a seq</p>")
     id1 = form["id1"].value
     id2 = form["id2"].value
 if "matrix" in form:
@@ -190,7 +192,7 @@ print(f"""<!DOCTYPE html>
     
     <h2>Final Alignment</h2>
     <pre class="result">
-    <pre>
+    
 """)
 
 if output:
