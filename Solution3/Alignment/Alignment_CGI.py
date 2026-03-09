@@ -61,7 +61,8 @@ alignment_jar = "../finaljars/alignment.jar"
 matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
 seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
 pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
-#dp_path = "dp_matrix.txt"
+dp_path = "dp_matrix.txt"
+fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
 
 
 with open(pairs_file, "w") as f:
@@ -82,6 +83,11 @@ input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqli
                          "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt]
 if use_nw =="nw":
     input.append("--nw")
+
+fp_result = subprocess.run(["python3", "fp_visualizer.py", fp_file], capture_output=True, text=True)
+print("<h2>Fixed Point Alignment</h2>")
+print(fp_result.stdout)
+
 
 #dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
 #print("<h2>DP-Matrix:</h2><pre>")
