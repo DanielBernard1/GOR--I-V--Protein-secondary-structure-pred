@@ -12,12 +12,28 @@ form = mycgi.Form()
 output = None
 
 
-seq1 = form["seq1"].value
-seq2 = form["seq2"].value
-
-id1 = form["id1"].value
-id2 = form["id2"].value
-
+if "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
+    content = form["seqfile"].file.read().decode("utf-8")
+    entries = []
+    current_id, current_seq = None, []
+    for line in content.splitlines():
+        line = line.strip()
+        if line.startswith(">"):
+            if current_id:
+                entries.append((current_id, "".join(current_seq)))
+            current_id = line[1:].split()[0]
+            current_seq = []
+        elif line:
+            current_seq.append(line)
+    if current_id:
+        entries.append((current_id, "".join(current_seq)))
+    id1, seq1 = entries[0]
+    id2, seq2 = entries[1]
+else:
+    seq1 = form["seq1"].value
+    seq2 = form["seq2"].value
+    id1 = form["id1"].value
+    id2 = form["id2"].value
 if "matrix" in form:
     matrix = form["matrix"].value
 else:
@@ -108,6 +124,9 @@ print(f"""<!DOCTYPE html>
         <textarea name="seq1">{seq1}</textarea>
         <p>Sequenz2: </p>
         <textarea name="seq2">{seq2}</textarea><br>
+        
+        <p>Oder Fasta-File hochladen für multiples Alignment:</p>
+        <input type="file" name="seqfile" > <br><br>
         
         <select name="matrix"> #alle Matrizen die auf Server liegen
             <option value="dayhoff.mat"> <p>dayhoff</p> </option>
