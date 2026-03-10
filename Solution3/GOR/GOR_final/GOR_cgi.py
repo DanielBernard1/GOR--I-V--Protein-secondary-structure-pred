@@ -21,11 +21,11 @@ def run_predict(BASE_DIR, form):
     maf = None
 
     if "--fasta" in form and form["--fasta"].filename:
-        fasta = os.path.join("uploads/input.fasta")
+        fasta = os.path.join(BASE_DIR,"uploads/input.fasta")
         with open(fasta, "wb") as f:
             f.write(form["--fasta"].file.read())
     if "--maf" in form and form["--maf"].filename:
-        maf = os.path.join("uploads/maf_input")
+        maf = os.path.join(BASE_DIR,"uploads/maf_input")
         os.makedirs(maf, exist_ok=True)
         filename = form["--maf"].filename
         with open(os.path.join(maf, filename), "wb") as f:
@@ -84,7 +84,7 @@ def run_predict(BASE_DIR, form):
 
         output = "Error occurred"
 
-    tmp_path = os.path.join("uploads/temp_seqAndStructure.txt")
+    tmp_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure.txt")
 
     with open(tmp_path, "w") as f:
         f.write("hheheh")
