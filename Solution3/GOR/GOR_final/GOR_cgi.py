@@ -25,7 +25,7 @@ def run_predict(BASE_DIR, form):
 
     fasta_path = None
     maf_path = None
-    if "--fasta" in form:
+    if "--fasta" in form and form["--fasta"].filename:
         fasta_path = os.path.join(BASE_DIR, "uploads/input.fasta")
         with open(fasta_path, "wb") as f:
             f.write(form["--fasta"].file.read())
@@ -37,7 +37,7 @@ def run_predict(BASE_DIR, form):
             f.write(form["--maf"].file.read())
 
 
-    if maf:
+    if "--maf" in form and form["--maf"].filename:
         if GorType == "--GOR1":
             model = modelGor1
             if probabilities == "yes":
