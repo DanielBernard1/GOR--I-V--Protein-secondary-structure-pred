@@ -155,6 +155,34 @@ text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
     text_error = "Fehler: Bitte beide Sequenzen eingeben."
 
+pdb_error = ""
+if input_type == "pdb" and pdb1_input:
+    try:
+        db = mysql.connector.connect(
+            host="mysql2-ext.bio.ifi.lmu.de",
+            user="bioprakt15",
+            password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
+            database="bioprakt15"
+        )
+        cursor = db.cursor()
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb1_input.lower(),))
+        row = cursor.fetchone()
+        seq1 = row[0] if row else None
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
+        row = cursor.fetchone()
+        seq2 = row[0] if row else None
+        id1 = pdb1_input
+        id2 = pdb2_input
+        db.close()
+        if not seq1 or not seq2:
+            pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
+            seq1 = seq2 = ""
+    except Exception as e:
+        pdb_error = f"ERROR: Datenbankverbindung fehlgeschlagen: {e}"
+        seq1 = seq2 = ""
+
+if pdb_error:
+    print(f'<p class="error">{pdb_error}</p>')
 
 # Java starten — VOR dem HTML damit Download möglich ist
 import sys
@@ -600,35 +628,7 @@ if file_error:
 if text_error:
     print(f'<p class="error">{text_error}</p>')
 
-# DB-Abfrage nach HTML
-pdb_error = ""
-if input_type == "pdb" and pdb1_input:
-    try:
-        db = mysql.connector.connect(
-            host="mysql2-ext.bio.ifi.lmu.de",
-            user="bioprakt15",
-            password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
-            database="bioprakt15"
-        )
-        cursor = db.cursor()
-        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb1_input.lower(),))
-        row = cursor.fetchone()
-        seq1 = row[0] if row else None
-        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
-        row = cursor.fetchone()
-        seq2 = row[0] if row else None
-        id1 = pdb1_input
-        id2 = pdb2_input
-        db.close()
-        if not seq1 or not seq2:
-            pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
-            seq1 = seq2 = ""
-    except Exception as e:
-        pdb_error = f"ERROR: Datenbankverbindung fehlgeschlagen: {e}"
-        seq1 = seq2 = ""
 
-if pdb_error:
-    print(f'<p class="error">{pdb_error}</p>')
 
 
 if output:
