@@ -2,8 +2,8 @@ import os
 import subprocess
 
 def run_seclib(BASE_DIR, form):
-    id = form.getValue("--id")
-    idList = form.getValue("--idlist")
+    id = form.getvalue("--id")
+    idList = form.getvalue("--idlist")
 
     seclib_path = os.path.join(BASE_DIR, "sec_lib.txt")
     output = ""
