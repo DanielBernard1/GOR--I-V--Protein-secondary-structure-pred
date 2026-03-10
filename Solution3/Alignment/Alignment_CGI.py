@@ -112,8 +112,6 @@ go = form["go"].value
 ge = form["ge"].value
 
 
-
-
 #if "check" in form:
 #    check = True
 #else:
@@ -129,7 +127,10 @@ if "use_nw" in form:
 else:
     use_nw = "gotoh"
 
-
+if use_nw == "nw":
+    style_go = "display: none;"
+else:
+    style_go = "display: block;"
 #Einlesen:
 alignment_jar = "../finaljars/alignment.jar"
 matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
@@ -187,6 +188,10 @@ print(f"""<!DOCTYPE html>
         document.getElementById('gap_open').style.display = 'none';
     }}
     }}
+    window.onload = function() {{
+        var algo = document.querySelector('select[name=use_nw]').value;
+        switchGap(algo);
+    }};
     </script>
 </head>
 <body>
@@ -260,7 +265,7 @@ print(f"""<!DOCTYPE html>
             <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option> 
         </select><br>
         
-        <div id="gap_open" style="{'display:none' if use_nw == 'nw' else 'display:block'}">
+        <div id="gap_open" style="{style_go}">
             <p>Gap Open:</p>
             <input type="text" name="go" value="{go}">
         </div>
