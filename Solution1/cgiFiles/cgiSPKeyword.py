@@ -8,11 +8,12 @@ print("Content-type:text/html\n\n")
 
 result = "No Organism Name entered."
 form = mycgi.Form()
-keywords_input = form.get('keywords')
-swiss_prot_input = form.get('swissprot_file')
+keywords_input = form.getfirst('keywords', '')
+swiss_prot_input = form["swissprot_file"]
 
 keywords = [keyword.strip() for keyword in keywords_input.split(",") if keyword.strip()]
-uploaded_file_path = os.path.join("copies", swiss_prot_input.filename)
+
+uploaded_file_path = os.path.join("/tmp", swiss_prot_input.filename)
     
 with open(uploaded_file_path, 'wb') as fout:
     shutil.copyfileobj(swiss_prot_input.file, fout)
