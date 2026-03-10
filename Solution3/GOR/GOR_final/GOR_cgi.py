@@ -59,23 +59,23 @@ def run_predict(BASE_DIR, form):
         if GorType == "--GOR1":
             model = modelGor1
             if probabilities == "yes":
-                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--fasta", fasta, "--format", "txt", "--probabilities"], capture_output=True, text=True, cwd=BASE_DIR)
+                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--seq", fasta, "--format", "txt", "--probabilities"], capture_output=True, text=True, cwd=BASE_DIR)
             else:
-                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--fasta", fasta, "--format", "txt"], capture_output=True, text=True, cwd=BASE_DIR)
-            output  = output = f"PREDICT={PREDICT} exists={os.path.exists(PREDICT)} fasta={fasta} exists={os.path.exists(fasta)} model={model} exists={os.path.exists(model)}"
+                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--seq", fasta, "--format", "txt"], capture_output=True, text=True, cwd=BASE_DIR)
+            output  = result.stdout
         elif GorType == "--GOR3":
             model = modelGor3
             if probabilities == "yes":
-                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--fasta", fasta, "--format", "txt", "--probabilities"], capture_output=True, text=True, cwd=BASE_DIR)
+                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--seq", fasta, "--format", "txt", "--probabilities"], capture_output=True, text=True, cwd=BASE_DIR)
             else:
-                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--fasta", fasta, "--format", "txt"], capture_output=True, text=True, cwd=BASE_DIR)
+                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--seq", fasta, "--format", "txt"], capture_output=True, text=True, cwd=BASE_DIR)
             output = result.stdout
         elif GorType == "--GOR4":
             model = modelGor4
             if probabilities == "yes":
-                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--fasta", fasta, "--format", "txt", "--probabilities"], capture_output=True, text=True, cwd=BASE_DIR)
+                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--seq", fasta, "--format", "txt", "--probabilities"], capture_output=True, text=True, cwd=BASE_DIR)
             else:
-                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--fasta", fasta, "--format", "txt"], capture_output=True, text=True, cwd=BASE_DIR)
+                result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--seq", fasta, "--format", "txt"], capture_output=True, text=True, cwd=BASE_DIR)
             output = result.stdout
         else:
             output = "Error: kein GOR Typ ausgewählt"
@@ -84,7 +84,7 @@ def run_predict(BASE_DIR, form):
 
     tmp_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure.txt")
     with open(tmp_path, "w") as f:
-        f.write("hheheh")
+
         f.write(output)
 
     if fasta and os.path.exists(fasta):
