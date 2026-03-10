@@ -12,7 +12,7 @@ file_content = form_file.file.read().decode("utf-8")
 
 if pattern:
     result = subprocess.run(
-        ["python3", "Aufgabe7.py", "--fasta", "-", "--pattern", pattern],
+        ["python3", "../Assignment07/psscan.py", "--fasta", "-", "--pattern", pattern],
         input=file_content,
         text=True,
         capture_output=True
