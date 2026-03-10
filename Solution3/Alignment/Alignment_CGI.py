@@ -5,11 +5,11 @@
 import subprocess
 import mycgi
 import mysql.connector
-import os
+
 
 form = mycgi.Form()
 
-# ── Formular-Werte einlesen ──────────────────────────────────
+#Werte einlesen
 submitted  = "input_type" in form
 input_type = form["input_type"].value if submitted else ""
 
@@ -45,7 +45,7 @@ seqlib_file   = "seqlib.txt"
 pairs_file    = "pairs.txt"
 dp_path       = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
 
-# ── Input verarbeiten ────────────────────────────────────────
+#Input
 file_error   = ""
 native_error = ""
 use_native   = False  # True wenn pairs+seqlib direkt hochgeladen wurden
@@ -132,7 +132,7 @@ if download_output and submitted and fmt in ("ali", "scores") and not file_error
     import sys
     sys.exit(0)
 
-# ── Ab hier: normaler HTML-Output ───────────────────────────
+#HTML output
 print("Content-type: text/html\n")
 
 print(f"""<!DOCTYPE html>
@@ -313,7 +313,7 @@ if file_error:   print(f'<p class="error">{file_error}</p>')
 if text_error:   print(f'<p class="error">{text_error}</p>')
 if native_error: print(f'<p class="error">{native_error}</p>')
 
-# ── DB-Abfrage für PDB (nach HTML) ──────────────────────────
+#DB Abfrage PDBIds
 pdb_error = ""
 if input_type == "pdb" and pdb1_input:
     try:
@@ -325,10 +325,10 @@ if input_type == "pdb" and pdb1_input:
             database="bioprakt15"
         )
         cursor = db.cursor()
-        cursor.execute("SELECT sequence FROM homestead WHERE pdb = %s", (pdb1_input.lower(),))
+        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb1_input.lower(),))
         row = cursor.fetchone()
         seq1 = row[0] if row else None
-        cursor.execute("SELECT sequence FROM homestead WHERE pdb = %s", (pdb2_input.lower(),))
+        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb2_input.lower(),))
         row = cursor.fetchone()
         seq2 = row[0] if row else None
         id1 = pdb1_input
@@ -344,7 +344,7 @@ if input_type == "pdb" and pdb1_input:
 if pdb_error:
     print(f'<p class="error">{pdb_error}</p>')
 
-# ── Java starten ─────────────────────────────────────────────
+
 output = None
 can_run = not any([file_error, text_error, native_error, pdb_error])
 
@@ -385,7 +385,14 @@ if output:
 
 print("</body>\n</html>")
 
-# ── DP-Matrix & Fixed Point (optional) ──────────────────────
+fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
+fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
+subprocess.run(["python3", "FixPoint.py", fp_file, fp_png])
+print("<h2>Fixed Point Alignment</h2>")
+print(
+    f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
+
+#DP-Matrix
 if show_dp and output and can_run:
     try:
         cmd_dp = ["java", "-jar", alignment_jar,
@@ -402,10 +409,5 @@ if show_dp and output and can_run:
         print(dp_vis.stdout)
         print("</pre>")
 
-        fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
-        fp_png  = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
-        subprocess.run(["python3", "FixPoint.py", fp_file, fp_png])
-        print("<h2>Fixed Point Alignment</h2>")
-        print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
     except Exception as e:
         print(f"<p class='error'>DP-Matrix Fehler: {e}</p>")
