@@ -74,10 +74,10 @@ if input_type == "text" and submitted and (not seq1 or not seq2):
     text_error = "Fehler: Bitte beide Sequenzen eingeben."
 
 
-# ════════════════════════════════════════════════════════════
+
 # HTML ZUERST DRUCKEN — so ist die Seite immer sichtbar,
 # auch wenn DB oder Java danach einen Fehler werfen
-# ════════════════════════════════════════════════════════════
+
 
 print(f"""<!DOCTYPE html>
 <html>
@@ -210,17 +210,14 @@ if text_error:
     print(f'<p class="error">{text_error}</p>')
 
 
-# ════════════════════════════════════════════════════════════
-# AB HIER: DB-Abfrage und Java — NACH dem HTML
-# Wenn hier etwas crasht, sieht der User trotzdem das Formular
-# ════════════════════════════════════════════════════════════
+# AB HIER: DB-Abfrage und Java
 
 # PDB-Sequenzen aus DB holen (erst hier, nicht vor dem HTML)
 pdb_error = ""
 if input_type == "pdb" and pdb1_input:
     try:
         db = mysql.connector.connect(
-            host="localhost",
+            host="mysql2-ext.bio.ifi.lmu.de",
             user="bioprakt15",
             password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
             database="bioprakt15"
