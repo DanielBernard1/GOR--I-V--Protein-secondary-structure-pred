@@ -7,9 +7,9 @@ def run_predict(BASE_DIR, form):
 
     probabilities = form.getvalue("--probabilities")
 
-    JARS    = os.path.join("jars")
+    JARS = os.path.join(BASE_DIR, "jars")
     PREDICT = os.path.join(JARS, "predict.jar")
-    MODELS  = "GOR_models"
+    MODELS = os.path.join(BASE_DIR, "GOR_models")
 
     modelGor1 = os.path.join(MODELS, "gor1_cb513_model.txt")
     modelGor3 = os.path.join(MODELS, "gor3_cb513_model.txt")
@@ -21,11 +21,11 @@ def run_predict(BASE_DIR, form):
     maf = None
 
     if "--fasta" in form and form["--fasta"].filename:
-        fasta = os.path.join("uploads/input.fasta")
+        fasta = os.path.join(BASE_DIR, "uploads/input.fasta")
         with open(fasta, "wb") as f:
             f.write(form["--fasta"].file.read())
     if "--maf" in form and form["--maf"].filename:
-        maf = os.path.join("uploads/maf_input")
+        tmp_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure.txt")
         os.makedirs(maf, exist_ok=True)
         filename = form["--maf"].filename
         with open(os.path.join(maf, filename), "wb") as f:
