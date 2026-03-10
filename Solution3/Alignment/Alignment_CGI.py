@@ -148,12 +148,12 @@ print(f"""<!DOCTYPE html>
 <html>
 <head>
     <style>
-        body {{ font-family: Arial; max-width: 900px; margin: auto; padding: 20px; }}
-        h1 {{ color: #2c5f8a; border-bottom: 2px solid #2c5f8a; }}
-        button, input[type=submit] {{background: #2c5f8a; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }}
-        section {{ margin-bottom: 40px; }}
-        textarea, input[type=text], select {{ padding: 5px; width: 100%; }}
-        pre {{ white-space: pre-wrap; overflow-wrap: break-word; }}
+         body {{ font-family: Arial; max-width: 900px; margin: auto; padding: 20px; }}
+    h1 {{ color: #2c5f8a; border-bottom: 2px solid #2c5f8a; }}
+    button, input[type=submit] {{ background: #2c5f8a; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }}
+    section {{ margin-bottom: 40px; }}
+    textarea, input[type=text], select {{ padding: 5px; width: 100%; }}
+    pre.result {{ font-family: 'Courier New', monospace; font-size: 20px; line-height: 1.6; white-space: pre; overflow-x: auto; background: #f0f6fc; border-left: 4px solid #2c5f8a; padding: 16px; border-radius: 4px; }}
     </style>
     <script>
     function switchInput(type) {{
@@ -249,7 +249,9 @@ print(f"""<!DOCTYPE html>
 if output:
     print(mode)
     print("")
+    print("<pre class='result'>")
     print(output.stdout)
+    print("</pre>")
     print(matrix)
     print("")
     print("")
