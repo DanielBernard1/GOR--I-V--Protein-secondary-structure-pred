@@ -177,10 +177,13 @@ public class alignment {
 
                 FixedPoint fp = new FixedPoint(aseq1, aseq2, matrix, ge);
                 fp.fixedPointScores(fpFile.getPath());
+                File trace;
                 if (file.isDirectory()){
                     file = new File(file, "scoring_matrix.txt");
-                    File trace = new File(file, "traceback_index.txt");
-
+                    trace = new File(file, "traceback_index.txt");
+                }
+                else{
+                    trace = new File("traceback_index.txt");
                 }
                 int[][] scoring_matrix = scoring.getScoring_matrix();
                 try (FileWriter fw = new FileWriter(file)) {
@@ -256,9 +259,13 @@ public class alignment {
 
                 FixedPoint fp = new FixedPoint(seq1, seq2, matrix, ge);
                 fp.fixedPointScores(fpFile.getPath());
+                File trace;
                 if (file.isDirectory()){
                     file = new File(file, "scoring_matrix.txt");
-                    File trace = new File(file, "traceback_index.txt");
+                    trace = new File(file, "traceback_index.txt");
+                }
+                else{
+                    trace = new File( "traceback_index.txt");
                 }
                 int[][] scoring_matrix = scoring.getScoring_matrix();
                 try (FileWriter fw = new FileWriter(file)) {
