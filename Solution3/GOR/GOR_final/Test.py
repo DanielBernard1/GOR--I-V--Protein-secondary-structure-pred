@@ -15,26 +15,26 @@ form = mycgi.Form()
 action = form.getvalue("action")
 output_section = ""
 GOR_OUTPUT = os.path.join("uploads/temp_seqAndStructure.txt")
-DETAILED_PATH = os.path.join("uploads/detailedGor.txt")
 
 if action == "seclib":
     try:
-        output, seclib_path = run_seclib(BASE_DIR, form)
-
-        output_section = f"<pre>{output}</pre><a href='sec_lib.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
+        output = run_predict(BASE_DIR, form)
+        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
 elif action == "predict":
     try:
         output = run_predict(BASE_DIR, form)
-        output_section = f"<pre>{output}</pre><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
+        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 elif action == "validate":
     try:
         output = run_validate(BASE_DIR, form)
-        values = [""] + [line.strip() for line in output.splitlines()]
+        values = [""]
+        for line in output.splitlines():
+            values.append(line.strip())
         output_section = f"""<br><br>
     <h2>Results</h2>
 <div style="overflow-x: auto;">
@@ -61,12 +61,26 @@ elif action == "validate":
         <tbody>
             <tr>
                 <td style="padding: 8px 12px;">validation</td>
-                {''.join(f'<td style="padding: 8px 12px;">{values[i] if i < len(values) else ""}</td>' for i in range(1, 14))}
+                <td style="padding: 8px 12px;">{values[1]}</td>
+                <td style="padding: 8px 12px;">{values[2]}</td>
+                <td style="padding: 8px 12px;">{values[3]}</td>
+                <td style="padding: 8px 12px;">{values[4]}</td>
+                <td style="padding: 8px 12px;">{values[5]}</td>
+                <td style="padding: 8px 12px;">{values[6]}</td>
+                <td style="padding: 8px 12px;">{values[7]}</td>
+                <td style="padding: 8px 12px;">{values[8]}</td>
+                <td style="padding: 8px 12px;">{values[9]}</td>
+                <td style="padding: 8px 12px;">{values[10]}</td>
+                <td style="padding: 8px 12px;">{values[11]}</td>
+                <td style="padding: 8px 12px;">{values[12]}</td>
+                <td style="padding: 8px 12px;">{values[13]}</td>
+                <td style="padding: 8px 12px;">{values[14]}</td>
+
             </tr>
         </tbody>
     </table>
 </div>
-<a href="/{DETAILED_PATH}" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">↓ Download</a>"""
+<a href="uploads/detailedGor.txt" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">Download</a>"""
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
