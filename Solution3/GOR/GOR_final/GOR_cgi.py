@@ -9,9 +9,7 @@ def run_predict(BASE_DIR, form):
 
     JARS    = os.path.join("jars")
     PREDICT = os.path.join(JARS, "predict.jar")
-
     MODELS  = "GOR_models"
-
 
     modelGor1 = os.path.join(MODELS, "gor1_cb513_model.txt")
     modelGor3 = os.path.join(MODELS, "gor3_cb513_model.txt")
@@ -19,8 +17,8 @@ def run_predict(BASE_DIR, form):
 
     os.makedirs(os.path.join("uploads"), exist_ok=True)
 
-    fasta_path = None
-    maf_path = None
+    fasta = None
+    maf = None
 
     if "--fasta" in form and form["--fasta"].filename:
         fasta = os.path.join("uploads/input.fasta")
