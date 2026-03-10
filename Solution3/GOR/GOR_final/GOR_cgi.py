@@ -62,7 +62,7 @@ def run_predict(BASE_DIR, form):
                 result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--fasta", fasta, "--format", "txt", "--probabilities"], capture_output=True, text=True, cwd=BASE_DIR)
             else:
                 result = subprocess.run(["java", "-jar", PREDICT, "--model", model, "--fasta", fasta, "--format", "txt"], capture_output=True, text=True, cwd=BASE_DIR)
-            output = result.stdout
+            output  = f"returncode={result.returncode} stdout='{result.stdout}' stderr='{result.stderr}'"
         elif GorType == "--GOR3":
             model = modelGor3
             if probabilities == "yes":
