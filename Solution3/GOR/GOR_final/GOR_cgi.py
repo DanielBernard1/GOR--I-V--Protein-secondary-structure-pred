@@ -1,5 +1,6 @@
 import os
 import subprocess
+import shutil
 
 def run_predict(BASE_DIR, form):
 
@@ -90,7 +91,6 @@ def run_predict(BASE_DIR, form):
     if fasta and os.path.exists(fasta):
         os.remove(fasta)
     if maf and os.path.exists(maf):
-        import shutil
         shutil.rmtree(maf)
 
     return output

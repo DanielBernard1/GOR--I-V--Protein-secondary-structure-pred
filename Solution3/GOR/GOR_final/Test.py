@@ -115,6 +115,22 @@ print(f"""<!DOCTYPE html>
 </section>
 
 <section>
+
+    <h2>Train</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="train">
+        <label>GOR Methode</label>
+        <select name="--method">
+            <option value="--GOR1">GOR1</option>
+            <option value="--GOR3">GOR3</option>
+            <option value="--GOR4">GOR4</option>
+        </select>
+        <label>Database File</label>
+        <input type="file" name="--db">
+        <button type="submit">Run</button>
+    </form>
+    {output_section if action == "train" else ""}
+
     <h2>Predict</h2>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="predict">
