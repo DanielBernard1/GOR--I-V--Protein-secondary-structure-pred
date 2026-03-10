@@ -15,8 +15,10 @@ output_section = ""
 
 if action == "seclib":
     try:
+        id_val = form.get("--id")
+        output_section = f"<pre>action=seclib, id={id_val}</pre>"
         output, seclib_path = run_seclib(BASE_DIR, form)
-        output_section = f"<br><br><h2>Output</h2><textarea readonly rows='10' style='resize:both;'>{output}</textarea><a href='/{seclib_path}' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
+        output_section = f"<pre>{output}</pre>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
