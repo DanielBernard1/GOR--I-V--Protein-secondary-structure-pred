@@ -185,17 +185,17 @@ print(f"""<!DOCTYPE html>
     <h2>New Searchrequest:</h2>
     <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> 
         <p>Input-Type:</p>
-        <p>Enter Sequences:</p>
-        <input type="button" onclick="switchInput('text')">
-        <p>Upload FasterFile: </p>
-        <input type="button" onclick="switchInput('file')">
+        <p>Own Sequences:</p>
+        <input type="button" value="Enter Sequences manually" onclick="switchInput('text')">
+        <p>Upload FastaFile: </p>
+        <input type="button" value="Enter Fasta-File" onclick="switchInput('file')">
         <p>Upload PDB-IDs form the Database: </p>
-        <input type="button" value="pdb" onclick="switchInput('pdb')">
+        <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
         
         <input type="hidden" name="input_type" id="input_type_hidden" value="{input_type}">
         <br><br>
         
-        <div id="input_text" style="display: block;">
+        <div id="input_text" style="{style_text}">
             <p>Id1: </p>
             <input type="text" name="id1" value="{id1}">
             <p>Id2: </p>
@@ -206,13 +206,13 @@ print(f"""<!DOCTYPE html>
             <textarea name="seq2">{seq2}</textarea><br>
         </div>
         
-        <div id="input_file" style="display: block;">
+        <div id="input_file" style="{style_file}">
             <p>Upload Fasta-File for multiple Alignments:</p>
             <input type="file" name="seqfile" > 
         </div>
         <br><br>
         
-        <div id="input_pdb" style="display: block;">
+        <div id="input_pdb" style="{style_pdb}">
             <p>Upload PDB-IDs out of the Database</p>
             <p>PDB-ID1: </p>
             <input type="text" name="pdb1" placeholder="z.B. 1HBA">
