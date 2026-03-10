@@ -11,38 +11,31 @@ print("Content-type: text/html\n")
 form = mycgi.Form()
 
 # Werte einlesen
-
-
 submitted  = "input_type" in form
 input_type = form["input_type"].value if submitted else ""
 
-# Welches Input-Div soll sichtbar sein (wird in HTML eingesetzt)
 style_text = "display: block;" if input_type == "text" else "display: none;"
 style_file = "display: block;" if input_type == "file" else "display: none;"
 style_pdb  = "display: block;" if input_type == "pdb"  else "display: none;"
 
-# Sequenz-Felder (nur bei text-Input direkt aus Form)
 seq1 = form["seq1"].value if "seq1" in form else ""
 seq2 = form["seq2"].value if "seq2" in form else ""
 id1  = form["id1"].value  if "id1"  in form else ""
 id2  = form["id2"].value  if "id2"  in form else ""
 
-# PDB-Eingaben zwischenspeichern — DB-Abfrage kommt erst NACH dem HTML
 pdb1_input = form["pdb1"].value.strip() if "pdb1" in form else ""
 pdb2_input = form["pdb2"].value.strip() if "pdb2" in form else ""
 
-# Parameter
-matrix = form["matrix"].value if "matrix" in form else "dayhoff.mat"
-mode   = form["mode"].value   if "mode"   in form else "global"
-fmt    = form["format"].value if "format" in form else "html"
-go     = form["go"].value     if "go"     in form else "-12"
-ge     = form["ge"].value     if "ge"     in form else "-1"
-use_nw = form["use_nw"].value if "use_nw" in form else "gotoh"
+matrix  = form["matrix"].value if "matrix" in form else "dayhoff.mat"
+mode    = form["mode"].value   if "mode"   in form else "global"
+fmt     = form["format"].value if "format" in form else "html"
+go      = form["go"].value     if "go"     in form else "-12"
+ge      = form["ge"].value     if "ge"     in form else "-1"
+use_nw  = form["use_nw"].value if "use_nw" in form else "gotoh"
 show_dp = "show_dp" in form
 
 style_go = "display: none;" if use_nw == "nw" else "display: block;"
 
-# Für FASTA-File: Datei direkt hier parsen (kein DB-Call, kein Crash)
 file_error = ""
 if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
     try:
@@ -68,18 +61,15 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
     except Exception as e:
         file_error = f"ERROR reading file: {e}"
 
-# Text-Input Fehler (nur wenn submitted)
 text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
     text_error = "Fehler: Bitte beide Sequenzen eingeben."
 
 
-
-# HTML ZUERST DRUCKEN --> Seite immer sichtbar
-# auch wenn Fehker geworfen wird
+# HTML ZUERST DRUCKEN
 
 print(f"""<!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -278,142 +268,169 @@ print(f"""<!DOCTYPE html>
         document.getElementById('input_file').style.display = 'none';
         document.getElementById('input_pdb').style.display  = 'none';
         document.getElementById('input_' + type).style.display = 'block';
-        // Setzt den hidden field damit Python weiß welcher Input-Typ gewählt wurde
         document.getElementById('input_type_hidden').value = type;
     }}
-
     function switchGap(algo) {{
         if (algo === 'gotoh') {{
-            document.getElementById('gap_open').style.display = 'block';
+            document.getElementById('gap_open').style.display   = 'block';
             document.getElementById('gap_extend').style.display = 'block';
         }} else {{
-            document.getElementById('gap_open').style.display = 'none';
+            document.getElementById('gap_open').style.display   = 'none';
             document.getElementById('gap_extend').style.display = 'block';
         }}
     }}
     window.onload = function() {{
-        var algo = document.querySelector('select[name=use_nw]').value;
-        switchGap(algo);
+        switchGap(document.querySelector('select[name=use_nw]').value);
     }};
     </script>
 </head>
 <body>
-    <nav>
-        <a class="nav-logo" href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">
-            <svg viewBox="0 0 22 22" fill="none" width="20" height="20">
-                <ellipse cx="11" cy="11" rx="4"  ry="10" stroke="#2e7d52" stroke-width="1.8" fill="none"/>
-                <ellipse cx="11" cy="11" rx="10" ry="4"  stroke="#4caf80" stroke-width="1.8" fill="none"/>
-                <circle  cx="11" cy="11" r="2"           fill="#2e7d52"/>
-            </svg>
-            propraGruppe15
-        </a>
-        <ul class="nav-links">
-            <!-- Home-Link: zurück zur Hauptseite -->
-            <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">Home</a></li>
-            <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_CGI.py">GOR</a></li>
-            <!-- class="active": markiert die aktuelle Seite -->
-            <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
-        </ul>
-    </nav>
-    
-    
+
+<!-- DESIGN: Navbar mit Zurück-Link zur Hauptseite -->
+<nav>
+    <a class="nav-logo" href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">
+        <svg viewBox="0 0 22 22" fill="none" width="20" height="20">
+            <ellipse cx="11" cy="11" rx="4"  ry="10" stroke="#2e7d52" stroke-width="1.8" fill="none"/>
+            <ellipse cx="11" cy="11" rx="10" ry="4"  stroke="#4caf80" stroke-width="1.8" fill="none"/>
+            <circle  cx="11" cy="11" r="2"           fill="#2e7d52"/>
+        </svg>
+        propraGruppe15
+    </a>
+    <ul class="nav-links">
+        <!-- Home-Link: zurück zur Hauptseite -->
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_CGI.py">GOR</a></li>
+        <!-- class="active": markiert die aktuelle Seite -->
+        <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
+    </ul>
+</nav>
+
+<!-- DESIGN: grüner Header mit Algorithmen-Untertitel und Sequenz-Deko -->
+<div class="page-header">
     <h1>Alignment</h1>
-    <h2>New Searchrequest:</h2>
+    <p>Gotoh &nbsp;&middot;&nbsp; Needleman-Wunsch &nbsp;&middot;&nbsp; Smith-Waterman</p>
+    <div class="seq-deco">MVLSPADKTNVKAAWGKV--GAHAGEYGAEALERMFLSFPTTKTYFPHFD &middot;&middot;&middot; MVHLTPEEKSAVTALWGKVNVDEVGG &middot;&middot;&middot; ACDEFGHIKLMNPQRSTVWY</div>
+</div>
+
+<div class="page-wrapper">
+
+    <p class="section-label">New Searchrequest</p>
+    <div class="card">
     <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py">
 
-        <p>Input-Type:</p>
-        <p>Own Sequences:</p>
+        <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:10px;">Input-Type:</p>
+
+        <p style="font-size:0.8rem; color:var(--text-dim);">Own Sequences:</p>
         <input type="button" value="Enter Sequences manually" onclick="switchInput('text')">
-        <p>Upload FastaFile: </p>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FastaFile:</p>
         <input type="button" value="Enter Fasta-File" onclick="switchInput('file')">
-        <p>Upload PDB-IDs form the Database: </p>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload PDB-IDs from the Database:</p>
         <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
 
         <input type="hidden" name="input_type" id="input_type_hidden" value="{input_type}">
-        <br><br>
+        <br>
 
         <div id="input_text" style="{style_text}">
-            <p>Id1: </p>
-            <input type="text" name="id1" value="{id1}">
-            <p>Id2: </p>
-            <input type="text" name="id2" value="{id2}"><br>
-            <p>Sequenz1: </p>
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">Id 1</label>
+                    <input type="text" name="id1" value="{id1}">
+                </div>
+                <div>
+                    <label class="field-label">Id 2</label>
+                    <input type="text" name="id2" value="{id2}">
+                </div>
+            </div>
+            <label class="field-label">Sequenz 1</label>
             <textarea name="seq1">{seq1}</textarea>
-            <p>Sequenz2: </p>
-            <textarea name="seq2">{seq2}</textarea><br>
+            <label class="field-label">Sequenz 2</label>
+            <textarea name="seq2">{seq2}</textarea>
         </div>
 
         <div id="input_file" style="{style_file}">
-            <p>Upload Fasta-File for multiple Alignments:</p>
+            <label class="field-label">FASTA-Datei (min. 2 Sequenzen — erste zwei werden aligned)</label>
             <input type="file" name="seqfile">
         </div>
-        <br><br>
 
         <div id="input_pdb" style="{style_pdb}">
-            <p>Upload PDB-IDs out of the Database</p>
-            <p>PDB-ID1: </p>
-            <input type="text" name="pdb1" value="{pdb1_input}" placeholder="z.B. 1hba">
-            <p>PDB-ID2: </p>
-            <input type="text" name="pdb2" value="{pdb2_input}" placeholder="z.B. 2hbb">
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">PDB-ID 1</label>
+                    <input type="text" name="pdb1" value="{pdb1_input}" placeholder="z.B. 1hba">
+                </div>
+                <div>
+                    <label class="field-label">PDB-ID 2</label>
+                    <input type="text" name="pdb2" value="{pdb2_input}" placeholder="z.B. 2hbb">
+                </div>
+            </div>
         </div>
-        <br><br>
 
-        <p>Matrix:</p>
-        <select name="matrix">
-            <option value="dayhoff.mat"         {'selected' if matrix == 'dayhoff.mat'         else ''}>dayhoff</option>
-            <option value="BlakeCohenMatrix.mat" {'selected' if matrix == 'BlakeCohenMatrix.mat' else ''}>BlakeCohenMatrix</option>
-            <option value="blosum62.mat"         {'selected' if matrix == 'blosum62.mat'         else ''}>BLOSUM62</option>
-            <option value="pam250.mat"           {'selected' if matrix == 'pam250.mat'           else ''}>pam250</option>
-        </select>
-        <br><br>
+    </div><!-- end card -->
 
-        <p>Mode:</p>
-        <select name="mode">
-            <option value="global"    {'selected' if mode == 'global'    else ''}>global</option>
-            <option value="local"     {'selected' if mode == 'local'     else ''}>local</option>
-            <option value="freeshift" {'selected' if mode == 'freeshift' else ''}>freeshift</option>
-        </select>
-        <br><br>
-
-        <p>Output-Format:</p>
-        <select name="format">
-            <option value="html"   {'selected' if fmt == 'html'   else ''}>html</option>
-            <option value="ali"    {'selected' if fmt == 'ali'    else ''}>ali</option>
-            <option value="scores" {'selected' if fmt == 'scores' else ''}>scores</option>
-        </select><br>
-
-        <p>Algorithm:</p>
-        <select name="use_nw" onchange="switchGap(this.value)">
-            <option value="gotoh" {'selected' if use_nw == 'gotoh' else ''}>Gotoh</option>
-            <option value="nw"    {'selected' if use_nw == 'nw'    else ''}>Needleman-Wunsch / Smith-Waterman</option>
-        </select><br>
-
-        <div id="gap_open" style="{style_go}">
-            <p>Gap Open:</p>
-            <input type="text" name="go" value="{go}">
+    <p class="section-label">Parameters</p>
+    <div class="card">
+        <div class="param-grid">
+            <div>
+                <label class="field-label">Matrix</label>
+                <select name="matrix">
+                    <option value="dayhoff.mat"         {'selected' if matrix == 'dayhoff.mat'         else ''}>dayhoff</option>
+                    <option value="BlakeCohenMatrix.mat" {'selected' if matrix == 'BlakeCohenMatrix.mat' else ''}>BlakeCohenMatrix</option>
+                    <option value="blosum62.mat"         {'selected' if matrix == 'blosum62.mat'         else ''}>BLOSUM62</option>
+                    <option value="pam250.mat"           {'selected' if matrix == 'pam250.mat'           else ''}>pam250</option>
+                </select>
+            </div>
+            <div>
+                <label class="field-label">Mode</label>
+                <select name="mode">
+                    <option value="global"    {'selected' if mode == 'global'    else ''}>global</option>
+                    <option value="local"     {'selected' if mode == 'local'     else ''}>local</option>
+                    <option value="freeshift" {'selected' if mode == 'freeshift' else ''}>freeshift</option>
+                </select>
+            </div>
+            <div>
+                <label class="field-label">Output-Format</label>
+                <select name="format">
+                    <option value="html"   {'selected' if fmt == 'html'   else ''}>html</option>
+                    <option value="ali"    {'selected' if fmt == 'ali'    else ''}>ali</option>
+                    <option value="scores" {'selected' if fmt == 'scores' else ''}>scores</option>
+                </select>
+            </div>
+            <div>
+                <label class="field-label">Algorithm</label>
+                <select name="use_nw" onchange="switchGap(this.value)">
+                    <option value="gotoh" {'selected' if use_nw == 'gotoh' else ''}>Gotoh</option>
+                    <option value="nw"    {'selected' if use_nw == 'nw'    else ''}>Needleman-Wunsch / Smith-Waterman</option>
+                </select>
+            </div>
+            <div id="gap_open" style="{style_go}">
+                <label class="field-label">Gap Open</label>
+                <input type="text" name="go" value="{go}">
+            </div>
+            <div id="gap_extend">
+                <label class="field-label">Gap Extension</label>
+                <input type="text" name="ge" value="{ge}">
+            </div>
         </div>
-        <div id="gap_extend">
-            <p>Gap Extension:</p>
-            <input type="text" name="ge" value="{ge}">
+
+        <div class="checkbox-row">
+            <input type="checkbox" name="show_dp" id="show_dp" {'checked' if show_dp else ''}>
+            <label for="show_dp">DP-Matrix &amp; Fixed Point anzeigen</label>
         </div>
-        <br><br>
+    </div><!-- end card -->
 
         <input type="submit" value="Calculate Alignment">
     </form>
 
-    <h2>Final Alignment</h2>
+    <hr>
+    <p class="section-label">Result</p>
 """)
 
-# Fehler aus File-Parsing anzeigen
 if file_error:
     print(f'<p class="error">{file_error}</p>')
 if text_error:
     print(f'<p class="error">{text_error}</p>')
 
-
-# AB HIER: DB-Abfrage und Java
-
-# PDB-Sequenzen aus DB holen
+# DB-Abfrage nach HTML
 pdb_error = ""
 if input_type == "pdb" and pdb1_input:
     try:
@@ -427,15 +444,12 @@ if input_type == "pdb" and pdb1_input:
         cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb1_input.lower(),))
         row = cursor.fetchone()
         seq1 = row[0] if row else None
-
         cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb2_input.lower(),))
         row = cursor.fetchone()
         seq2 = row[0] if row else None
-
         id1 = pdb1_input
         id2 = pdb2_input
         db.close()
-
         if not seq1 or not seq2:
             pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
             seq1 = seq2 = ""
@@ -446,7 +460,7 @@ if input_type == "pdb" and pdb1_input:
 if pdb_error:
     print(f'<p class="error">{pdb_error}</p>')
 
-# Java nur starten wenn Sequenzen vorhanden und kein Fehler
+# Java starten
 alignment_jar = "../finaljars/alignment.jar"
 matrix_path   = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
 seqlib_file   = "seqlib.txt"
@@ -460,29 +474,37 @@ if seq1 and seq2 and not file_error and not text_error and not pdb_error:
         with open(seqlib_file, "w") as f:
             f.write(f"{id1}:{seq1}\n")
             f.write(f"{id2}:{seq2}\n")
-
         cmd = ["java", "-jar", alignment_jar,
                "--pairs", pairs_file, "--seqlib", seqlib_file,
                "-m", matrix_path, "--mode", mode,
                "--go", go, "--ge", ge, "--format", fmt]
         if use_nw == "nw":
             cmd.append("--nw")
-
         output = subprocess.run(cmd, capture_output=True, text=True)
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
 if output:
-    print("<pre>")
-    print(mode)
-    print("")
+    # DESIGN: result-bar + pre.result statt nacktem <pre>
+    print(f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
+    print('<pre class="result">')
     print(output.stdout)
-    print(matrix)
-    print("</pre>")
-    print("<h2>Benchmark</h2>")
+    print('</pre>')
+    print('<p class="section-label">Benchmark</p>')
     print("<img src='benchmark.png'>")
 
-print("</body>\n</html>")
+print("""
+</div>
+
+<!-- DESIGN: Footer wie index.html -->
+<footer>
+    <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; Gruppe 15</span>
+    <span>Alignment</span>
+</footer>
+
+</body>
+</html>
+""")
 
 # DP-Matrix und Fixpoint
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
