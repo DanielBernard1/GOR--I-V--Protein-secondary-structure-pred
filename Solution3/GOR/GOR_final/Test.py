@@ -26,7 +26,7 @@ print(f"""<!DOCTYPE html>
 <h1>GOR</h1>
 <section>
     <h2>Validate</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="validate">
         <label>Prediction</label>
         <textarea name="--prediction" rows="4"></textarea>
