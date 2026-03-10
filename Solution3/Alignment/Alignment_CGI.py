@@ -63,27 +63,6 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
     except Exception as e:
         file_error = f"ERROR reading file: {e}"
 
-native_error = ""
-use_native   = False
-if input_type == "native":
-    pairs_ok  = "pairs_file"  in form and hasattr(form["pairs_file"],  "file") and form["pairs_file"].filename
-    seqlib_ok = "seqlib_file" in form and hasattr(form["seqlib_file"], "file") and form["seqlib_file"].filename
-    if not pairs_ok or not seqlib_ok:
-        native_error = "ERROR: Bitte beide Dateien hochladen (pairs.txt und seqlib.txt)."
-    else:
-        try:
-            pairs_content  = form["pairs_file"].file.read().decode("utf-8")
-            seqlib_content = form["seqlib_file"].file.read().decode("utf-8")
-            with open("pairs.txt", "w") as f:
-                f.write(pairs_content)
-            with open("seqlib.txt", "w") as f:
-                f.write(seqlib_content)
-            use_native = True
-            first_pair = pairs_content.strip().splitlines()[0].split()
-            if len(first_pair) >= 2:
-                id1, id2 = first_pair[0], first_pair[1]
-        except Exception as e:
-            native_error = f"ERROR beim Einlesen der Dateien: {e}"
 
 text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
@@ -511,23 +490,28 @@ seqlib_file   = "seqlib.txt"
 pairs_file    = "pairs.txt"
 
 output = None
-if seq1 and seq2 and not file_error and not text_error and not pdb_error:
+if (use_native or (seq1 and seq2)) and not file_error and not text_error and not pdb_error and not native_error:
     try:
-        with open(pairs_file, "w") as f:
-            f.write(f"{id1} {id2}\n")
-        with open(seqlib_file, "w") as f:
-            f.write(f"{id1}:{seq1}\n")
-            f.write(f"{id2}:{seq2}\n")
+        if not use_native:
+            with open(pairs_file, "w") as f:
+                f.write(f"{id1} {id2}\n")
+            with open(seqlib_file, "w") as f:
+                f.write(f"{id1}:{seq1}\n")
+                f.write(f"{id2}:{seq2}\n")
+
         cmd = ["java", "-jar", alignment_jar,
                "--pairs", pairs_file, "--seqlib", seqlib_file,
                "-m", matrix_path, "--mode", mode,
                "--go", go, "--ge", ge, "--format", fmt]
         if use_nw == "nw":
             cmd.append("--nw")
+
         output = subprocess.run(cmd, capture_output=True, text=True)
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
+if output:
+    print("<pre>")
 if output:
     import re
     java_out = output.stdout
