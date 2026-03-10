@@ -22,7 +22,7 @@ def run_seclib(BASE_DIR, form):
             result = subprocess.run(
                 ["python3", "sec_create.py", "--idList", tmp_path],
                 capture_output=True, text=True)
-            output = result.stdout
+            output = result.stderr
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
