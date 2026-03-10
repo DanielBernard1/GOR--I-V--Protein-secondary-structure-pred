@@ -7,7 +7,7 @@ form = mycgi.Form()
 pattern = form.getfirst("pattern", "").strip()
 prosite_id = form.getfirst("prosite_id", "").strip()
 
-
+form_file = form["file"]
 file_content = form_file.file.read().decode("utf-8")
 
 if pattern:
