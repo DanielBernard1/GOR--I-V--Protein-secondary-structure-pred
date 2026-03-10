@@ -2,6 +2,7 @@
 import sys
 import os
 
+from train_CGI import run_train
 from validate_cgi import run_validate
 
 print("Content-type: text/html\n")
@@ -83,6 +84,12 @@ elif action == "validate":
 <a href="uploads/detailedGor.txt" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">Download</a>"""
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
+elif action == "train":
+    try:
+        output = run_train(BASE_DIR, form)
+        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/db_model.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
 
 
 
@@ -109,12 +116,28 @@ print(f"""<!DOCTYPE html>
         <input type="text" name="--id" placeholder="z.B. 2MZ9">
         <label>oder ID-Liste (File)</label>
         <input type="file" name="--idlist">
-        <button type="submit">Run</button>
+        <button type="submit" >Run</button>
     </form>
     {output_section if action == "seclib" else ""}
 </section>
 
 <section>
+
+    <h2>Train</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="action" value="train">
+        <label>GOR Methode</label>
+        <select name="--method">
+            <option value="1">GOR1</option>
+            <option value="3">GOR3</option>
+            <option value="4">GOR4</option>
+        </select>
+        <label>Database File</label>
+        <input type="file" name="--db">
+        <button type="submit" >Run</button>
+    </form>
+    {output_section if action == "train" else ""}
+
     <h2>Predict</h2>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="predict">
@@ -133,7 +156,7 @@ print(f"""<!DOCTYPE html>
             <option value="no">No</option>
             <option value="yes">Yes</option>
         </select>
-        <button type="submit">Run</button>
+        <button type="submit" >Run</button>
     </form>
     {output_section if action == "predict" else ""}
 </section>
@@ -148,7 +171,7 @@ print(f"""<!DOCTYPE html>
         <label>Reference</label>
         <textarea name="--reference" rows="4"></textarea>
         <input type="file" name="--reference_file">
-        <button type="submit">Run</button>
+        <button type="submit" >Run</button>
     </form>
     {output_section if action == "validate" else ""}
 </section>
@@ -165,7 +188,7 @@ print(f"""<!DOCTYPE html>
         </select>
         <label>Input Database</label>
         <textarea name="--inputdb" rows="4"></textarea>
-        <button type="submit">Run</button>
+        <button type="submit" >Run</button>
     </form>
     {output_section if action == "kfold" else ""}
 </section>

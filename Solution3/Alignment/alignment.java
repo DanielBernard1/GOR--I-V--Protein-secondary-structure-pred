@@ -102,7 +102,7 @@ public class alignment {
         while ((line = br.readLine())!=null){
             line = line.trim();
             if (line.startsWith(">")){
-                header = line;
+                header = line.replace(">", "");
                 counter = 1;
             }
             else if (line.startsWith("AS")){
@@ -357,7 +357,6 @@ public class alignment {
             if(line.isEmpty()){continue;}
             String[] parts = line.split(":", 2);
             map.put(parts[0].trim().replace(">", ""), parts[1].trim());
-
         }
         br.close();
         return map;

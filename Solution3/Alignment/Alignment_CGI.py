@@ -6,7 +6,6 @@ import subprocess
 import mycgi
 import mysql.connector
 
-print("Content-type: text/html\n")
 
 form = mycgi.Form()
 
@@ -188,6 +187,8 @@ if (use_native or (seq1 and seq2)) and not file_error and not text_error and not
         output = subprocess.run(cmd, capture_output=True, text=True)
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
+
+print("Content-type: text/html\n")
 
 if "download_output" in form:
     download_output = True
@@ -447,8 +448,8 @@ print(f"""<!DOCTYPE html>
     </a>
     <ul class="nav-links">
         <!-- Home-Link: zurück zur Hauptseite -->
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">Home</a></li>
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_CGI.py">GOR</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/Test.py">GOR</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
         <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
     </ul>
@@ -610,10 +611,10 @@ if input_type == "pdb" and pdb1_input:
             database="bioprakt15"
         )
         cursor = db.cursor()
-        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb1_input.lower(),))
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb = %s", (pdb1_input.lower(),))
         row = cursor.fetchone()
         seq1 = row[0] if row else None
-        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb2_input.lower(),))
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb = %s", (pdb2_input.lower(),))
         row = cursor.fetchone()
         seq2 = row[0] if row else None
         id1 = pdb1_input
@@ -673,10 +674,11 @@ if show_dp and seq1 and seq2 and output:
             cmd_dp.append("--nw")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
-        dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
-        print("<h2>DP-Matrix:</h2><pre>")
+        scoring_matrix_file = dp_path + "scoring_matrix_" + matrix + ".txt"
+        dp_vis = subprocess.run(["python3", "../dp_matrix.py", scoring_matrix_file])
+        print("<div><h2>DP-Matrix:</h2>")
         print(dp_vis.stdout)
-        print("</pre>")
+        print("</div>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
         fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
