@@ -24,7 +24,7 @@ def run_validate(BASE_DIR, form):
         f.write(reference)
 
     result = subprocess.run(
-        ["java", "-jar", VALIDATION_PATH, "-p", PREDICTION_PATH, "-r", REFERENCE_PATH, "-d", DETAILED_PATH, "--format", "txt"],
+        ["java", "-jar", VALIDATION_PATH, "-p", PREDICTION_PATH, "-r", REFERENCE_PATH, "-d", DETAILED_PATH, "--f", "txt"],
         capture_output=True, text=True)
 
-    return f"returncode={result.returncode} stdout='{result.stdout}' stderr='{result.stderr}'"
+    return result.stdout
