@@ -5,8 +5,20 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 print("Content-type: text/html\n")
 
-action = None
+import mycgi
+from Website_sec_create import run_seclib
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+form = mycgi.Form()
+action = form.getvalue("action")
 output_section = ""
+
+if action == "seclib":
+    try:
+        output, seclib_path = run_seclib(BASE_DIR, form)
+        output_section = f"<pre>{output}</pre><a href='/{seclib_path}' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
 
 print(f"""<!DOCTYPE html>
 <html>
