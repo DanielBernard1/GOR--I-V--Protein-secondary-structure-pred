@@ -13,7 +13,7 @@ args = parser.parse_args()
 patterns = [re.compile(p) for p in args.organism]
 
 #Datensatz über url zugreifen 
-url = "ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/prokaryotes.txt"
+url = "https://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/prokaryotes.txt"
 
 with urllib.request.urlopen(url) as response:
     #with open(args.output, "w") as f:

@@ -11,31 +11,86 @@ print("Content-type: text/html\n")
 form = mycgi.Form()
 
 # Werte einlesen
-submitted = "input_type" in form
-input_type = form["input_type"].value if submitted else ""
+if "input_type" in form:
+    submitted = True
+    input_type = form["input_type"].value
+else:
+    submitted = False
+    input_type = ""
 
-style_text = "display: block;" if input_type == "text" else "display: none;"
-style_file = "display: block;" if input_type == "file" else "display: none;"
-style_pdb = "display: block;" if input_type == "pdb" else "display: none;"
-style_native = "display: block;" if input_type == "native" else "display: none;"
+if input_type == "text":
+    style_text = "display: block;"
+else:
+    style_text = "display: none;"
+if input_type == "file":
+    style_file = "display: block;"
+else:
+    style_file = "display: none;"
+if input_type == "pdb":
+    style_pdb = "display: block;"
+else:
+    style_pdb = "display: none;"
+if input_type == "native":
+    style_native = "display: block;"
+else:
+    style_native = "display: none;"
 
-seq1 = form["seq1"].value if "seq1" in form else ""
-seq2 = form["seq2"].value if "seq2" in form else ""
-id1 = form["id1"].value if "id1" in form else ""
-id2 = form["id2"].value if "id2" in form else ""
+if "seq1" in form:
+    seq1 = form["seq1"].value
+else:
+    seq1 = ""
+if "seq2" in form:
+    seq2 = form["seq2"].value
+else:
+    seq2 = ""
+if "id1" in form:
+    id1 = form["id1"].value
+else:
+    id1 = ""
+if "id2" in form:
+    id2 = form["id2"].value
+else:
+    id2 = ""
 
-pdb1_input = form["pdb1"].value.strip() if "pdb1" in form else ""
-pdb2_input = form["pdb2"].value.strip() if "pdb2" in form else ""
+if "pdb1" in form:
+    pdb1_input = form["pdb1"].value.strip()
+else:
+    pdb1_input = ""
+if "pdb2" in form:
+    pdb2_input = form["pdb2"].value.strip()
+else:
+    pdb2_input = ""
 
-matrix = form["matrix"].value if "matrix" in form else "dayhoff.mat"
-mode = form["mode"].value if "mode" in form else "global"
-fmt = form["format"].value if "format" in form else "html"
-go = form["go"].value if "go" in form else "-12"
-ge = form["ge"].value if "ge" in form else "-1"
-use_nw = form["use_nw"].value if "use_nw" in form else "gotoh"
+if "matrix" in form:
+    matrix = form["matrix"].value
+else:
+    matrix = "dayhoff.mat"
+if "mode" in form:
+    mode = form["mode"].value
+else:
+    mode = "global"
+if "format" in form:
+    fmt = form["format"].value
+else:
+    fmt = "html"
+if "go" in form:
+    go = form["go"].value
+else:
+    go = "-12"
+if "ge" in form:
+    ge = form["ge"].value
+else:
+    ge = "-1"
+if "use_nw" in form:
+    use_nw = form["use_nw"].value
+else:
+    use_nw = "gotoh"
 show_dp = "show_dp" in form
 
-style_go = "display: none;" if use_nw == "nw" else "display: block;"
+if use_nw == "nw":
+    style_go = "display: none;"
+else:
+    style_go = "display: block;"
 
 file_error = ""
 if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
@@ -61,29 +116,6 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
             id2, seq2 = entries[1]
     except Exception as e:
         file_error = f"ERROR reading file: {e}"
-
-# Native pairs.txt + seqlib.txt Upload
-native_error = ""
-use_native = False
-if input_type == "native":
-    pairs_ok = "pairs_file" in form and hasattr(form["pairs_file"], "file") and form["pairs_file"].filename
-    seqlib_ok = "seqlib_file" in form and hasattr(form["seqlib_file"], "file") and form["seqlib_file"].filename
-    if not pairs_ok or not seqlib_ok:
-        native_error = "ERROR: Bitte beide Dateien hochladen (pairs.txt und seqlib.txt)."
-    else:
-        try:
-            pairs_content = form["pairs_file"].file.read().decode("utf-8")
-            seqlib_content = form["seqlib_file"].file.read().decode("utf-8")
-            with open("pairs.txt", "w") as f:
-                f.write(pairs_content)
-            with open("seqlib.txt", "w") as f:
-                f.write(seqlib_content)
-            use_native = True
-            first_pair = pairs_content.strip().splitlines()[0].split()
-            if len(first_pair) >= 2:
-                id1, id2 = first_pair[0], first_pair[1]
-        except Exception as e:
-            native_error = f"ERROR beim Einlesen der Dateien: {e}"
 
 text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
@@ -290,7 +322,6 @@ print(f"""<!DOCTYPE html>
         document.getElementById('input_text').style.display = 'none';
         document.getElementById('input_file').style.display = 'none';
         document.getElementById('input_pdb').style.display  = 'none';
-        document.getElementById('input_native').style.display = 'none';  
         document.getElementById('input_' + type).style.display = 'block';
         document.getElementById('input_type_hidden').value = type;
     }}
@@ -471,8 +502,6 @@ print(f"""<!DOCTYPE html>
 
 if file_error:
     print(f'<p class="error">{file_error}</p>')
-if native_error:
-    print(f'<p class="error">{native_error}</p>')
 if text_error:
     print(f'<p class="error">{text_error}</p>')
 
@@ -533,6 +562,8 @@ if (use_native or (seq1 and seq2)) and not file_error and not text_error and not
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
+if output:
+    print("<pre>")
 if output:
     import re
 

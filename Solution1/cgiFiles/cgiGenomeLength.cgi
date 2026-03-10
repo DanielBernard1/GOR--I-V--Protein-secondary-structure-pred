@@ -17,10 +17,10 @@ organisms = [organism.strip() for organism in organisms_input.split(",") if orga
 #script_path = os.path.join(os.path.dirname(cgi_dir), "Assignment08", "genome_length.py")
 
 result = subprocess.run(
-    ["python3", "../Assignment08/genome_length.py", "--organism"].extend(organisms), 
+    ["python3", "../Assignment08/genome_length.py", "--organism"] + organisms,
     text=True,
     capture_output=True
-    ) 
+    )
 output = result.stdout
 output = output.replace("\n", "<br>")
 print(f"""
