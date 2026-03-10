@@ -16,7 +16,7 @@ output_section = ""
 if action == "seclib":
     try:
         output, seclib_path = run_seclib(BASE_DIR, form)
-        output_section = f"<pre>{output}</pre><a href='/{seclib_path}' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
+        output_section = f"<pre>{output}</pre><a href='sec_lib.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 

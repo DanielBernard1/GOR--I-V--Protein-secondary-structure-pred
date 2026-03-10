@@ -2,8 +2,8 @@ import os
 import subprocess
 
 def run_seclib(BASE_DIR, form):
-    id = form.get("--id")
-    idList = form.get("--idlist")
+    id = form.getvalue("--id")
+    idList = form.getvalue("--idlist")
 
     seclib_path = os.path.join(BASE_DIR, "sec_lib.txt")
     output = ""
@@ -15,7 +15,7 @@ def run_seclib(BASE_DIR, form):
         output = result.stdout
 
     elif idList:
-        tmp_path = os.path.join(BASE_DIR, "tmp_idlist.txt")
+        tmp_path = os.path.join("tmp_idlist.txt")
         try:
             with open(tmp_path, "w") as f:
                 f.write(idList)
