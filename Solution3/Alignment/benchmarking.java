@@ -47,7 +47,7 @@ public class benchmarking {
             }
             double rec = (System.nanoTime() - t1)/1000.0/100;
 
-            csv.write(String.format("%d,%.4f,%.4f%n",(len),dp,rec));//reddit
+            csv.write(String.format("%d,%.4f,%.4f%n",(len),dp,rec)); //reddit
 
         }
         csv.close();
