@@ -5,35 +5,30 @@ def run_predict(BASE_DIR, form):
 
     GorType = form.getvalue("--Gor_type")
 
-    fasta = form.getvalue("--fasta")
-
-    maf = form.getvalue("--maf")
     probabilities = form.getvalue("--probabilities")
 
     JARS    = os.path.join("jars")
     PREDICT = os.path.join(JARS, "predict.jar")
-
-    MODELS  = os.path.join("GOR_models")
-
+    MODELS  = "GOR_models"
 
     modelGor1 = os.path.join(MODELS, "gor1_cb513_model.txt")
     modelGor3 = os.path.join(MODELS, "gor3_cb513_model.txt")
-
     modelGor4 = os.path.join(MODELS, "gor4_cb513_model.txt")
 
     os.makedirs(os.path.join("uploads"), exist_ok=True)
 
-    fasta_path = None
-    maf_path = None
-    if "--fasta" in form:
-        fasta_path = os.path.join(BASE_DIR, "uploads/input.fasta")
-        with open(fasta_path, "wb") as f:
+    fasta = None
+    maf = None
+
+    if "--fasta" in form and form["--fasta"].filename:
+        fasta = os.path.join("uploads/input.fasta")
+        with open(fasta, "wb") as f:
             f.write(form["--fasta"].file.read())
-    if "--maf" in form:
-        maf_path = os.path.join(BASE_DIR, "uploads/maf_input")
-        os.makedirs(maf_path, exist_ok=True)
+    if "--maf" in form and form["--maf"].filename:
+        maf = os.path.join("uploads/maf_input")
+        os.makedirs(maf, exist_ok=True)
         filename = form["--maf"].filename
-        with open(os.path.join(maf_path, filename), "wb") as f:
+        with open(os.path.join(maf, filename), "wb") as f:
             f.write(form["--maf"].file.read())
 
 
@@ -89,17 +84,16 @@ def run_predict(BASE_DIR, form):
 
         output = "Error occurred"
 
-    tmp_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure.txt")
+    tmp_path = os.path.join("uploads/temp_seqAndStructure.txt")
 
 
     with open(tmp_path, "w") as f:
         f.write(output)
 
-    if fasta_path and os.path.exists(fasta_path):
-        os.remove(fasta_path)
-    if maf_path and os.path.exists(maf_path):
+    if fasta and os.path.exists(fasta):
+        os.remove(fasta)
+    if maf and os.path.exists(maf):
         import shutil
-        shutil.rmtree(maf_path)
-
+        shutil.rmtree(maf)
 
     return output
