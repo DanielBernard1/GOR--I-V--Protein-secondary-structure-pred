@@ -157,13 +157,6 @@ seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
 pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
 
 
-if seq1 and seq2:
-    with open(pairs_file, "w") as f:
-        f.write(f"{id1} {id2}\n")
-
-    with open(seqlib_file, "w") as f:
-        f.write(f"{id1}:{seq1}\n")
-        f.write(f"{id2}:{seq2}\n")
 
 
 #with open("") as f:
@@ -173,12 +166,6 @@ if seq1 and seq2:
 
 
 
-    input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
-                             "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt]
-    if use_nw =="nw":
-        input.append("--nw")
-
-    output = subprocess.run(input, capture_output=True, text=True)
 
 
 
@@ -303,6 +290,20 @@ print(f"""<!DOCTYPE html>
     <pre class="result">
     
 """)
+if seq1 and seq2:
+    with open(pairs_file, "w") as f:
+        f.write(f"{id1} {id2}\n")
+
+    with open(seqlib_file, "w") as f:
+        f.write(f"{id1}:{seq1}\n")
+        f.write(f"{id2}:{seq2}\n")
+
+    input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
+             "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt]
+    if use_nw == "nw":
+        input.append("--nw")
+
+    output = subprocess.run(input, capture_output=True, text=True)
 
 if output:
     print(mode)
