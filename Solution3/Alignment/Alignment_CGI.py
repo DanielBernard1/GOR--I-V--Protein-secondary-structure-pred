@@ -10,8 +10,8 @@ print("Content-type: text/html\n")
 
 form = mycgi.Form()
 
-# ── Formular-Werte einlesen ──────────────────────────────────
-# Alles sicher mit "in form" prüfen — kein KeyError beim ersten Laden
+# Werte einlesen
+
 
 submitted  = "input_type" in form
 input_type = form["input_type"].value if submitted else ""
@@ -75,9 +75,8 @@ if input_type == "text" and submitted and (not seq1 or not seq2):
 
 
 
-# HTML ZUERST DRUCKEN — so ist die Seite immer sichtbar,
-# auch wenn DB oder Java danach einen Fehler werfen
-
+# HTML ZUERST DRUCKEN --> Seite immer sichtbar
+# auch wenn Fehker geworfen wird
 
 print(f"""<!DOCTYPE html>
 <html>
@@ -116,6 +115,25 @@ print(f"""<!DOCTYPE html>
     </script>
 </head>
 <body>
+    <nav>
+        <a class="nav-logo" href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">
+            <svg viewBox="0 0 22 22" fill="none" width="20" height="20">
+                <ellipse cx="11" cy="11" rx="4"  ry="10" stroke="#2e7d52" stroke-width="1.8" fill="none"/>
+                <ellipse cx="11" cy="11" rx="10" ry="4"  stroke="#4caf80" stroke-width="1.8" fill="none"/>
+                <circle  cx="11" cy="11" r="2"           fill="#2e7d52"/>
+            </svg>
+            propraGruppe15
+        </a>
+        <ul class="nav-links">
+            <!-- Home-Link: zurück zur Hauptseite -->
+            <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">Home</a></li>
+            <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_CGI.py">GOR</a></li>
+            <!-- class="active": markiert die aktuelle Seite -->
+            <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
+        </ul>
+    </nav>
+    
+    
     <h1>Alignment</h1>
     <h2>New Searchrequest:</h2>
     <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py">
@@ -212,7 +230,7 @@ if text_error:
 
 # AB HIER: DB-Abfrage und Java
 
-# PDB-Sequenzen aus DB holen (erst hier, nicht vor dem HTML)
+# PDB-Sequenzen aus DB holen
 pdb_error = ""
 if input_type == "pdb" and pdb1_input:
     try:
@@ -283,7 +301,7 @@ if output:
 
 print("</body>\n</html>")
 
-# ── DP-Matrix (optional) ─────────────────────────────────────
+# DP-Matrix und Fixpoint
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
 
 if show_dp and seq1 and seq2 and output:
