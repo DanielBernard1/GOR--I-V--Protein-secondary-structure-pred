@@ -86,8 +86,8 @@ def run_predict(BASE_DIR, form):
 
     tmp_path = os.path.join("uploads/temp_seqAndStructure.txt")
 
-
     with open(tmp_path, "w") as f:
+        f.write("hheheh")
         f.write(output)
 
     if fasta and os.path.exists(fasta):
