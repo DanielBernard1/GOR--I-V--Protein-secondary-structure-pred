@@ -3,12 +3,12 @@ import subprocess
 
 def run_predict(BASE_DIR, form):
 
-    GorType = form.get("--Gor_type")
+    GorType = form.getvalue("--Gor_type")
 
-    fasta = form.get("--fasta")
+    fasta = form.getvalue("--fasta")
 
-    maf = form.get("--maf")
-    probabilities = form.get("--probabilities")
+    maf = form.getvalue("--maf")
+    probabilities = form.getvalue("--probabilities")
 
     JARS    = os.path.join(BASE_DIR, "jars")
     PREDICT = os.path.join(JARS, "predict.jar")
