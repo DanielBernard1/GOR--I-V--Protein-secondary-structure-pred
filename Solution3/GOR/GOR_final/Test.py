@@ -3,9 +3,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mycgi
-from GOR_cgi import run_predict
 from validate_cgi import run_validate
-from Website_sec_create import run_seclib
 
 print("Content-type: text/html\n")
 
@@ -16,8 +14,11 @@ output_section = ""
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 if action == "validate":
-    output = run_validate(BASE_DIR, form)
-    output_section = f"<pre>{output}</pre>"
+    try:
+        output = run_validate(BASE_DIR, form)
+        output_section = f"<pre>{output}</pre>"
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
 
 print(f"""<!DOCTYPE html>
 <html><body>
