@@ -181,13 +181,14 @@ print(f"""<!DOCTYPE html>
     }}
     
     function switchGap(algo) {{
-    document.getElementById('gap_open').style.display = 'none'; 
     if (algo === 'gotoh') {{
         document.getElementById('gap_open').style.display = 'block';
+        document.getElementById('gap_extend').style.display = 'block';
     }} else {{
         document.getElementById('gap_open').style.display = 'none';
+        document.getElementById('gap_extend').style.display = 'block';
     }}
-    }}
+}}
     window.onload = function() {{
         var algo = document.querySelector('select[name=use_nw]').value;
         switchGap(algo);
@@ -260,7 +261,7 @@ print(f"""<!DOCTYPE html>
         </select><br>
             
         <p>Algorithm:</p>
-        <select name="use_nw">
+        <select name="use_nw" onchange="switchGap(this.value)">
             <option value="gotoh"> <p>Gotoh</p> </option>
             <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option> 
         </select><br>
