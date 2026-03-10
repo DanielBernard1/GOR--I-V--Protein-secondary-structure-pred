@@ -34,7 +34,10 @@ elif action == "predict":
 elif action == "validate":
     try:
         output = run_validate(BASE_DIR, form)
-        values = [""] + [line.strip() for line in output.splitlines()]
+        print(output)
+        values = [""]
+        for line in output.splitlines():
+            values.append(line.strip())
         output_section = f"""<br><br>
     <h2>Results</h2>
 <div style="overflow-x: auto;">
@@ -61,12 +64,25 @@ elif action == "validate":
         <tbody>
             <tr>
                 <td style="padding: 8px 12px;">validation</td>
-                {''.join(f'<td style="padding: 8px 12px;">{values[i] if i < len(values) else ""}</td>' for i in range(1, 14))}
+                <td style="padding: 8px 12px;">{values[1]}</td>
+                <td style="padding: 8px 12px;">{values[2]}</td>
+                <td style="padding: 8px 12px;">{values[3]}</td>
+                <td style="padding: 8px 12px;">{values[4]}</td>
+                <td style="padding: 8px 12px;">{values[5]}</td>
+                <td style="padding: 8px 12px;">{values[6]}</td>
+                <td style="padding: 8px 12px;">{values[7]}</td>
+                <td style="padding: 8px 12px;">{values[8]}</td>
+                <td style="padding: 8px 12px;">{values[9]}</td>
+                <td style="padding: 8px 12px;">{values[10]}</td>
+                <td style="padding: 8px 12px;">{values[11]}</td>
+                <td style="padding: 8px 12px;">{values[12]}</td>
+                <td style="padding: 8px 12px;">{values[13]}</td>
+
             </tr>
         </tbody>
     </table>
 </div>
-<a href="/{DETAILED_PATH}" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">↓ Download</a>"""
+<a href="/{DETAILED_PATH}" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">Download</a>"""
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
