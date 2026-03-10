@@ -12,6 +12,7 @@ print("Content-type: text/html\n")
 form = mycgi.Form()
 action = form.get("action")
 output = ""
+output_section = ""
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DETAILED_PATH = os.path.join(BASE_DIR, "uploads/detailedGor.txt")
