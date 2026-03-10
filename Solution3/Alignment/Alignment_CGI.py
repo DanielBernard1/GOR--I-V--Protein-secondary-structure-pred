@@ -39,14 +39,17 @@ if "seq1" in form:
     seq1 = form["seq1"].value
 else:
     seq1 = ""
+
 if "seq2" in form:
     seq2 = form["seq2"].value
 else:
     seq2 = ""
+
 if "id1" in form:
     id1 = form["id1"].value
 else:
     id1 = ""
+
 if "id2" in form:
     id2 = form["id2"].value
 else:
@@ -65,22 +68,27 @@ if "matrix" in form:
     matrix = form["matrix"].value
 else:
     matrix = "dayhoff.mat"
+
 if "mode" in form:
     mode = form["mode"].value
 else:
     mode = "global"
+
 if "format" in form:
     fmt = form["format"].value
 else:
     fmt = "html"
+
 if "go" in form:
     go = form["go"].value
 else:
     go = "-12"
+
 if "ge" in form:
     ge = form["ge"].value
 else:
     ge = "-1"
+
 if "use_nw" in form:
     use_nw = form["use_nw"].value
 else:
@@ -117,10 +125,96 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
     except Exception as e:
         file_error = f"ERROR reading file: {e}"
 
+# Native pairs.txt + seqlib.txt Upload
+native_error = ""
+use_native   = False
+if input_type == "native":
+    pairs_ok  = "pairs_file"  in form and hasattr(form["pairs_file"],  "file") and form["pairs_file"].filename
+    seqlib_ok = "seqlib_file" in form and hasattr(form["seqlib_file"], "file") and form["seqlib_file"].filename
+    if not pairs_ok or not seqlib_ok:
+        native_error = "ERROR: Bitte beide Dateien hochladen (pairs.txt und seqlib.txt)."
+    else:
+        try:
+            pairs_content  = form["pairs_file"].file.read().decode("utf-8")
+            seqlib_content = form["seqlib_file"].file.read().decode("utf-8")
+            with open("pairs.txt", "w") as f:
+                f.write(pairs_content)
+            with open("seqlib.txt", "w") as f:
+                f.write(seqlib_content)
+            use_native = True
+            first_pair = pairs_content.strip().splitlines()[0].split()
+            if len(first_pair) >= 2:
+                id1 = first_pair[0]
+                id2 = first_pair[1]
+        except Exception as e:
+            native_error = f"ERROR beim Einlesen der Dateien: {e}"
+
+# pdb_error hier initialisieren damit Java-Bedingung unten funktioniert
+pdb_error = ""
+
 text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
     text_error = "Fehler: Bitte beide Sequenzen eingeben."
 
+
+# Java starten — VOR dem HTML damit Download möglich ist
+import sys
+
+# Java starten
+alignment_jar = "../finaljars/alignment.jar"
+matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
+seqlib_file = "seqlib.txt"
+pairs_file = "pairs.txt"
+
+output = None
+java_error = ""
+
+if (use_native or (seq1 and seq2)) and not file_error and not text_error and not pdb_error and not native_error:
+    try:
+        if not use_native:
+            with open(pairs_file, "w") as f:
+                f.write(f"{id1} {id2}\n")
+            with open(seqlib_file, "w") as f:
+                f.write(f"{id1}:{seq1}\n")
+                f.write(f"{id2}:{seq2}\n")
+
+        cmd = ["java", "-jar", alignment_jar,
+               "--pairs", pairs_file, "--seqlib", seqlib_file,
+               "-m", matrix_path, "--mode", mode,
+               "--go", go, "--ge", ge, "--format", fmt]
+        if use_nw == "nw":
+            cmd.append("--nw")
+
+        output = subprocess.run(cmd, capture_output=True, text=True)
+    except Exception as e:
+        print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
+
+if "download_output" in form:
+    download_output = True
+else:
+    download_output = False
+
+if output and not java_error and (input_type == "native" or download_output):
+    if fmt == "ali":
+        ext = "ali"
+    elif fmt == "scores":
+        ext = "scores"
+    else:
+        ext = "txt"
+    filename = f"alignment_{id1}_vs_{id2}.{ext}"
+    print("Content-Type: text/plain")
+    print(f"Content-Disposition: attachment; filename=\"{filename}\"")
+    print()
+    print(output.stdout)
+    sys.exit(0)
+
+
+
+# Vorberechnete Werte für HTML-Template
+if download_output:
+    download_output_checked = "checked"
+else:
+    download_output_checked = ""
 # HTML ZUERST DRUCKEN
 
 print(f"""<!DOCTYPE html>
@@ -535,35 +629,11 @@ if input_type == "pdb" and pdb1_input:
 if pdb_error:
     print(f'<p class="error">{pdb_error}</p>')
 
-# Java starten
-alignment_jar = "../finaljars/alignment.jar"
-matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
-seqlib_file = "seqlib.txt"
-pairs_file = "pairs.txt"
-
-output = None
-if (use_native or (seq1 and seq2)) and not file_error and not text_error and not pdb_error and not native_error:
-    try:
-        if not use_native:
-            with open(pairs_file, "w") as f:
-                f.write(f"{id1} {id2}\n")
-            with open(seqlib_file, "w") as f:
-                f.write(f"{id1}:{seq1}\n")
-                f.write(f"{id2}:{seq2}\n")
-
-        cmd = ["java", "-jar", alignment_jar,
-               "--pairs", pairs_file, "--seqlib", seqlib_file,
-               "-m", matrix_path, "--mode", mode,
-               "--go", go, "--ge", ge, "--format", fmt]
-        if use_nw == "nw":
-            cmd.append("--nw")
-
-        output = subprocess.run(cmd, capture_output=True, text=True)
-    except Exception as e:
-        print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
 if output:
     print("<pre>")
+if java_error:
+    print (f"<p class='error'>{java_error}</p>")
 if output:
     import re
 
