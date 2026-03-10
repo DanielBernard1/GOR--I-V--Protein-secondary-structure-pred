@@ -1,7 +1,8 @@
 #!/usr/bin/biopython
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from validate_cgi import run_validate
 
 print("Content-type: text/html\n")
 
@@ -29,6 +30,46 @@ elif action == "predict":
         output_section = f"<pre>{output}</pre><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
+elif action == "validate":
+    try:
+        output = run_validate(BASE_DIR, form)
+        values = [""] + [line.strip() for line in output.splitlines()]
+        output_section = f"""<br><br>
+    <h2>Results</h2>
+<div style="overflow-x: auto;">
+    <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
+        <thead>
+            <tr style="background: #2c3e50; color: white;">
+                <th style="padding: 8px 12px;">Fold</th>
+                <th style="padding: 8px 12px;">Proteins</th>
+                <th style="padding: 8px 12px;">Mean Length</th>
+                <th style="padding: 8px 12px;">Sum Length</th>
+                <th style="padding: 8px 12px;">Sum Predicted</th>
+                <th style="padding: 8px 12px;">Q3 Mean</th>
+                <th style="padding: 8px 12px;">Q3 Dev</th>
+                <th style="padding: 8px 12px;">SOV Mean</th>
+                <th style="padding: 8px 12px;">SOV Dev</th>
+                <th style="padding: 8px 12px;">qObs H</th>
+                <th style="padding: 8px 12px;">qObs E</th>
+                <th style="padding: 8px 12px;">qObs C</th>
+                <th style="padding: 8px 12px;">SOV H</th>
+                <th style="padding: 8px 12px;">SOV E</th>
+                <th style="padding: 8px 12px;">SOV C</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 8px 12px;">validation</td>
+                {''.join(f'<td style="padding: 8px 12px;">{values[i] if i < len(values) else ""}</td>' for i in range(1, 14))}
+            </tr>
+        </tbody>
+    </table>
+</div>
+<a href="/{DETAILED_PATH}" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">↓ Download</a>"""
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
+
+
 
 print(f"""<!DOCTYPE html>
 <html>
