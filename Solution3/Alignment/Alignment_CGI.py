@@ -61,6 +61,28 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
     except Exception as e:
         file_error = f"ERROR reading file: {e}"
 
+native_error = ""
+use_native   = False
+if input_type == "native":
+    pairs_ok  = "pairs_file"  in form and hasattr(form["pairs_file"],  "file") and form["pairs_file"].filename
+    seqlib_ok = "seqlib_file" in form and hasattr(form["seqlib_file"], "file") and form["seqlib_file"].filename
+    if not pairs_ok or not seqlib_ok:
+        native_error = "ERROR: Bitte beide Dateien hochladen (pairs.txt und seqlib.txt)."
+    else:
+        try:
+            pairs_content  = form["pairs_file"].file.read().decode("utf-8")
+            seqlib_content = form["seqlib_file"].file.read().decode("utf-8")
+            with open("pairs.txt", "w") as f:
+                f.write(pairs_content)
+            with open("seqlib.txt", "w") as f:
+                f.write(seqlib_content)
+            use_native = True
+            first_pair = pairs_content.strip().splitlines()[0].split()
+            if len(first_pair) >= 2:
+                id1, id2 = first_pair[0], first_pair[1]
+        except Exception as e:
+            native_error = f"ERROR beim Einlesen der Dateien: {e}"
+
 text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
     text_error = "Fehler: Bitte beide Sequenzen eingeben."
