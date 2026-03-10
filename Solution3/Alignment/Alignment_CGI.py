@@ -178,6 +178,15 @@ print(f"""<!DOCTYPE html>
         document.getElementById('input_pdb').style.display  = 'none';
         document.getElementById('input_' + type).style.display = 'block';
     }}
+    
+    function switchGap(algo) {{
+    document.getElementById('gap_open').style.display = 'none'; 
+    if (algo === 'gotoh') {{
+        document.getElementById('gap_open').style.display = 'block';
+    }} else {{
+        document.getElementById('gap_open').style.display = 'none';
+    }}
+    }}
     </script>
 </head>
 <body>
@@ -251,11 +260,14 @@ print(f"""<!DOCTYPE html>
             <option value="nw"> <p>Needleman-Wunsch/ Smith-Waterman</p> </option> 
         </select><br>
         
-        <p>Gap Open:</p>
-        <input type="text" name="go" value="{go}"><br>
+        <div id="gap_open" style="{'display:none' if use_nw == 'nw' else 'display:block'}">
+            <p>Gap Open:</p>
+            <input type="text" name="go" value="{go}">
+        </div>
         <p>Gap Extension:</p>
-        <input type="text" name="ge" value="{ge}"><br>
+        <input type="text" name="ge" value="{ge}">
         <br><br>
+        
         <input type="submit" value="Calculate Alignment">
         
     </form>
