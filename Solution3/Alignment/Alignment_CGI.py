@@ -167,7 +167,6 @@ print(f"""<!DOCTYPE html>
     <style>
         body {{ font-family: Arial; max-width: 900px; margin: auto; padding: 20px; }}
         h1 {{ color: #2c5f8a; border-bottom: 2px solid #2c5f8a; }}
-        button, input[type=submit] {{background: #2c5f8a; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }}
         section {{ margin-bottom: 40px; }}
         textarea, input[type=text], select {{ padding: 5px; width: 100%; }}
         pre {{ white-space: pre-wrap; overflow-wrap: break-word; }}

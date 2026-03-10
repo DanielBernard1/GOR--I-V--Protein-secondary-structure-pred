@@ -1,142 +1,417 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Aufgabe 3</title>
-        <style>
-        body { font-family: Arial; max-width: 900px; margin: auto; padding: 20px; }
-        h1 { color: #2c5f8a; border-bottom: 2px solid #2c5f8a; }
-        button, input[type=submit] { background: #2c5f8a; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
-        section { margin-bottom: 40px; }
-        textarea, input[type=text], select { padding: 5px; width: 100%; }
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>propraGruppe15</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green:     #2e7d52;
+            --green-dk:  #1f5c3a;
+            --green-lt:  #4caf80;
+            --green-bg:  #edf7f2;
+            --green-mid: #c5ddd0;
+            --text:      #1c2b1e;
+            --text-dim:  #5a7060;
+            --border:    #c5ddd0;
+            --bg:        #f2f8f4;
+            --white:     #ffffff;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ── Navbar ─────────────────────────────── */
+        nav {
+            background: var(--white);
+            border-bottom: 2px solid var(--green-mid);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            height: 54px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 1px 6px rgba(30,80,50,0.07);
+        }
+        .nav-logo {
+            font-weight: 600; font-size: 0.95rem;
+            color: var(--green); display: flex; align-items: center;
+            gap: 8px; white-space: nowrap; text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 4px; list-style: none; }
+        .nav-links a {
+            text-decoration: none; font-size: 0.85rem; font-weight: 500;
+            color: var(--text-dim); padding: 6px 13px; border-radius: 6px;
+            transition: all 0.15s;
+        }
+        .nav-links a:hover  { background: var(--green-bg); color: var(--green); }
+        .nav-links a.active { background: var(--green); color: white; }
+
+        /* ── Hero ───────────────────────────────── */
+        .hero {
+            background: #2e7d52;
+            padding: 48px 40px 40px; color: white;
+        }
+        .hero h1 { font-size: 1.9rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; }
+        .hero p   { font-size: 0.95rem; opacity: 0.82; font-weight: 300; max-width: 580px; line-height: 1.7; }
+        .hero-deco {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; opacity: 0.2; letter-spacing: 0.15em;
+            margin-top: 18px; overflow: hidden; white-space: nowrap;
+        }
+
+        /* ── Page ───────────────────────────────── */
+        .page-wrapper { max-width: 940px; margin: 0 auto; padding: 32px 24px 80px; }
+
+        /* ── Section label ──────────────────────── */
+        .section-label {
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em;
+            text-transform: uppercase; color: var(--green);
+            margin-bottom: 12px; margin-top: 32px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .section-label::after { content: ''; flex: 1; height: 1px; background: var(--green-mid); }
+
+        /* ── Card ───────────────────────────────── */
+        .card {
+            background: var(--white); border: 1px solid var(--border);
+            border-radius: 8px; padding: 24px 28px; margin-bottom: 16px;
+            box-shadow: 0 1px 4px rgba(30,80,50,0.07);
+        }
+        .card h2 {
+            font-size: 1rem; font-weight: 600; color: var(--green-dk); margin-bottom: 6px;
+        }
+        .card > p, .card > form > p {
+            font-size: 0.88rem; color: var(--text-dim);
+            line-height: 1.65; margin-bottom: 14px; font-weight: 300;
+        }
+
+        /* ── Meta grid (Gruppe) ─────────────────── */
+        .meta-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+        .meta-block {
+            background: var(--green-bg); border: 1px solid var(--green-mid);
+            border-radius: 6px; padding: 14px 16px;
+        }
+        .meta-block h3 {
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--green); margin-bottom: 6px;
+        }
+        .meta-block p { font-size: 0.88rem; color: var(--text); line-height: 1.55; }
+
+        /* ── Form elements ──────────────────────── */
+        .field-label {
+            display: block; font-size: 0.78rem; font-weight: 500;
+            color: var(--text-dim); margin-bottom: 5px; margin-top: 14px;
+        }
+        input[type=text], textarea, select {
+            width: 100%; padding: 9px 12px;
+            background: var(--white); border: 1.5px solid var(--border);
+            border-radius: 6px; color: var(--text);
+            font-family: 'Inter', sans-serif; font-size: 0.9rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none; appearance: none;
+        }
+        input[type=text]:focus, textarea:focus, select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(46,125,82,0.1);
+        }
+        textarea {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem; resize: vertical; min-height: 72px; background: #fafcfb;
+        }
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%235a7060' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center;
+            padding-right: 32px; cursor: pointer;
+        }
+        input[type=file] { color: var(--text-dim); font-size: 0.88rem; padding: 8px 0; }
+
+        .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+
+        input[type=submit], button[type=submit] {
+            margin-top: 18px; padding: 10px 26px;
+            background: var(--green); color: white;
+            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.88rem;
+            border: none; border-radius: 6px; cursor: pointer;
+            transition: background 0.15s;
+        }
+        input[type=submit]:hover, button[type=submit]:hover { background: var(--green-dk); }
+
+        /* ── Warning note ───────────────────────── */
+        .note {
+            background: #fff8e1; border: 1px solid #f0d060;
+            border-radius: 6px; padding: 8px 14px;
+            font-size: 0.82rem; color: #7a5800; margin-bottom: 14px;
+        }
+
+        /* ── Sub-divider inside card ────────────── */
+        .card-divider {
+            border: none; border-top: 1px solid var(--border); margin: 22px 0;
+        }
+
+        /* ── Footer ─────────────────────────────── */
+        footer {
+            background: var(--white); border-top: 1px solid var(--border);
+            padding: 14px 40px; font-size: 0.78rem; color: var(--text-dim);
+            display: flex; justify-content: space-between; margin-top: 40px;
+        }
     </style>
-    </head>
-    <body>
-        <section>
-            <h1>Gruppenmitglieder</h1>
-            <p>Toan David Huynh Ngoc </p>
-            <p>Laura Sophia Martin </p>
-            <p>Lucas Nsasonov</p>
-            <h1>GruppenNummer</h1>
+</head>
+<body>
+
+<!-- ── Navbar ─────────────────────────────────────── -->
+<nav>
+    <a class="nav-logo" href="#">
+        <svg viewBox="0 0 22 22" fill="none" width="20" height="20">
+            <ellipse cx="11" cy="11" rx="4"  ry="10" stroke="#2e7d52" stroke-width="1.8" fill="none"/>
+            <ellipse cx="11" cy="11" rx="10" ry="4"  stroke="#4caf80" stroke-width="1.8" fill="none"/>
+            <circle  cx="11" cy="11" r="2"           fill="#2e7d52"/>
+        </svg>
+        propraGruppe15
+    </a>
+    <ul class="nav-links">
+        <li><a href="#"                                                                                                                         class="active">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI.py">Alignment</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_final/GOR_CGI.py">GOR</a></li>
+    </ul>
+</nav>
+
+<!--Titel-->
+<div class="hero">
+    <h1>propraGruppe15</h1>
+    <p>Bioinformatik-Praktikum &mdash; LMU/TUM &middot; Gruppe 15</p>
+</div>
+
+<!-- ── Content ──────────────────────────────────── -->
+<div class="page-wrapper">
+
+    <!-- Gruppe -->
+    <p class="section-label">Gruppe</p>
+    <div class="meta-grid">
+        <div class="meta-block">
+            <h3>Mitglieder</h3>
+            <p>Toan David Huynh Ngoc<br>Laura Sophia Martin<br>Lucas Nassonov<br>Daniel Bernadi</p>
+        </div>
+        <div class="meta-block">
+            <h3>Gruppennummer</h3>
             <p>Gruppe 15</p>
-            <h1>Betreuer</h1>
-            <p>Katharina Reinisch</p>  
-            <p>Samuel Klein</p>   
-        </section>
+        </div>
+        <div class="meta-block">
+            <h3>Betreuer</h3>
+            <p>Katharina Reinisch<br>Samuel Klein</p>
+        </div>
+    </div>
+
+    <!-- Datenbanksuche -->
+    <p class="section-label">Datenbanksuche</p>
+
+    <div class="card">
+        <h2>AC Search</h2>
+        <p>Suche nach einer Protein-Sequenz anhand ihrer Accession Number im FASTA-Format.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiACSearch.cgi">
+            <label class="field-label">FASTA</label>
+            <input type="text" name="fasta" required>
+            <input type="submit" value="Absenden">
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>SwissProt Keyword Search</h2>
+        <p>Durchsuche die SwissProt-Datenbank nach einem oder mehreren Keywords.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiSPKeyword.py">
+            <label class="field-label">Keywords (kommagetrennt)</label>
+            <input type="text" name="keywords" placeholder="keyword1, keyword2..." required>
+            <label class="field-label">SwissProt File</label>
+            <input type="file" name="swissprot_file">
+            <button type="submit">Run</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>PROSITE Pattern Scan</h2>
+        <p>Suche nach einem PROSITE-Pattern oder einer PROSITE-ID in einer FASTA-Datei.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiPSScan.cgi">
+            <label class="field-label">Pattern</label>
+            <input type="text" name="pattern" placeholder="z.B. [LIVMF]-H-C-x(2)-G-x(3)-{STC}-[STAGP]-x-[LIVMFY]">
+            <label class="field-label">PROSITE-ID</label>
+            <input type="text" name="prosite_id" placeholder="z.B. PSxxxxx">
+            <label class="field-label">FASTA-File</label>
+            <input type="file" name="file" required>
+            <input type="submit" value="Absenden">
+        </form>
+    </div>
+
+    <!-- Genomanalyse & Sequenz-Pipeline -->
+    <p class="section-label">Genomanalyse &amp; Sequenz-Pipeline</p>
+
+    <div class="card">
+        <h2>Genome Length</h2>
+        <p>Vergleich von Genomlängen verschiedener Organismen.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiGenomeLength.cgi">
+            <label class="field-label">Organismen</label>
+            <input type="text" name="organisms" placeholder="human, mouse, yeast" required>
+            <button type="submit">Run</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Pipeline — FASTA zu Protein</h2>
+        <p>Analysiert eine FASTA-Datei zusammen mit einer Feature-Datei und übersetzt die Sequenz in ein Protein.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/Pipeline_10.cgi">
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">FASTA-File</label>
+                    <input type="file" name="fasta" required>
+                </div>
+                <div>
+                    <label class="field-label">TSV / Features-File</label>
+                    <input type="file" name="features" required>
+                </div>
+            </div>
+            <button type="submit">Run</button>
+        </form>
+
+        <hr class="card-divider">
+
+        <h2>DNA &rarr; ORFs (via Locus-Tag)</h2>
+        <p>Nur DNA zu ORFs übersetzen.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/genome2orf.cgi">
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">FASTA-File</label>
+                    <input type="file" name="fasta" required>
+                </div>
+                <div>
+                    <label class="field-label">Features-File</label>
+                    <input type="file" name="features" required>
+                </div>
+            </div>
+            <button type="submit">Run</button>
+        </form>
+
+        <hr class="card-divider">
+
+        <h2>mRNA &rarr; Protein (via Locus-Tag)</h2>
+        <p>Nur mRNA zu Aminosäuresequenz übersetzen.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~huynhngoc/propragruppe15/Solution1/cgiFiles/mrna2aa.cgi">
+            <label class="field-label">FASTA-File</label>
+            <input type="file" name="fasta" required>
+            <button type="submit">Run</button>
+        </form>
+    </div>
+
+    <!-- Strukturvergleich -->
+    <p class="section-label">Strukturvergleich</p>
+
+    <div class="card">
+        <div class="note">Aktuell nicht verfügbar — Homstrad-Dateien wurden gelöscht.</div>
+        <h2>Homstrad</h2>
+        <p>Vergleich zweier Proteinstrukturen anhand ihrer PDB-IDs aus der Homstrad-Datenbank.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution2/Assignment14/homstrad.cgi">
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">PDB-ID 1</label>
+                    <input type="text" name="pdb1" required>
+                </div>
+                <div>
+                    <label class="field-label">PDB-ID 2</label>
+                    <input type="text" name="pdb2">
+                </div>
+            </div>
+            <button type="submit">Run</button>
+        </form>
+    </div>
+
+    <!-- Alignment -->
+    <p class="section-label">Alignment Calculator</p>
+    <div class="card">
+        <h2>Pairwise Sequence Alignment</h2>
+        <p>Paarweises Alignment mit Gotoh / Needleman-Wunsch — globales, lokales und Freeshift-Alignment mit wählbarer Substitutionsmatrix.</p>
+        <form method="post" enctype="multipart/form-data"
+              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI.py">
+
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">ID 1</label>
+                    <input type="text" name="id1" value="seq1" required>
+                </div>
+                <div>
+                    <label class="field-label">ID 2</label>
+                    <input type="text" name="id2" value="seq2" required>
+                </div>
+            </div>
+
+            <label class="field-label">Sequenz 1</label>
+            <textarea name="seq1" rows="3" required></textarea>
+            <label class="field-label">Sequenz 2</label>
+            <textarea name="seq2" rows="3" required></textarea>
+
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">Matrix</label>
+                    <select name="matrix">
+                        <option value="dayhoff.mat">Dayhoff</option>
+                        <option value="blosum62.mat">BLOSUM62</option>
+                        <option value="pam250.mat">PAM250</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="field-label">Modus</label>
+                    <select name="mode">
+                        <option value="global">Global</option>
+                        <option value="local">Local</option>
+                        <option value="freeshift">Freeshift</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="field-label">Format</label>
+                    <select name="format">
+                        <option value="ali">ALI</option>
+                        <option value="scores">Scores</option>
+                        <option value="html">HTML</option>
+                    </select>
+                </div>
+                <div></div>
+                <div>
+                    <label class="field-label">Gap Open</label>
+                    <input type="text" name="go" value="-12">
+                </div>
+                <div>
+                    <label class="field-label">Gap Extend</label>
+                    <input type="text" name="ge" value="-1" required>
+                </div>
+            </div>
+
+            <button type="submit">Run</button>
+        </form>
+    </div>
 
 
-        <section>
-            <h1>Aufgabe 5</h1>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiACSearch.cgi">
-                <input type="text" name="fasta" required>
-                <input type="submit" value="Absenden">
-            </form>
-        </section>
 
-        <section>
-            <h1>Aufgabe 6</h1>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiSPKeyword.py">
-                <input type="text" name="keywords" placeholder="keyword1, keyword2..." required>
-                <input type="file" name="swissprot_file"><br><br>
-                <button type="submit">Run</button>
-            </form>
-        </section>
+</div>
 
-        <section>   
-            <h1>Aufgabe 7</h1>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiPSScan.cgi" >
-                <table>
-                    <tr> <td align="right">pattern: </td> <td> <input type="text" name="pattern" placeholder="e.g. [LIVMF]-H-C-x(2)-G-x(3)-{STC}-[STAGP]-x-[LIVMFY]"> </td> </tr>
-                    <tr> <td align="right">PROSITE-ID: </td> <td> <input type="text" name="prosite_id" placeholder="e.g. PSxxxxx"> </td> </tr>
-                    <tr> <td align="right">fasta: </td> <td> <input type="file" name="file" required> </td> </tr>
-                </table>
-                <input type="submit" value="Absenden">
-            </form>
-        </section>
+<footer>
+    <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; LMU/TUM &middot; Gruppe 15</span>
+    <span>Laura Martin &middot; Lucas Nassonov &middot; Daniel Bernadi &middot; Toan David Huynh Ngoc</span>
+</footer>
 
-        <section> 
-            <h1>Aufgabe 8</h1>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiGenomeLength.cgi">
-                <input type="text" name="organisms" placeholder="human, mouse, yeast" required>
-                <button type="submit">Run</button>
-            </form>
-        </section>
-
-
-        <section>
-            <h1>Aufgabe 10 </h1>
-            <p>This programm analysis a Fasta File connected to a features file and translates it
-            into a Protein, for other Options look down below </p>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/Pipeline_10.cgi">
-                <p>Please upload a fasta file and a features file</p>
-                <p> Fasta: <input type="file" name="fasta" required></p>
-                <p> TSV: <input type="file" name="features" required></p>
-                <button type="submit">Run</button>
-            </form>
-
-            <p> If you only wanna translate your DNA represented by its Locus-Tag to a ORFs: </p>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/genome2orf.cgi">
-                <p>Please upload a fasta file and a features file</p>
-                <input type="file" name="fasta" required>
-                <input type="file" name="features" required>
-                <button type="submit">Run</button>
-            </form>
-
-
-            <p> If you only wanna translate your mRNA represented by its Locus-Tag to a Protein: </p>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~huynhngoc/propragruppe15/Solution1/cgiFiles/mrna2aa.cgi">
-                <p>Please upload a fasta file </p>
-                <input type="file" name="fasta" required>
-                <button type="submit">Run</button>
-            </form>
-        </section>
-
-
-        <!--funktioniert aktuell nicht weil Homestrad datein gelöscht wurden-->
-        <section>
-            <h1>Aufgabe 14, Blatt 2</h1>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution2/Assignment14/homstrad.cgi">
-                <input type="text" name="pdb1" required>
-                <input type="text" name="pdb2">
-                <button type="submit">Run</button>
-            </form>
-        </section>
-
-
-        <section>
-            <h1>Alignment Calculator</h1>
-            <form method="post" enctype="multipart/form-data" action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI2.py">
-                <p>ID 1:</p>
-                <input type="text" name="id1" value="seq1" required>
-                <p>ID 2:</p>
-                <input type="text" name="id2" value="seq2" required><br><br>
-                <p>Sequenz 1:</p>
-                <textarea name="seq1" required></textarea><br>
-                <p>Sequenz 2:</p>
-                <textarea name="seq2" required></textarea><br><br>
-                <p>Matrix:</p>
-                <select name="matrix">
-                    <option value="dayhoff.mat" >dayhoff</option>
-                    <option value="blosum62.mat" >blosum62</option>
-                    <option value="pam250.mat">pam250</option>
-                </select>
-                <p>Modus:</p>
-                <select name="mode">
-                    <option value="global">global</option>
-                    <option value="local">local</option>
-                    <option value="freeshift">freeshift</option>
-                </select>
-                <p>Format:</p>
-                <select name="format">
-                    <option value="ali">ali</option>
-                    <option value="scores">scores</option>
-                    <option value="html">html</option>
-                </select><br><br>
-                <p>Gap Open:</p> <input type="text" name="go" value="-12" >
-                <p>Gap Extend:</p> <input type="text" name="ge" value="-1" required><br><br>
-
-                <button type="submit">Run</button>
-            </form>
-        </section>
-
-    </body>
+</body>
 </html>
