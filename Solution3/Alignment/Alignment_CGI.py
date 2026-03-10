@@ -66,7 +66,7 @@ elif input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "fi
         entries.append((current_id, "".join(current_seq)))
 
     if len(entries) < 2:
-        print("<p> ERROR: Not enough sequences in the file. </p>")
+        print("<p> ERROR: Not enough sequences in the file. Or Wrong File</p>")
     id1, seq1 = entries[0]
     id2, seq2 = entries[1]
 else:
@@ -168,8 +168,11 @@ print(f"""<!DOCTYPE html>
     <h2>New Searchrequest:</h2>
     <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> 
         <p>Input-Type:</p>
+        <p>Enter Sequences:</p>
         <input type="radio" name="input_type" value="text" onclick="switchInput('text')">
+        <p>Upload FasterFile: </p>
         <input type="radio" name="input_type" value="file" onclick="switchInput('file')">
+        <p>Upload PDB-IDs form the Database: </p>
         <input type="radio" name="input_type" value="pdb" onclick="switchInput('pdb')">
         <br><br>
         
