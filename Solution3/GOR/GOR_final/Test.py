@@ -14,7 +14,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 form = mycgi.Form()
 action = form.getvalue("action")
 output_section = ""
-GOR_OUTPUT = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure.txt")
+GOR_OUTPUT = os.path.join("uploads/temp_seqAndStructure.txt")
+DETAILED_PATH = os.path.join("uploads/detailedGor.txt")
 
 if action == "seclib":
     try:
