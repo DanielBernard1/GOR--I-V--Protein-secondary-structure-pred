@@ -159,7 +159,7 @@ for pdb_id in all_pdb_ids:
             print(f"pdb: {pdb_id} not found online")
 
 for pdb_id in all_pdb_ids:
-    for root, dirs, files in os.walk("../All_pdb_files"):
+    for root, dirs, files in os.walk("All_pdb_files"):
         if f"{pdb_id}.pdb" in files:
             for entry in pdb_reader(pdb_id):
 
