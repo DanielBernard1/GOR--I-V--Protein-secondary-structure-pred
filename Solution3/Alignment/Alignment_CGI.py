@@ -17,6 +17,8 @@ input_type = form["input_type"].value if submitted else ""
 style_text = "display: block;" if input_type == "text" else "display: none;"
 style_file = "display: block;" if input_type == "file" else "display: none;"
 style_pdb  = "display: block;" if input_type == "pdb"  else "display: none;"
+style_native = "display: block;" if input_type == "native" else "display: none;"
+
 
 seq1 = form["seq1"].value if "seq1" in form else ""
 seq2 = form["seq2"].value if "seq2" in form else ""
