@@ -1,9 +1,14 @@
 import os
 import subprocess
 
+
 def run_seclib(BASE_DIR, form):
     id = form.getvalue("--id")
-    idList = form.getvalue("--idlist")
+
+    if "--idlist" in form and form["--idlist"].filename:
+        idList = form["--idlist"].file.read().decode("utf-8")
+    else:
+        idList = form.getvalue("--idlist")
 
     seclib_path = os.path.join(BASE_DIR, "sec_lib.txt")
     output = ""
