@@ -6,7 +6,6 @@ import subprocess
 import mycgi
 import mysql.connector
 
-print("Content-type: text/html\n")
 
 form = mycgi.Form()
 
@@ -188,6 +187,8 @@ if (use_native or (seq1 and seq2)) and not file_error and not text_error and not
         output = subprocess.run(cmd, capture_output=True, text=True)
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
+
+print("Content-type: text/html\n")
 
 if "download_output" in form:
     download_output = True
@@ -448,7 +449,7 @@ print(f"""<!DOCTYPE html>
     <ul class="nav-links">
         <!-- Home-Link: zurück zur Hauptseite -->
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_CGI.py">GOR</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/Test.py">GOR</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
         <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
     </ul>
