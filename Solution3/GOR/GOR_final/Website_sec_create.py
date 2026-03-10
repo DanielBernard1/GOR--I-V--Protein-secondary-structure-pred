@@ -20,7 +20,7 @@ def run_seclib(BASE_DIR, form):
             with open(tmp_path, "w") as f:
                 f.write(idList)
             result = subprocess.run(
-                ["python3", "sec_create.py", "--idList", tmp_path],
+                ["python3", "sec_create.py", "--idlist", tmp_path],
                 capture_output=True, text=True)
             output = result.stderr
         finally:
