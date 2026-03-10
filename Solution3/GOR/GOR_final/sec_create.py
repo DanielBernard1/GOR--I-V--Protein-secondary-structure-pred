@@ -4,7 +4,7 @@ import re
 import argparse as ap
 import sys
 import urllib.request
-import mysql.connector
+
 import os
 #dd
 def dssp_reader(id):
@@ -144,7 +144,7 @@ else:
 for pdb_id in all_pdb_ids:
     found = False
 
-    for root, dirs, files in os.walk("../All_pdb_files"):
+    for root, dirs, files in os.walk("All_pdb_files"):
         if f"{pdb_id}.pdb" in files or f"{pdb_id}.dssp" in files:
             found = True
             break
@@ -159,7 +159,7 @@ for pdb_id in all_pdb_ids:
             print(f"pdb: {pdb_id} not found online")
 
 for pdb_id in all_pdb_ids:
-    for root, dirs, files in os.walk("../All_pdb_files"):
+    for root, dirs, files in os.walk("All_pdb_files"):
         if f"{pdb_id}.pdb" in files:
             for entry in pdb_reader(pdb_id):
 
@@ -167,7 +167,7 @@ for pdb_id in all_pdb_ids:
         elif f"{pdb_id}.dssp" in files:
             seclib.append(dssp_reader(pdb_id))
 
-with open("../sec_lib.txt", "w") as f:
+with open("sec_lib.txt", "w") as f:
     for i in seclib:
         f.write(f">{i['id']}\n")
         f.write(f"AS {i['AS']}\n")
@@ -175,6 +175,7 @@ with open("../sec_lib.txt", "w") as f:
         print(f">{i['id']}")
         print(f"AS {i['AS']}")
         print(f"SS {i['SS']}\n")
+
 
 
 
