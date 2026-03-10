@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-def run_validate(BASE_DIR, form):
+def run_train(BASE_DIR, form):
 
 
 
