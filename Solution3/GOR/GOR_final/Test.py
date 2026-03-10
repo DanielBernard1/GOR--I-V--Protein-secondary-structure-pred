@@ -26,9 +26,7 @@ if action == "seclib":
 elif action == "predict":
     try:
         output = run_predict(BASE_DIR, form)
-        output2 = output.stdout + output.stderr
-        if output:
-            output_section = f"<pre>{output2}</pre><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
+        output_section = f"<pre>{output}</pre><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
