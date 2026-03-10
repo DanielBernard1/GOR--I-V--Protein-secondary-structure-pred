@@ -485,13 +485,27 @@ if seq1 and seq2 and not file_error and not text_error and not pdb_error:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
 if output:
-    # DESIGN: result-bar + pre.result statt nacktem <pre>
-    print(f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
-    print('<pre class="result">')
-    print(output.stdout)
-    print('</pre>')
+    import re
+    java_out = output.stdout
+    # Java gibt bei format=html eine komplette HTML-Seite aus — nur Body-Inhalt nehmen
+    # sonst wird unsere Seite blau/kaputt durch Java-eigenes CSS
+    if "<html" in java_out.lower():
+        body_match = re.search(r'<body[^>]*>(.*?)</body>', java_out, re.DOTALL | re.IGNORECASE)
+        java_out = body_match.group(1).strip() if body_match else java_out
+        # DESIGN: result-bar + div (nicht pre) damit Java-Spans sichtbar bleiben
+        print(f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
+        print('<div class="result">')
+        print(java_out)
+        print('</div>')
+    else:
+        # Kein HTML-Output (ali/scores): in <pre> anzeigen
+        print(f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
+        print('<pre class="result">')
+        print(java_out)
+        print('</pre>')
     print('<p class="section-label">Benchmark</p>')
     print("<img src='benchmark.png'>")
+
 
 print("""
 </div>
