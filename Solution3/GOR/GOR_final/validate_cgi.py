@@ -27,4 +27,4 @@ def run_validate(BASE_DIR, form):
         ["java", "-jar", VALIDATION_PATH, "-p", PREDICTION_PATH, "-r", REFERENCE_PATH, "-d", DETAILED_PATH, "--format", "txt"],
         capture_output=True, text=True)
 
-    return result.stdout
+    return f"returncode={result.returncode} stdout='{result.stdout}' stderr='{result.stderr}'"
