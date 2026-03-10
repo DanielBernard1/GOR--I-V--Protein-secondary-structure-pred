@@ -13,6 +13,7 @@ public class alignment {
         String matrixName = null;
         String modeStr = null;
         boolean secStruct = false;
+        String secStructPath = null;
 
         String format = null;
         String dpDir = null;
@@ -30,7 +31,7 @@ public class alignment {
             if(a.equals("--go")){go = Integer.parseInt(args[++i]); continue;}
             if(a.equals("--ge")){ge = Integer.parseInt(args[++i]); continue;}
             if(a.equals("--dpmatrices")){dpDir = args[++i]; continue;}
-            if(a.equals("--ss")){secStruct = true; continue;}
+            if(a.equals("--ss")){secStruct = true; secStructPath = args[++i]; continue;}
             //mandatory
             if(a.equals("--pairs")){pairsPath = args[++i]; continue;}
             if(a.equals("--seqlib")){seqlibPath = args[++i]; continue;}
@@ -55,16 +56,13 @@ public class alignment {
             printHelp();
             return;
         }
-
+        Map<String, String> seqlib = readSeqLib(seqlibPath);
         SubstitutionMatrix m1 = new SubstitutionMatrix(matrixName);
-
+        SecondaryStructureMatrix secondaryStructureMatrix = new SecondaryStructureMatrix();
         if (secStruct){
-            SecondaryStructureMatrix secondaryStructureMatrix = new SecondaryStructureMatrix();
-            Map<String, List<String>> SecStructLib = readStructLib(seqlibPath);
-            readPairsSecStruct(go, ge, dpDir, check, pairsPath, SecStructLib, m1, secondaryStructureMatrix, mode, useNW, format);
+            Map<String, List<String>> SecStructLib = readStructLib(secStructPath);
         }
         else {
-            Map<String, String> seqlib = readSeqLib(seqlibPath);
             readPairs(go, ge, dpDir, check, pairsPath, seqlib, m1, mode, useNW, format);
         }
     }
@@ -102,7 +100,7 @@ public class alignment {
         while ((line = br.readLine())!=null){
             line = line.trim();
             if (line.startsWith(">")){
-                header = line;
+                header = line.replace(">", "");
                 counter = 1;
             }
             else if (line.startsWith("AS")){
@@ -122,76 +120,6 @@ public class alignment {
         }
         br.close();
         return map;
-    }
-    private static void readPairsSecStruct(int go, int ge, String dpPath, boolean check, String pairsPath, Map<String, List<String>> seqlib, SubstitutionMatrix matrix, SecondaryStructureMatrix secondaryStructureMatrix, AlignmentType mode, boolean useNW, String format) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(pairsPath));
-        String line;
-
-        while ((line = br.readLine())!= null){
-            line = line.trim();
-            if(line.isEmpty()){continue;}
-            String[] parts = line.split("\\s+"); //soll auf mehrere spaces, taps ud leerzeichen splitten
-            String id1 = parts[0];
-            String id2 = parts[1];
-
-            String aseq1 = seqlib.get(id1).get(0);
-            String sseq1 = seqlib.get(id1).get(1);
-            String aseq2 = seqlib.get(id2).get(0);
-            String sseq2 = seqlib.get(id2).get(1);
-
-            if(aseq1 == null || aseq2 == null || sseq1 == null || sseq2 == null ){continue;}
-
-            Scoring scoring = new Scoring(aseq1, aseq2, sseq1, sseq2, matrix, secondaryStructureMatrix, go, ge, mode);
-
-            finalAlignment res = scoring.result(useNW);
-
-            double score = res.getScore();
-
-            String[] alignments = new String[]{res.getAlign1(), res.getAlign2()};
-
-            if(check){
-                double cs = scoring.checkScore(res.getAlign1(), res.getAlign2());
-                if(Math.abs(cs - res.getScore()) < 0.001){
-                    continue;
-                }
-            }
-            String scoreStr = String.format("%.4f", score);
-            if (format.equals("scores")) {
-                System.out.println(id1 + " " + id2 + " " + scoreStr);
-            }
-            else if (format.equals("ali")){
-                System.out.println(">" + id1 + " " + id2 + " " +scoreStr);
-                System.out.println(id1 + ": " + alignments[0]);
-                System.out.println(id2 + ": " + alignments[1]);
-            }
-            else if (format.equals("html")){
-                System.out.println(buildHtmlOutput(id1, id2, aseq1, aseq2, score, alignments[0], alignments[1], matrix));
-            }
-            else{
-                printHelp();
-                return;
-            }
-            if (dpPath != null && format.equals("html")){
-                File file = new File(dpPath);
-                File fpFile = new File(new File(dpPath), "fixedpoint_" + id1 + "_" + id2 + ".txt");
-
-                FixedPoint fp = new FixedPoint(aseq1, aseq2, matrix, ge);
-                fp.fixedPointScores(fpFile.getPath());
-                if (file.isDirectory()){
-                    file = new File(file, "scoring_matrix.txt");
-                }
-                int[][] scoring_matrix = scoring.getScoring_matrix();
-                try (FileWriter fw = new FileWriter(file)) {
-                    for (int i = 0; i < scoring_matrix.length; i++) {
-                        for (int j = 0; j < scoring_matrix[0].length; j++) {
-                            fw.write(scoring_matrix[i][j] + "\t");
-                        }
-                        fw.write("\n");
-                    }
-                }
-            }
-        }
-        br.close();
     }
 
     private static void readPairs(int go, int ge, String dpPath, boolean check, String pairsPath, Map<String, String> seqlib, SubstitutionMatrix matrix, AlignmentType mode, boolean useNW, String format) throws Exception{
@@ -344,7 +272,7 @@ public class alignment {
             line = line.trim();
             if(line.isEmpty()){continue;}
             String[] parts = line.split(":", 2);
-            map.put(parts[0].trim(), parts[1].trim());
+            map.put(parts[0].trim().replac(">",""), parts[1]);
         }
         br.close();
         return map;

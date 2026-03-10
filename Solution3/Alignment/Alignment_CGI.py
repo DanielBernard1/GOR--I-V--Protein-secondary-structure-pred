@@ -610,10 +610,10 @@ if input_type == "pdb" and pdb1_input:
             database="bioprakt15"
         )
         cursor = db.cursor()
-        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb1_input.lower(),))
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb = %s", (pdb1_input.lower(),))
         row = cursor.fetchone()
         seq1 = row[0] if row else None
-        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb2_input.lower(),))
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb = %s", (pdb2_input.lower(),))
         row = cursor.fetchone()
         seq2 = row[0] if row else None
         id1 = pdb1_input
@@ -673,10 +673,11 @@ if show_dp and seq1 and seq2 and output:
             cmd_dp.append("--nw")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
-        dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
-        print("<h2>DP-Matrix:</h2><pre>")
+        scoring_matrix_file = dp_path + "scoring_matrix_" + matrix + ".txt"
+        dp_vis = subprocess.run(["python3", "../dp_matrix.py", scoring_matrix_file])
+        print("<div><h2>DP-Matrix:</h2>")
         print(dp_vis.stdout)
-        print("</pre>")
+        print("</div>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
         fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
