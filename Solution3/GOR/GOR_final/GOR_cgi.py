@@ -10,10 +10,10 @@ def run_predict(BASE_DIR, form):
     maf = form.getvalue("--maf")
     probabilities = form.getvalue("--probabilities")
 
-    JARS    = os.path.join(BASE_DIR, "jars")
+    JARS    = os.path.join("jars")
     PREDICT = os.path.join(JARS, "predict.jar")
 
-    MODELS  = os.path.join(BASE_DIR, "GOR_models")
+    MODELS  = os.path.join("GOR_models")
 
 
     modelGor1 = os.path.join(MODELS, "gor1_cb513_model.txt")
@@ -21,9 +21,23 @@ def run_predict(BASE_DIR, form):
 
     modelGor4 = os.path.join(MODELS, "gor4_cb513_model.txt")
 
-    os.makedirs(os.path.join(BASE_DIR, "uploads"), exist_ok=True)
+    os.makedirs(os.path.join("uploads"), exist_ok=True)
 
-    if maf:
+    fasta_path = None
+    maf_path = None
+    if "--fasta" in form and form["--fasta"].filename:
+        fasta_path = os.path.join(BASE_DIR, "uploads/input.fasta")
+        with open(fasta_path, "wb") as f:
+            f.write(form["--fasta"].file.read())
+    if "--maf" in form:
+        maf_path = os.path.join(BASE_DIR, "uploads/maf_input")
+        os.makedirs(maf_path, exist_ok=True)
+        filename = form["--maf"].filename
+        with open(os.path.join(maf_path, filename), "wb") as f:
+            f.write(form["--maf"].file.read())
+
+
+    if "--maf" in form and form["--maf"].filename:
         if GorType == "--GOR1":
             model = modelGor1
             if probabilities == "yes":
@@ -80,6 +94,12 @@ def run_predict(BASE_DIR, form):
 
     with open(tmp_path, "w") as f:
         f.write(output)
+
+    if fasta_path and os.path.exists(fasta_path):
+        os.remove(fasta_path)
+    if maf_path and os.path.exists(maf_path):
+        import shutil
+        shutil.rmtree(maf_path)
 
 
     return output
