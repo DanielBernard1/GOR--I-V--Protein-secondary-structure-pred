@@ -8,20 +8,19 @@ pattern = form.getfirst("pattern", "").strip()
 prosite_id = form.getfirst("prosite_id", "").strip()
 
 
-form_file = form["file"]  
+file_content = form_file.file.read().decode("utf-8")
 
 if pattern:
     result = subprocess.run(
         ["python3", "Aufgabe7.py", "--fasta", "-", "--pattern", pattern],
-        stdin=form_file.file,
+        input=file_content,
         text=True,
         capture_output=True
     )
-
 elif prosite_id:
     result = subprocess.run(
         ["python3", "Aufgabe7.py", "--fasta", "-", "--web", prosite_id],
-        stdin=form_file.file,
+        input=file_content,
         text=True,
         capture_output=True
     )
