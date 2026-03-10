@@ -1,17 +1,18 @@
-#!/usr/bin/env python3
+#!/usr/bin/biopython
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import mycgi
-from validate_cgi import run_validate
 
 print("Content-type: text/html\n")
 
-form = mycgi.Form()
-action = form.get("action")
-output_section = ""
+import mycgi
+from validate_cgi import run_validate
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+form = mycgi.Form()
+action = form.get("action")
+
+output_section = ""
 
 if action == "validate":
     try:
@@ -25,7 +26,7 @@ print(f"""<!DOCTYPE html>
 <h1>GOR</h1>
 <section>
     <h2>Validate</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="validate">
         <label>Prediction</label>
         <textarea name="--prediction" rows="4"></textarea>
