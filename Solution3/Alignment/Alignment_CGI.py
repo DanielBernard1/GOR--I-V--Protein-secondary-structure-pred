@@ -86,12 +86,25 @@ elif input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "fi
     id1, seq1 = entries[0]
     id2, seq2 = entries[1]
 else:
-    seq1 = form["seq1"].value
-    seq2 = form["seq2"].value
+    if "seq1" in form:
+        seq1 = form["seq1"].value
+    else:
+        seq1 = ""
+    if "seq2" in form:
+        seq2 = form["seq2"].value
+    else:
+        seq2 = ""
     if not seq1 or not seq2:
         print("<p style='color:red'>Fehler: Pls insert a seq</p>")
-    id1 = form["id1"].value
-    id2 = form["id2"].value
+
+    if "id1" in form:
+        id1 = form["id1"].value
+    else:
+        id1 = ""
+    if "id2" in form:
+        id2 = form["id2"].value
+    else:
+        id2 = ""
 
 if "matrix" in form:
     matrix = form["matrix"].value
@@ -108,8 +121,14 @@ if "format" in form:
 else:
     fmt = "html"
 
-go = form["go"].value
-ge = form["ge"].value
+if "go" in form:
+    go = form["go"].value
+else:
+    go = "-12"
+if "ge" in form:
+    ge = form["ge"].value
+else:
+    ge = "-1"
 
 
 #if "check" in form:
