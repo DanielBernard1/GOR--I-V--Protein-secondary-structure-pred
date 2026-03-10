@@ -84,7 +84,7 @@ def run_predict(BASE_DIR, form):
 
         output = "Error occurred"
 
-    tmp_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure.txt")
+    tmp_path = os.path.join("uploads/temp_seqAndStructure.txt")
 
 
     with open(tmp_path, "w") as f:
