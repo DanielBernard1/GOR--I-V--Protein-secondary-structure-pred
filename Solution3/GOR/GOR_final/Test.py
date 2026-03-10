@@ -86,8 +86,8 @@ elif action == "validate":
         output_section = f"<pre>ERROR: {e}</pre>"
 elif action == "train":
     try:
-        output, model_path = run_train(BASE_DIR, form)
-        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/model_{form.getvalue('--method')}.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Model</a>"
+        output = run_train(BASE_DIR, form)
+        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/db_model.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Model</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
