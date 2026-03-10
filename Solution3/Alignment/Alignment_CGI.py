@@ -198,6 +198,7 @@ print(f"""<!DOCTYPE html>
         document.getElementById('input_file').style.display = 'none';
         document.getElementById('input_pdb').style.display  = 'none';
         document.getElementById('input_' + type).style.display = 'block';
+        document.getElementById('input_type_hidden').value = type;
     }}
     
     function switchGap(algo) {{
