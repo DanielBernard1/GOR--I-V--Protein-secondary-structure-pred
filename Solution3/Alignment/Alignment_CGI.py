@@ -322,8 +322,13 @@ print(f"""<!DOCTYPE html>
 
         <p style="font-size:0.8rem; color:var(--text-dim);">Own Sequences:</p>
         <input type="button" value="Enter Sequences manually" onclick="switchInput('text')">
+        
+        <p style="font-size:0.8rem; color:var(--text-dim);">Upload pairs and seqlib File</p>
+        <input type="button" value="pairs + seqlib" onclick="switchInput('native')">
+
         <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FastaFile:</p>
         <input type="button" value="Enter Fasta-File" onclick="switchInput('file')">
+        
         <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload PDB-IDs from the Database:</p>
         <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
 
@@ -363,6 +368,21 @@ print(f"""<!DOCTYPE html>
                     <input type="text" name="pdb2" value="{pdb2_input}" placeholder="z.B. 2hbb">
                 </div>
             </div>
+        </div>
+        
+        <div id="input_native" style="{style_native}">
+            <p style="font-size:0.82rem; color:var(--text-dim); margin:10px 0 6px;">
+                Direkt die nativen Java-Input-Dateien hochladen. Ermöglicht mehrere Paare auf einmal.
+            </p>
+            <div style="font-family:monospace;font-size:0.78rem;background:#f4f4f4;border:1px solid var(--border);padding:10px;border-radius:4px;margin-bottom:12px;">
+                <b>pairs.txt:</b>&nbsp; seq1 seq2<br>
+                <b>seqlib.txt:</b> seq1:MVLSPADKTN...<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq2:ACDEFGHIKL...
+            </div>
+            <label class="field-label">pairs.txt</label>
+            <input type="file" name="pairs_file" accept=".txt">
+            <label class="field-label">seqlib.txt</label>
+            <input type="file" name="seqlib_file" accept=".txt">
         </div>
 
     </div><!-- end card -->
@@ -503,7 +523,7 @@ if output:
         print('<pre class="result">')
         print(java_out)
         print('</pre>')
-    print('<p class="section-label">Benchmark</p>')
+    print('<p class="section-label">Graphics</p>')
     print("<img src='benchmark.png'>")
 
 # DP-Matrix und Fixpoint

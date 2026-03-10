@@ -18,7 +18,7 @@ if pattern:
         capture_output=True
     )
 
-if prosite_id:
+elif prosite_id:
     result = subprocess.run(
         ["python3", "Aufgabe7.py", "--fasta", "-", "--web", prosite_id],
         stdin=form_file.file,
