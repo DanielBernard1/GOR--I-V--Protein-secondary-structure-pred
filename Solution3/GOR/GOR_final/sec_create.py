@@ -144,7 +144,7 @@ else:
 for pdb_id in all_pdb_ids:
     found = False
 
-    for root, dirs, files in os.walk("../All_pdb_files"):
+    for root, dirs, files in os.walk("All_pdb_files"):
         if f"{pdb_id}.pdb" in files or f"{pdb_id}.dssp" in files:
             found = True
             break
