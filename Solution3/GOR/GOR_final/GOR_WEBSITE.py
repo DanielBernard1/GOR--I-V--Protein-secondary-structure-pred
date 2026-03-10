@@ -11,8 +11,6 @@ import subprocess
 import mycgi
 from Website_sec_create import run_seclib
 
-print("Content-type: text/html\n")
-
 form = mycgi.Form()
 action = form.get("action")
 output = ""
@@ -21,8 +19,6 @@ output_section = ""
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DETAILED_PATH = os.path.join(BASE_DIR, "uploads/detailedGor.txt")
 GOR_OUTPUT = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure.txt")
-
-
 
 def run_kfold():
     gorType = form.get("--gorType")
@@ -33,34 +29,33 @@ def run_kfold():
     os.remove(tmp)
     return result.stdout
 
-#actions
-
 if action == "seclib":
-    output, seclib_path = run_seclib(BASE_DIR, form)
-    print(f"""
-            <br><br>
-            <h2>Output</h2><textarea readonly rows='10' style='resize:both;'>" + {output} + "</textarea>"
-                <a href = "/{seclib_path}" download style = "display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;" > Download </a>"""
-          )
+    try:
+        output, seclib_path = run_seclib(BASE_DIR, form)
+        output_section = f"<br><br><h2>Output</h2><textarea readonly rows='10' style='resize:both;'>{output}</textarea><a href='/{seclib_path}' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
 
 elif action == "predict":
-    output = run_predict(BASE_DIR, form)
-    if output:
-        print(f"""
-        <br><br>
-        <h2>Output</h2><textarea readonly rows='10' style='resize:both;'>" + {output} + "</textarea>"
-            <a href = "/{GOR_OUTPUT}" download style = "display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;" > Download </a>"""
-        )
-    else:print("")
+    try:
+        output = run_predict(BASE_DIR, form)
+        if output:
+            output_section = f"<br><br><h2>Output</h2><textarea readonly rows='10' style='resize:both;'>{output}</textarea><a href='/{GOR_OUTPUT}' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;'>Download</a>"
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
+
 elif action == "kfold":
-    output = run_kfold()
+    try:
+        output = run_kfold()
+        output_section = f"<pre>{output}</pre>"
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
 
 elif action == "validate":
-    output = run_validate(BASE_DIR, form)
-    values = []
-    for line in output.splitlines():
-        values.append(line.strip())
-    output_section = f"""<br><br>
+    try:
+        output = run_validate(BASE_DIR, form)
+        values = [""] + [line.strip() for line in output.splitlines()]
+        output_section = f"""<br><br>
     <h2>Results</h2>
 <div style="overflow-x: auto;">
     <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
@@ -86,33 +81,14 @@ elif action == "validate":
         <tbody>
             <tr>
                 <td style="padding: 8px 12px;">validation</td>
-                <td style="padding: 8px 12px;">{values[1]}</td>
-                <td style="padding: 8px 12px;">{values[2]}</td>
-                <td style="padding: 8px 12px;">{values[3]}</td>
-                <td style="padding: 8px 12px;">{values[4]}</td>
-                <td style="padding: 8px 12px;">{values[5]}</td>
-                <td style="padding: 8px 12px;">{values[6]}</td>
-                <td style="padding: 8px 12px;">{values[7]}</td>
-                <td style="padding: 8px 12px;">{values[8]}</td>
-                <td style="padding: 8px 12px;">{values[9]}</td>
-                <td style="padding: 8px 12px;">{values[10]}</td>
-                <td style="padding: 8px 12px;">{values[11]}</td>
-                <td style="padding: 8px 12px;">{values[12]}</td>
-                <td style="padding: 8px 12px;">{values[13]}</td>
+                {''.join(f'<td style="padding: 8px 12px;">{values[i] if i < len(values) else ""}</td>' for i in range(1, 14))}
             </tr>
         </tbody>
     </table>
 </div>
-<a href="/{DETAILED_PATH}" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">↓ Download</a>
-"""
-elif output:
-    output_section = "<section><h2>Output</h2><pre>" + output + "</pre></section>"
-
-else:
-    output_section = ""
-
-
-#basse html
+<a href="/{DETAILED_PATH}" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">↓ Download</a>"""
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
 
 print(f"""<!DOCTYPE html>
 <html>
@@ -139,8 +115,8 @@ print(f"""<!DOCTYPE html>
         <input type="file" name="--idlist">
         <button type="submit">Run</button>
     </form>
+    {output_section if action == "seclib" else ""}
 </section>
-{output_section if action == "seclib" else ""}
 
 <section>
     <h2>Predict</h2>
@@ -166,30 +142,24 @@ print(f"""<!DOCTYPE html>
     {output_section if action == "predict" else ""}
 </section>
 
-
 <section>
     <h2>Validate</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="validate">
         <label>Prediction</label>
         <textarea name="--prediction" rows="4"></textarea>
-         <input type="file" name="--prediction_file">
+        <input type="file" name="--prediction_file">
         <label>Reference</label>
         <textarea name="--reference" rows="4"></textarea>
         <input type="file" name="--reference_file">
         <button type="submit">Run</button>
     </form>
-    
-    
     {output_section if action == "validate" else ""}
-    
-    
 </section>
-
 
 <section>
     <h2>K-Fold</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="kfold">
         <label>GOR Typ</label>
         <select name="--gorType">
@@ -201,8 +171,8 @@ print(f"""<!DOCTYPE html>
         <textarea name="--inputdb" rows="4"></textarea>
         <button type="submit">Run</button>
     </form>
+    {output_section if action == "kfold" else ""}
 </section>
-{output_section if action == "kfold" else ""}
 
 </body>
 </html>""")
