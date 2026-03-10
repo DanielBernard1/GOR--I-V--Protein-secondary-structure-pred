@@ -18,9 +18,35 @@ def run_predict(BASE_DIR, form):
 
     fasta = None
     maf = None
+    custom_model = None
+
+    if "--model_file" in form and form["--model_file"].filename:
+        custom_model = os.path.join("uploads/custom_model.txt")
+        with open(custom_model, "wb") as f:
+            f.write(form["--model_file"].file.read())
+        filename = form["--model_file"].filename
+        if "gor1" in filename:
+
+            modelGor1 = custom_model
+            if GorType != "--GOR1":
+                os.remove(custom_model)
+                return "wrong combination of GOR and model"
+
+        elif "gor3" in filename:
+            modelGor3 = custom_model
+            if GorType != "--GOR3":
+                os.remove(custom_model)
+                return "wrong combination of GOR and model"
+        elif "gor4" in filename:
+            modelGor4 = custom_model
+            if GorType != "--GOR4":
+                os.remove(custom_model)
+                return "wrong combination of GOR and model"
+
+
 
     if "--fasta" in form and form["--fasta"].filename:
-        fasta = os.path.join(BASE_DIR, "uploads/input.fasta")
+        fasta = os.path.join( "uploads/input.fasta")
         with open(fasta, "wb") as f:
             f.write(form["--fasta"].file.read())
 
@@ -92,5 +118,7 @@ def run_predict(BASE_DIR, form):
         os.remove(fasta)
     if maf and os.path.exists(maf):
         shutil.rmtree(maf)
+    if custom_model and os.path.exists(custom_model):
+        os.remove(custom_model)
 
     return output

@@ -76,7 +76,6 @@ elif action == "validate":
                 <td style="padding: 8px 12px;">{values[12]}</td>
                 <td style="padding: 8px 12px;">{values[13]}</td>
                 <td style="padding: 8px 12px;">{values[14]}</td>
-
             </tr>
         </tbody>
     </table>
@@ -86,8 +85,8 @@ elif action == "validate":
         output_section = f"<pre>ERROR: {e}</pre>"
 elif action == "train":
     try:
-        output = run_train(BASE_DIR, form)
-        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/db_model.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
+        output , model_path = run_train(BASE_DIR, form)
+        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href={model_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
@@ -136,6 +135,7 @@ print(f"""<!DOCTYPE html>
         <input type="file" name="--db">
         <button type="submit" >Run</button>
     </form>
+    <br><br>
     {output_section if action == "train" else ""}
 
     <h2>Predict</h2>
@@ -147,6 +147,8 @@ print(f"""<!DOCTYPE html>
             <option value="--GOR3">GOR3</option>
             <option value="--GOR4">GOR4</option>
         </select>
+        <label>Custom Model</label>
+        <input type="file" name="--model_file">
         <label>FASTA (File)</label>
         <input type="file" name="--fasta">
         <label>MAF (File)</label>
