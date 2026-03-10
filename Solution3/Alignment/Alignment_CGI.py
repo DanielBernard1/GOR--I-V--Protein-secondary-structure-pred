@@ -196,7 +196,11 @@ print(f"""<!DOCTYPE html>
             <input type="text" name="ge" value="{ge}">
         </div>
         <br><br>
-
+        
+        <input type="checkbox" name="show_dp" id="show_dp">
+        <label for="show_dp">DP-Matrix &amp; Fixed Point anzeigen</label>
+        <br><br>
+        
         <input type="submit" value="Calculate Alignment">
     </form>
 
@@ -223,11 +227,11 @@ if input_type == "pdb" and pdb1_input:
             database="bioprakt15"
         )
         cursor = db.cursor()
-        cursor.execute("SELECT sequence FROM homestead WHERE pdb = %s", (pdb1_input.lower(),))
+        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb1_input.lower(),))
         row = cursor.fetchone()
         seq1 = row[0] if row else None
 
-        cursor.execute("SELECT sequence FROM homestead WHERE pdb = %s", (pdb2_input.lower(),))
+        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb2_input.lower(),))
         row = cursor.fetchone()
         seq2 = row[0] if row else None
 
@@ -286,6 +290,12 @@ print("</body>\n</html>")
 # ── DP-Matrix (optional) ─────────────────────────────────────
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
 
+fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
+fp_png  = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
+subprocess.run(["python3", "FixPoint.py", fp_file, fp_png])
+print("<h2>Fixed Point Alignment</h2>")
+print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
+
 if show_dp and seq1 and seq2 and output:
     try:
         cmd_dp = ["java", "-jar", alignment_jar,
@@ -302,10 +312,6 @@ if show_dp and seq1 and seq2 and output:
         print(dp_vis.stdout)
         print("</pre>")
 
-        fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
-        fp_png  = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
-        subprocess.run(["python3", "FixPoint.py", fp_file, fp_png])
-        print("<h2>Fixed Point Alignment</h2>")
-        print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
+
     except Exception as e:
         print(f"<p class='error'>DP-Matrix Fehler: {e}</p>")
