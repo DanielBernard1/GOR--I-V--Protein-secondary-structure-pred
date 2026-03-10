@@ -88,6 +88,7 @@ def run_predict(BASE_DIR, form):
 
 
     with open(tmp_path, "w") as f:
+        f.write("hheheh")
         f.write(output)
 
     if fasta and os.path.exists(fasta):
