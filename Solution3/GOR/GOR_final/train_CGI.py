@@ -13,11 +13,11 @@ def run_train(BASE_DIR, form):
     if method == "1":
         method= "gor1"
     elif method == "3":
-        method= "gor2"
-    elif method == "4":
         method= "gor3"
+    elif method == "4":
+        method= "gor4"
 
-    modeloutput = os.path.join(f"uploads/model{method}.txt")
+    modeloutput = os.path.join(f"uploads/{method}model.txt")
 
     with open(db_file, "w") as f:
         f.write(db)
@@ -30,4 +30,4 @@ def run_train(BASE_DIR, form):
     if db_file and os.path.exists(db_file):
         os.remove(db_file)
 
-    return result.stdout
+    return result.stdout + result.stderr, modeloutput
