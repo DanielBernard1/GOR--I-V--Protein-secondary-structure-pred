@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/biopython
 from GOR_cgi import run_predict
 from validate_cgi import run_validate
 import os
