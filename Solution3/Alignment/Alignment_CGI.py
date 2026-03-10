@@ -1,7 +1,7 @@
 #!/usr/bin/biopython
-#quelle w3school html-tutorial
+# quelle w3school html-tutorial
 
-#Autor Laura Martin+
+# Autor Laura Martin+
 import subprocess
 import mycgi
 import mysql.connector
@@ -11,32 +11,86 @@ print("Content-type: text/html\n")
 form = mycgi.Form()
 
 # Werte einlesen
-submitted  = "input_type" in form
-input_type = form["input_type"].value if submitted else ""
+if "input_type" in form:
+    submitted = True
+    input_type = form["input_type"].value
+else:
+    submitted = False
+    input_type = ""
 
-style_text = "display: block;" if input_type == "text" else "display: none;"
-style_file = "display: block;" if input_type == "file" else "display: none;"
-style_pdb  = "display: block;" if input_type == "pdb"  else "display: none;"
-style_native = "display: block;" if input_type == "native" else "display: none;"
+if input_type == "text":
+    style_text = "display: block;"
+else:
+    style_text = "display: none;"
+if input_type == "file":
+    style_file = "display: block;"
+else:
+    style_file = "display: none;"
+if input_type == "pdb":
+    style_pdb = "display: block;"
+else:
+    style_pdb = "display: none;"
+if input_type == "native":
+    style_native = "display: block;"
+else:
+    style_native = "display: none;"
 
+if "seq1" in form:
+    seq1 = form["seq1"].value
+else:
+    seq1 = ""
+if "seq2" in form:
+    seq2 = form["seq2"].value
+else:
+    seq2 = ""
+if "id1" in form:
+    id1 = form["id1"].value
+else:
+    id1 = ""
+if "id2" in form:
+    id2 = form["id2"].value
+else:
+    id2 = ""
 
-seq1 = form["seq1"].value if "seq1" in form else ""
-seq2 = form["seq2"].value if "seq2" in form else ""
-id1  = form["id1"].value  if "id1"  in form else ""
-id2  = form["id2"].value  if "id2"  in form else ""
+if "pdb1" in form:
+    pdb1_input = form["pdb1"].value.strip()
+else:
+    pdb1_input = ""
+if "pdb2" in form:
+    pdb2_input = form["pdb2"].value.strip()
+else:
+    pdb2_input = ""
 
-pdb1_input = form["pdb1"].value.strip() if "pdb1" in form else ""
-pdb2_input = form["pdb2"].value.strip() if "pdb2" in form else ""
-
-matrix  = form["matrix"].value if "matrix" in form else "dayhoff.mat"
-mode    = form["mode"].value   if "mode"   in form else "global"
-fmt     = form["format"].value if "format" in form else "html"
-go      = form["go"].value     if "go"     in form else "-12"
-ge      = form["ge"].value     if "ge"     in form else "-1"
-use_nw  = form["use_nw"].value if "use_nw" in form else "gotoh"
+if "matrix" in form:
+    matrix = form["matrix"].value
+else:
+    matrix = "dayhoff.mat"
+if "mode" in form:
+    mode = form["mode"].value
+else:
+    mode = "global"
+if "format" in form:
+    fmt = form["format"].value
+else:
+    fmt = "html"
+if "go" in form:
+    go = form["go"].value
+else:
+    go = "-12"
+if "ge" in form:
+    ge = form["ge"].value
+else:
+    ge = "-1"
+if "use_nw" in form:
+    use_nw = form["use_nw"].value
+else:
+    use_nw = "gotoh"
 show_dp = "show_dp" in form
 
-style_go = "display: none;" if use_nw == "nw" else "display: block;"
+if use_nw == "nw":
+    style_go = "display: none;"
+else:
+    style_go = "display: block;"
 
 file_error = ""
 if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
@@ -63,11 +117,9 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
     except Exception as e:
         file_error = f"ERROR reading file: {e}"
 
-
 text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
     text_error = "Fehler: Bitte beide Sequenzen eingeben."
-
 
 # HTML ZUERST DRUCKEN
 
@@ -325,13 +377,13 @@ print(f"""<!DOCTYPE html>
 
         <p style="font-size:0.8rem; color:var(--text-dim);">Own Sequences:</p>
         <input type="button" value="Enter Sequences manually" onclick="switchInput('text')">
-        
+
         <p style="font-size:0.8rem; color:var(--text-dim);">Upload pairs and seqlib File</p>
         <input type="button" value="pairs + seqlib" onclick="switchInput('native')">
 
         <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FastaFile:</p>
         <input type="button" value="Enter Fasta-File" onclick="switchInput('file')">
-        
+
         <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload PDB-IDs from the Database:</p>
         <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
 
@@ -372,7 +424,7 @@ print(f"""<!DOCTYPE html>
                 </div>
             </div>
         </div>
-        
+
         <div id="input_native" style="{style_native}">
             <p style="font-size:0.82rem; color:var(--text-dim); margin:10px 0 6px;">
                 Direkt die nativen Java-Input-Dateien hochladen. Ermöglicht mehrere Paare auf einmal.
@@ -396,25 +448,25 @@ print(f"""<!DOCTYPE html>
             <div>
                 <label class="field-label">Matrix</label>
                 <select name="matrix">
-                    <option value="dayhoff.mat"         {'selected' if matrix == 'dayhoff.mat'         else ''}>dayhoff</option>
+                    <option value="dayhoff.mat"         {'selected' if matrix == 'dayhoff.mat' else ''}>dayhoff</option>
                     <option value="BlakeCohenMatrix.mat" {'selected' if matrix == 'BlakeCohenMatrix.mat' else ''}>BlakeCohenMatrix</option>
-                    <option value="blosum62.mat"         {'selected' if matrix == 'blosum62.mat'         else ''}>BLOSUM62</option>
-                    <option value="pam250.mat"           {'selected' if matrix == 'pam250.mat'           else ''}>pam250</option>
+                    <option value="blosum62.mat"         {'selected' if matrix == 'blosum62.mat' else ''}>BLOSUM62</option>
+                    <option value="pam250.mat"           {'selected' if matrix == 'pam250.mat' else ''}>pam250</option>
                 </select>
             </div>
             <div>
                 <label class="field-label">Mode</label>
                 <select name="mode">
-                    <option value="global"    {'selected' if mode == 'global'    else ''}>global</option>
-                    <option value="local"     {'selected' if mode == 'local'     else ''}>local</option>
+                    <option value="global"    {'selected' if mode == 'global' else ''}>global</option>
+                    <option value="local"     {'selected' if mode == 'local' else ''}>local</option>
                     <option value="freeshift" {'selected' if mode == 'freeshift' else ''}>freeshift</option>
                 </select>
             </div>
             <div>
                 <label class="field-label">Output-Format</label>
                 <select name="format">
-                    <option value="html"   {'selected' if fmt == 'html'   else ''}>html</option>
-                    <option value="ali"    {'selected' if fmt == 'ali'    else ''}>ali</option>
+                    <option value="html"   {'selected' if fmt == 'html' else ''}>html</option>
+                    <option value="ali"    {'selected' if fmt == 'ali' else ''}>ali</option>
                     <option value="scores" {'selected' if fmt == 'scores' else ''}>scores</option>
                 </select>
             </div>
@@ -422,7 +474,7 @@ print(f"""<!DOCTYPE html>
                 <label class="field-label">Algorithm</label>
                 <select name="use_nw" onchange="switchGap(this.value)">
                     <option value="gotoh" {'selected' if use_nw == 'gotoh' else ''}>Gotoh</option>
-                    <option value="nw"    {'selected' if use_nw == 'nw'    else ''}>Needleman-Wunsch / Smith-Waterman</option>
+                    <option value="nw"    {'selected' if use_nw == 'nw' else ''}>Needleman-Wunsch / Smith-Waterman</option>
                 </select>
             </div>
             <div id="gap_open" style="{style_go}">
@@ -485,9 +537,9 @@ if pdb_error:
 
 # Java starten
 alignment_jar = "../finaljars/alignment.jar"
-matrix_path   = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
-seqlib_file   = "seqlib.txt"
-pairs_file    = "pairs.txt"
+matrix_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/matrices/" + matrix
+seqlib_file = "seqlib.txt"
+pairs_file = "pairs.txt"
 
 output = None
 if (use_native or (seq1 and seq2)) and not file_error and not text_error and not pdb_error and not native_error:
@@ -514,6 +566,7 @@ if output:
     print("<pre>")
 if output:
     import re
+
     java_out = output.stdout
     # Java gibt bei format=html eine komplette HTML-Seite aus — nur Body-Inhalt nehmen
     # sonst wird unsere Seite blau/kaputt durch Java-eigenes CSS
@@ -521,13 +574,15 @@ if output:
         body_match = re.search(r'<body[^>]*>(.*?)</body>', java_out, re.DOTALL | re.IGNORECASE)
         java_out = body_match.group(1).strip() if body_match else java_out
         # DESIGN: result-bar + div (nicht pre) damit Java-Spans sichtbar bleiben
-        print(f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
+        print(
+            f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
         print('<div class="result">')
         print(java_out)
         print('</div>')
     else:
         # Kein HTML-Output (ali/scores): in <pre> anzeigen
-        print(f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
+        print(
+            f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
         print('<pre class="result">')
         print(java_out)
         print('</pre>')
@@ -554,10 +609,11 @@ if show_dp and seq1 and seq2 and output:
         print("</pre>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
-        fp_png  = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
+        fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
         subprocess.run(["python3", "FixPoint.py", fp_file, fp_png])
         print("<h2>Fixed Point Alignment</h2>")
-        print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
+        print(
+            f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
     except Exception as e:
         print(f"<p class='error'>DP-Matrix Fehler: {e}</p>")
 
@@ -573,4 +629,3 @@ print("""
 </body>
 </html>
 """)
-
