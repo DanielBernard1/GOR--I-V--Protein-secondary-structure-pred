@@ -1,6 +1,14 @@
 #!/usr/bin/biopython
-from GOR_cgi import run_predict
-from validate_cgi import run_validate
-from Website_sec_create import run_seclib
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import mycgi
 print("Content-type: text/html\n")
-print("<h1>all imports ok</h1>")
+form = mycgi.Form()
+action = form.get("action")
+output_section = ""
+print(f"""<!DOCTYPE html>
+<html><body>
+<h1>GOR</h1>
+<p>action: {action}</p>
+</body></html>""")
