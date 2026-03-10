@@ -15,7 +15,7 @@ def run_seclib(BASE_DIR, form):
         output = result.stdout
 
     elif idList:
-        tmp_path = os.path.join(BASE_DIR, "tmp_idlist.txt")
+        tmp_path = os.path.join("tmp_idlist.txt")
         try:
             with open(tmp_path, "w") as f:
                 f.write(idList)
