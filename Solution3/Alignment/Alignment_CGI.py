@@ -6,7 +6,6 @@ import subprocess
 import mycgi
 import mysql.connector
 
-print("Content-type: text/html\n")
 
 form = mycgi.Form()
 
@@ -156,6 +155,34 @@ text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
     text_error = "Fehler: Bitte beide Sequenzen eingeben."
 
+pdb_error = ""
+if input_type == "pdb" and pdb1_input:
+    try:
+        db = mysql.connector.connect(
+            host="mysql2-ext.bio.ifi.lmu.de",
+            user="bioprakt15",
+            password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
+            database="bioprakt15"
+        )
+        cursor = db.cursor()
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb1_input.lower(),))
+        row = cursor.fetchone()
+        seq1 = row[0] if row else None
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
+        row = cursor.fetchone()
+        seq2 = row[0] if row else None
+        id1 = pdb1_input
+        id2 = pdb2_input
+        db.close()
+        if not seq1 or not seq2:
+            pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
+            seq1 = seq2 = ""
+    except Exception as e:
+        pdb_error = f"ERROR: Datenbankverbindung fehlgeschlagen: {e}"
+        seq1 = seq2 = ""
+
+if pdb_error:
+    print(f'<p class="error">{pdb_error}</p>')
 
 # Java starten — VOR dem HTML damit Download möglich ist
 import sys
@@ -188,6 +215,8 @@ if (use_native or (seq1 and seq2)) and not file_error and not text_error and not
         output = subprocess.run(cmd, capture_output=True, text=True)
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
+
+print("Content-type: text/html\n")
 
 if "download_output" in form:
     download_output = True
@@ -447,8 +476,8 @@ print(f"""<!DOCTYPE html>
     </a>
     <ul class="nav-links">
         <!-- Home-Link: zurück zur Hauptseite -->
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">Home</a></li>
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_CGI.py">GOR</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/Test.py">GOR</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
         <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
     </ul>
@@ -599,35 +628,7 @@ if file_error:
 if text_error:
     print(f'<p class="error">{text_error}</p>')
 
-# DB-Abfrage nach HTML
-pdb_error = ""
-if input_type == "pdb" and pdb1_input:
-    try:
-        db = mysql.connector.connect(
-            host="mysql2-ext.bio.ifi.lmu.de",
-            user="bioprakt15",
-            password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
-            database="bioprakt15"
-        )
-        cursor = db.cursor()
-        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb1_input.lower(),))
-        row = cursor.fetchone()
-        seq1 = row[0] if row else None
-        cursor.execute("SELECT sequence FROM homestrad WHERE pdb = %s", (pdb2_input.lower(),))
-        row = cursor.fetchone()
-        seq2 = row[0] if row else None
-        id1 = pdb1_input
-        id2 = pdb2_input
-        db.close()
-        if not seq1 or not seq2:
-            pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
-            seq1 = seq2 = ""
-    except Exception as e:
-        pdb_error = f"ERROR: Datenbankverbindung fehlgeschlagen: {e}"
-        seq1 = seq2 = ""
 
-if pdb_error:
-    print(f'<p class="error">{pdb_error}</p>')
 
 
 if output:
@@ -673,10 +674,11 @@ if show_dp and seq1 and seq2 and output:
             cmd_dp.append("--nw")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
-        dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_path], capture_output=True, text=True)
-        print("<h2>DP-Matrix:</h2><pre>")
+        scoring_matrix_file = dp_path + "scoring_matrix_" + matrix + ".txt"
+        dp_vis = subprocess.run(["python3", "../dp_matrix.py", scoring_matrix_file])
+        print("<div><h2>DP-Matrix:</h2>")
         print(dp_vis.stdout)
-        print("</pre>")
+        print("</div>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
         fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
