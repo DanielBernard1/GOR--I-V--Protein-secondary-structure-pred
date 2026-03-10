@@ -25,10 +25,26 @@ def get_sequence_from_db(pdb_id):
     db.close()
     return row[0] if row else None
 
-if "input_type" in form:
+submitted = "input_type" in form
+if submitted:
     input_type = form["input_type"].value
 else:
-    input_type = "text"
+    input_type = ""
+
+if input_type == "text":
+    style_text = "display: block;"
+else:
+    style_text = "display: none;"
+
+if input_type == "file":
+    style_file = "display: block;"
+else:
+    style_file = "display: none;"
+
+if input_type == "pdb":
+    style_pdb = "display: block;"
+else:
+    style_pdb = "display: none;"
 
 
 seq1= ""
@@ -170,11 +186,13 @@ print(f"""<!DOCTYPE html>
     <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py"> 
         <p>Input-Type:</p>
         <p>Enter Sequences:</p>
-        <input type="radio" name="input_type" value="text" onclick="switchInput('text')">
+        <input type="button" onclick="switchInput('text')">
         <p>Upload FasterFile: </p>
-        <input type="radio" name="input_type" value="file" onclick="switchInput('file')">
+        <input type="button" onclick="switchInput('file')">
         <p>Upload PDB-IDs form the Database: </p>
-        <input type="radio" name="input_type" value="pdb" onclick="switchInput('pdb')">
+        <input type="button" value="pdb" onclick="switchInput('pdb')">
+        
+        <input type="hidden" name="input_type" id="input_type_hidden" value="{input_type}">
         <br><br>
         
         <div id="input_text" style="display: block;">
