@@ -11,12 +11,11 @@ from Website_sec_create import run_seclib
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 form = mycgi.Form()
 action = form.get("action")
-output_section = ""
+output_section = f"<pre>action={action}, alle keys={list(form.keys())}</pre>"
 
 if action == "seclib":
     try:
         id_val = form.get("--id")
-        output_section = f"<pre>action=seclib, id={id_val}</pre>"
         output, seclib_path = run_seclib(BASE_DIR, form)
         output_section = f"<pre>{output}</pre>"
     except Exception as e:
@@ -37,6 +36,8 @@ print(f"""<!DOCTYPE html>
 <body>
 <h1>GOR Prediction</h1>
 
+<pre>DEBUG: action={action}</pre>
+
 <section>
     <h2>Sec Library</h2>
     <form method="post" enctype="multipart/form-data">
@@ -47,7 +48,7 @@ print(f"""<!DOCTYPE html>
         <input type="file" name="--idlist">
         <button type="submit">Run</button>
     </form>
-    {output_section if action == "seclib" else ""}
+    {output_section}
 </section>
 
 <section>
