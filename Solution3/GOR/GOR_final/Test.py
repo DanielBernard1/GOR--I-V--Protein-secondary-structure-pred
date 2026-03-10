@@ -15,7 +15,6 @@ form = mycgi.Form()
 action = form.getvalue("action")
 output_section = ""
 GOR_OUTPUT = os.path.join("uploads/temp_seqAndStructure.txt")
-DETAILED_PATH = os.path.join("uploads/detailedGor.txt")
 
 if action == "seclib":
     try:
@@ -34,7 +33,6 @@ elif action == "predict":
 elif action == "validate":
     try:
         output = run_validate(BASE_DIR, form)
-        print(output)
         values = [""]
         for line in output.splitlines():
             values.append(line.strip())
@@ -77,12 +75,13 @@ elif action == "validate":
                 <td style="padding: 8px 12px;">{values[11]}</td>
                 <td style="padding: 8px 12px;">{values[12]}</td>
                 <td style="padding: 8px 12px;">{values[13]}</td>
+                <td style="padding: 8px 12px;">{values[14]}</td>
 
             </tr>
         </tbody>
     </table>
 </div>
-<a href="/{DETAILED_PATH}" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">Download</a>"""
+<a href="uploads/detailedGor.txt" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">Download</a>"""
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
