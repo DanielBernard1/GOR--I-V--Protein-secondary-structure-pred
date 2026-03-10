@@ -221,23 +221,28 @@
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiACSearch.cgi">
             <label class="field-label">FASTA</label>
-            <input type="text" name="fasta" required>
+            <input type="text" name="fasta" placeholder="z.B. P12345" required>
             <input type="submit" value="Absenden">
         </form>
     </div>
 
     <div class="card">
-        <h2>SwissProt Keyword Search</h2>
-        <p>Durchsuche die SwissProt-Datenbank nach einem oder mehreren Keywords.</p>
-        <form method="post" enctype="multipart/form-data"
-              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiSPKeyword.py">
-            <label class="field-label">Keywords (kommagetrennt)</label>
-            <input type="text" name="keywords" placeholder="keyword1, keyword2..." required>
-            <label class="field-label">SwissProt File</label>
-            <input type="file" name="swissprot_file">
-            <button type="submit">Run</button>
-        </form>
-    </div>
+    <h2>PROSITE Pattern Scan</h2>
+    <p>Suche nach einem PROSITE-Pattern oder einer PROSITE-ID in einer FASTA-Datei.</p>
+    <form method="post" enctype="multipart/form-data"
+          action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiPSScan.cgi">
+
+        <label class="field-label"><input type="radio" name="mode" value="pattern" checked> Pattern</label>
+        <input type="text" name="pattern" placeholder="z.B. [A]">
+
+        <label class="field-label"><input type="radio" name="mode" value="prosite_id"> PROSITE-ID</label>
+        <input type="text" name="prosite_id" placeholder="z.B. PS00028">
+
+        <label class="field-label">FASTA-File</label>
+        <input type="file" name="file" required>
+        <input type="submit" value="Absenden">
+    </form>
+</div>
 
     <div class="card">
         <h2>PROSITE Pattern Scan</h2>
@@ -245,7 +250,7 @@
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiPSScan.cgi">
             <label class="field-label">Pattern</label>
-            <input type="text" name="pattern" placeholder="z.B. [LIVMF]-H-C-x(2)-G-x(3)-{STC}-[STAGP]-x-[LIVMFY]">
+            <input type="text" name="pattern" placeholder="z.B. [A]">
             <label class="field-label">PROSITE-ID</label>
             <input type="text" name="prosite_id" placeholder="z.B. PSxxxxx">
             <label class="field-label">FASTA-File</label>
@@ -263,7 +268,7 @@
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiGenomeLength.cgi">
             <label class="field-label">Organismen</label>
-            <input type="text" name="organisms" placeholder="human, mouse, yeast" required>
+            <input type="text" name="organisms" placeholder="Helicobacter pylori" required>
             <button type="submit">Run</button>
         </form>
     </div>
