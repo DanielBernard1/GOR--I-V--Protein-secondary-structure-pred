@@ -611,10 +611,10 @@ if input_type == "pdb" and pdb1_input:
             database="bioprakt15"
         )
         cursor = db.cursor()
-        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb = %s", (pdb1_input.lower(),))
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb1_input.lower(),))
         row = cursor.fetchone()
         seq1 = row[0] if row else None
-        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb = %s", (pdb2_input.lower(),))
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
         row = cursor.fetchone()
         seq2 = row[0] if row else None
         id1 = pdb1_input
