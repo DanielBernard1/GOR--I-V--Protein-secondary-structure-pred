@@ -57,7 +57,7 @@ if input_type == "pdb" and "pdb1" in form and form["pdb1"].value.strip():
     id2 = form["pdb2"].value
     seq1 = get_sequence_from_db(id1)
     seq2 = get_sequence_from_db(id2)
-    if seq1 is None or seq2 is None:
+    if submitted and seq1 is None or seq2 is None:
         print("<p> ERROR: PDB-ID not found</p>")
         seq1 = ""
         seq2 = ""
@@ -157,12 +157,14 @@ seqlib_file = "seqlib.txt" #wo sind die sequenzen gespeichert
 pairs_file = "pairs.txt"  #welche Sequenzpaare werden allaniert
 
 
-with open(pairs_file, "w") as f:
-    f.write(f"{id1} {id2}\n")
+if seq1 and seq2:
+    with open(pairs_file, "w") as f:
+        f.write(f"{id1} {id2}\n")
 
-with open(seqlib_file, "w") as f:
-    f.write(f"{id1}:{seq1}\n")
-    f.write(f"{id2}:{seq2}\n")
+    with open(seqlib_file, "w") as f:
+        f.write(f"{id1}:{seq1}\n")
+        f.write(f"{id2}:{seq2}\n")
+
 
 #with open("") as f:
 #    print("<h3>DP-Matrix:</h3><pre>")
@@ -171,12 +173,12 @@ with open(seqlib_file, "w") as f:
 
 
 
-input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
-                         "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt]
-if use_nw =="nw":
-    input.append("--nw")
+    input = ["java", "-jar", alignment_jar, "--pairs", pairs_file, "--seqlib", seqlib_file,
+                             "-m", matrix_path, "--mode", mode, "--go", go, "--ge", ge, "--format", fmt]
+    if use_nw =="nw":
+        input.append("--nw")
 
-output = subprocess.run(input, capture_output=True, text=True)
+    output = subprocess.run(input, capture_output=True, text=True)
 
 
 
@@ -196,6 +198,7 @@ print(f"""<!DOCTYPE html>
         document.getElementById('input_file').style.display = 'none';
         document.getElementById('input_pdb').style.display  = 'none';
         document.getElementById('input_' + type).style.display = 'block';
+        document.getElementById('input_type_hidden').value = type;
     }}
     
     function switchGap(algo) {{
