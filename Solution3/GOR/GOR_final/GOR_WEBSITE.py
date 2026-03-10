@@ -1,10 +1,13 @@
 #!/usr/bin/biopython
+import sys
+
 from GOR_cgi import run_predict
 from validate_cgi import run_validate
 import os
 import subprocess
 import mycgi
 from Website_sec_create import run_seclib
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 print("Content-type: text/html\n")
