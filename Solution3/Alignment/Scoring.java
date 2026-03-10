@@ -1,5 +1,7 @@
 //Autor David und Laura (50/50)
 
+import java.util.List;
+
 public class Scoring{
     protected final String seq1;
     protected final String seq2;
@@ -168,7 +170,24 @@ public class Scoring{
         return null;
     }
     public int[][] getScoring_matrix() {
-        DynamicProgramming dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
+        DynamicProgramming dynamicProgramming;
+        if (secStruct){
+            dynamicProgramming = new DynamicProgramming(seq1, seq2, sseq1, sseq2, substitution_matrix, secondaryStructureMatrix, gap, mode);
+        }
+        else{
+            dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
+        }
+
         return dynamicProgramming.getScoring_matrix();
+    }
+    public List<String> getTracebackIndexes(){
+        DynamicProgramming dynamicProgramming;
+        if (secStruct){
+            dynamicProgramming = new DynamicProgramming(seq1, seq2, sseq1, sseq2, substitution_matrix, secondaryStructureMatrix, gap, mode);
+        }
+        else{
+            dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
+        }
+        return dynamicProgramming.getTraceback_indexes();
     }
 }

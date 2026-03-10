@@ -189,6 +189,12 @@ public class alignment {
                         fw.write("\n");
                     }
                 }
+                try (FileWriter fw = new FileWriter("traceback_index.txt")) {
+                    List<String> indexes = scoring.getTracebackIndexes();
+                    for (String a : indexes){
+                        fw.write(a + "\n");
+                    }
+                }
             }
         }
         br.close();
@@ -258,6 +264,12 @@ public class alignment {
                             fw.write(scoring_matrix[i][j] + "\t");
                         }
                         fw.write("\n");
+                    }
+                }
+                try (FileWriter fw = new FileWriter("traceback_index.txt")) {
+                    List<String> indexes = scoring.getTracebackIndexes();
+                    for (String a : indexes){
+                        fw.write(a + "\n");
                     }
                 }
             }
@@ -344,7 +356,8 @@ public class alignment {
             line = line.trim();
             if(line.isEmpty()){continue;}
             String[] parts = line.split(":", 2);
-            map.put(parts[0].trim(), parts[1].trim());
+            map.put(parts[0].trim().replace(">", ""), parts[1].trim());
+
         }
         br.close();
         return map;
