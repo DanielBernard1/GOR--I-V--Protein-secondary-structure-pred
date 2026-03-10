@@ -447,7 +447,7 @@ print(f"""<!DOCTYPE html>
     </a>
     <ul class="nav-links">
         <!-- Home-Link: zurück zur Hauptseite -->
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_CGI.py">GOR</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
         <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
