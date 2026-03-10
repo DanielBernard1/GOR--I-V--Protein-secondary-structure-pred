@@ -506,20 +506,6 @@ if output:
     print('<p class="section-label">Benchmark</p>')
     print("<img src='benchmark.png'>")
 
-
-print("""
-</div>
-
-<!-- DESIGN: Footer wie index.html -->
-<footer>
-    <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; Gruppe 15</span>
-    <span>Alignment</span>
-</footer>
-
-</body>
-</html>
-""")
-
 # DP-Matrix und Fixpoint
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
 
@@ -546,3 +532,17 @@ if show_dp and seq1 and seq2 and output:
         print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
     except Exception as e:
         print(f"<p class='error'>DP-Matrix Fehler: {e}</p>")
+
+print("""
+</div>
+
+<!-- DESIGN: Footer wie index.html -->
+<footer>
+    <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; Gruppe 15</span>
+    <span>Alignment</span>
+</footer>
+
+</body>
+</html>
+""")
+
