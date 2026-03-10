@@ -54,8 +54,8 @@ public class DynamicProgramming extends Scoring {
                 int match;
                 if (secStruct){
                     match = scoring_matrix[i - 1][j - 1]
-                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 70
-                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 30) / 100;
+                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 30
+                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 70) / 100;
                 }
                 else {
                     match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
@@ -97,8 +97,8 @@ public class DynamicProgramming extends Scoring {
                 int match;
                 if (secStruct){
                     match = scoring_matrix[i - 1][j - 1]
-                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 70
-                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 30) / 100;
+                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 30
+                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 70) / 100;
                 }
                 else {
                     match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
@@ -158,8 +158,8 @@ public class DynamicProgramming extends Scoring {
                 int match;
                 if (secStruct){
                     match = scoring_matrix[i - 1][j - 1]
-                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 70
-                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 30) / 100;
+                            + ((substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1))) * 30
+                            + (secondaryStructureMatrix.getScore(sseq1.charAt(i-1), sseq2.charAt(j-1))) * 70) / 100;
                 }
                 else {
                     match = scoring_matrix[i - 1][j - 1] + substitution_matrix.getScore(seq1.charAt(i - 1), seq2.charAt(j - 1));
