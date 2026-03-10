@@ -8,7 +8,7 @@ print("Content-type:text/html\n\n")
 
 result = "No Organism Name entered."
 form = mycgi.Form()
-organisms_input = form.get('organisms')
+organisms_input = form.getfirst('organisms', '')
 
 organisms = [organism.strip() for organism in organisms_input.split(",") if organism.strip()]
 
