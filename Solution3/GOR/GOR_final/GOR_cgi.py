@@ -155,13 +155,12 @@ def run_predict(BASE_DIR, form):
         os.remove(custom_model)
 
     if form.getvalue("--postprocess") == "yes":
-        pp_output_path = os.path.join("uploads/temp_seqAndStructure_pp.txt")
+        pp_output_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure_pp.txt")
         try:
             postprocess(tmp_path, pp_output_path)
-        except Exception:
-            pp_output_path = None
+        except Exception as e:
+            pp_output_path = str(e)
     else:
         pp_output_path = None
 
     return output, pp_output_path
-
