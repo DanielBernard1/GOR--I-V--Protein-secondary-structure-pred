@@ -36,32 +36,29 @@
     <p>Bioinformatik-Praktikum &mdash; LMU/TUM &middot; Gruppe 15</p>
 </div>
 
-<!-- ── Content ──────────────────────────────────── -->
 <div class="page-wrapper">
 
-    <!-- Gruppe -->
     <p class="section-label">Gruppe</p>
     <div class="meta-grid">
         <div class="meta-block">
-            <h3>Mitglieder</h3>
+            <h3>Members</h3>
             <p>Toan David Huynh Ngoc<br>Laura Sophia Martin<br>Lucas Nassonov<br>Daniel Bernadi</p>
         </div>
         <div class="meta-block">
-            <h3>Gruppennummer</h3>
-            <p>Gruppe 15</p>
+            <h3>Group</h3>
+            <p>Group 15</p>
         </div>
         <div class="meta-block">
-            <h3>Betreuer</h3>
+            <h3>Supervisor</h3>
             <p>Katharina Reinisch<br>Samuel Klein</p>
         </div>
     </div>
 
-    <!-- Datenbanksuche -->
-    <p class="section-label">Datenbanksuche</p>
+    <p class="section-label">Database Search</p>
 
     <div class="card">
         <h2>AC Search</h2>
-        <p>Suche nach einer Protein-Sequenz anhand ihrer Accession Number im FASTA-Format.</p>
+        <p>Seach for a Protein Sequence with a accession number in a fasta file</p>
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiACSearch.cgi">
             <label class="field-label">FASTA</label>
@@ -72,10 +69,10 @@
 
     <div class="card">
         <h2>SwissProt Keyword Search</h2>
-        <p>Durchsuche die SwissProt-Datenbank nach einem oder mehreren Keywords.</p>
+        <p>Search for 1 or more Keywords in the Swissport Database</p>
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiSPKeyword.py">
-            <label class="field-label">Keywords (kommagetrennt)</label>
+            <label class="field-label">Keywords (Komma seperated)</label>
             <input type="text" name="keywords" placeholder="keyword1, keyword2... z.B. Antigen" required>
             <label class="field-label">SwissProt File</label>
             <input type="file" name="swissprot_file" required>
@@ -85,7 +82,7 @@
 
     <div class="card">
     <h2>PROSITE Pattern Scan</h2>
-    <p>Suche nach einem PROSITE-Pattern oder einer PROSITE-ID in einer FASTA-Datei.</p>
+    <p>Search for a PROSITE-Pattern oder -ID in a Fasta-File</p>
     <form method="post" enctype="multipart/form-data"
           action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiPSScan.cgi">
 
@@ -101,23 +98,22 @@
     </form>
 </div>
 
-    <!-- Genomanalyse & Sequenz-Pipeline -->
-    <p class="section-label">Genomanalyse &amp; Sequenz-Pipeline</p>
+    <p class="section-label">Sequence-Pipeline</p>
 
     <div class="card">
         <h2>Genome Length</h2>
-        <p>Vergleich von Genomlängen verschiedener Organismen.</p>
+        <p>Compare Genomlength of different Organismn</p>
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/cgiGenomeLength.cgi">
-            <label class="field-label">Organismen</label>
+            <label class="field-label">Organismn</label>
             <input type="text" name="organisms" placeholder="Helicobacter pylori" required>
             <button type="submit">Run</button>
         </form>
     </div>
 
     <div class="card">
-        <h2>Pipeline — FASTA zu Protein</h2>
-        <p>Analysiert eine FASTA-Datei zusammen mit einer Feature-Datei und übersetzt die Sequenz in ein Protein.</p>
+        <h2>Pipeline — FASTA to Protein</h2>
+        <p>Analyse a Fasta and a Features File und translate it into a Protein</p>
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/Pipeline_10.cgi">
             <div class="param-grid">
@@ -136,7 +132,7 @@
         <hr class="card-divider">
 
         <h2>DNA &rarr; ORFs (via Locus-Tag)</h2>
-        <p>Nur DNA zu ORFs übersetzen.</p>
+        <p>Only DNA to ORFs</p>
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/cgiFiles/genome2orf.cgi">
             <div class="param-grid">
@@ -155,7 +151,7 @@
         <hr class="card-divider">
 
         <h2>mRNA &rarr; Protein (via Locus-Tag)</h2>
-        <p>Nur mRNA zu Aminosäuresequenz übersetzen.</p>
+        <p>Only mRNA to Aminoacid</p>
         <form method="post" enctype="multipart/form-data"
               action="https://bioclient1.bio.ifi.lmu.de/~huynhngoc/propragruppe15/Solution1/cgiFiles/mrna2aa.cgi">
             <label class="field-label">FASTA-File</label>
@@ -164,7 +160,7 @@
         </form>
     </div>
 
-    <!-- Strukturvergleich -->
+
     <p class="section-label">Strukturvergleich</p>
 
     <div class="card">
@@ -186,72 +182,6 @@
             <button type="submit">Run</button>
         </form>
     </div>
-
-    <!-- Alignment -->
-    <p class="section-label">Alignment Calculator</p>
-    <div class="card">
-        <h2>Pairwise Sequence Alignment</h2>
-        <p>Paarweises Alignment mit Gotoh / Needleman-Wunsch — globales, lokales und Freeshift-Alignment mit wählbarer Substitutionsmatrix.</p>
-        <form method="post" enctype="multipart/form-data"
-              action="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI.py">
-
-            <div class="param-grid">
-                <div>
-                    <label class="field-label">ID 1</label>
-                    <input type="text" name="id1" value="seq1" required>
-                </div>
-                <div>
-                    <label class="field-label">ID 2</label>
-                    <input type="text" name="id2" value="seq2" required>
-                </div>
-            </div>
-
-            <label class="field-label">Sequenz 1</label>
-            <textarea name="seq1" rows="3" required></textarea>
-            <label class="field-label">Sequenz 2</label>
-            <textarea name="seq2" rows="3" required></textarea>
-
-            <div class="param-grid">
-                <div>
-                    <label class="field-label">Matrix</label>
-                    <select name="matrix">
-                        <option value="dayhoff.mat">Dayhoff</option>
-                        <option value="blosum62.mat">BLOSUM62</option>
-                        <option value="pam250.mat">PAM250</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="field-label">Modus</label>
-                    <select name="mode">
-                        <option value="global">Global</option>
-                        <option value="local">Local</option>
-                        <option value="freeshift">Freeshift</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="field-label">Format</label>
-                    <select name="format">
-                        <option value="ali">ALI</option>
-                        <option value="scores">Scores</option>
-                        <option value="html">HTML</option>
-                    </select>
-                </div>
-                <div></div>
-                <div>
-                    <label class="field-label">Gap Open</label>
-                    <input type="text" name="go" value="-12">
-                </div>
-                <div>
-                    <label class="field-label">Gap Extend</label>
-                    <input type="text" name="ge" value="-1" required>
-                </div>
-            </div>
-
-            <button type="submit">Run</button>
-        </form>
-    </div>
-
-
 
 </div>
 
