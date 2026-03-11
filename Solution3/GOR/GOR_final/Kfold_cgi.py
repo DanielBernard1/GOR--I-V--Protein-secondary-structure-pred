@@ -76,6 +76,7 @@ def kfold(BASE_DIR, form):
             "--model", model_file
 
         ], capture_output=True, text=True)
+        return f"<pre>TRAIN stdout: {train_result.stdout}\nTRAIN stderr: {train_result.stderr}\ngorType: {gorType}</pre>"
 
         with open(test_fasta, "w") as f:
             for p in split["test"]:

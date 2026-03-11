@@ -158,7 +158,7 @@ print(f"""<!DOCTYPE html>
             <option value="--GOR3">GOR3</option>
             <option value="--GOR4">GOR4</option>
         </select>
-        <label>Custom Model</label>
+        <label>Custom Model (pls use the same filename as provided by the generator or use the format gorXmodel.txt)</label>
         <input type="file" name="--model_file">
         <label>FASTA (File)</label>
         <input type="file" name="--fasta">
