@@ -166,7 +166,7 @@ print(f"""<!DOCTYPE html>
         <br><br>
     
         <label>
-            <input type="checkbox" name="--postprocess" value="yes"> Post-Processing
+            <label><input type="checkbox" name="--postprocess" value="yes" style="width:auto;"> Post-Processing</label>
         </label>
         <br><br>
     
