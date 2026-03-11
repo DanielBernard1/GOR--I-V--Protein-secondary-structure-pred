@@ -205,6 +205,9 @@ public class Scoring{
             dp = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
         }
         dp.getScoring_matrix();
+        if (mode.isGlobal())   dp.NW_alignment();
+        if (mode.isLocal())    dp.SW_alignment();
+        if (mode.isFreeshift()) dp.FS_alignment();
         return dp.getTracebackIndexes();
     }
 }
