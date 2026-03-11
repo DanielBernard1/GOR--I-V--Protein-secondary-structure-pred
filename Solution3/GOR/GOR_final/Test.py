@@ -18,12 +18,17 @@ action = form.getvalue("action")
 output_section = ""
 GOR_OUTPUT = os.path.join("uploads/temp_seqAndStructure.txt")
 
+
 if action == "seclib":
     try:
-        output, seclib_path = run_seclib(BASE_DIR, form)
-        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href={seclib_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
+        output, seclib_path, fasta_path = run_seclib(BASE_DIR, form)
+        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
+        output_section += f"<a href={seclib_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Seclib</a>"
+        if fasta_path:
+            output_section += f" <a href='uploads/sec_lib.fasta' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download FASTA</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
+
 elif action == "predict":
     try:
         output, pp_path = run_predict(BASE_DIR, form)
@@ -130,7 +135,6 @@ print(f"""<!DOCTYPE html>
 <html>
 <head>
     <title>GOR</title>
-    <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
     <style>
         body {{ font-family: monospace; max-width: 1700px; margin: auto; padding: 2rem; }}
         section {{ border: 1px solid #ccc; padding: 1rem; margin-bottom: 1.5rem; }}
@@ -141,7 +145,6 @@ print(f"""<!DOCTYPE html>
 </head>
 <body>
 <h1>GOR Prediction</h1>
-
 <section>
     <h2>Sec Library</h2>
     <form method="post" enctype="multipart/form-data">
@@ -150,7 +153,11 @@ print(f"""<!DOCTYPE html>
         <input type="text" name="--id" placeholder="z.B. 2MZ9">
         <label>oder ID-Liste (File)</label>
         <input type="file" name="--idlist">
-        <button type="submit" >Run</button>
+        <label>
+            <input type="checkbox" name="--generate_fasta" value="yes" style="width:auto;"> Generate FASTA
+        </label>
+        <br><br>
+        <button type="submit">Run</button>
     </form>
     {output_section if action == "seclib" else ""}
 </section>
@@ -263,5 +270,6 @@ print(f"""<!DOCTYPE html>
         {output_section if action == "visualise" else ""}
     </div>
 </section>
+
 </body>
 </html>""")
