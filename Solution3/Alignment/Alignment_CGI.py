@@ -184,7 +184,6 @@ if input_type == "pdb" and pdb1_input:
         row = cursor.fetchone()
         seq1 = row[0] if row else None
         cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
-        print(f'<p class="error">seq1={seq1} seq2={seq2}</p>')
         row = cursor.fetchone()
         seq2 = row[0] if row else None
         id1 = pdb1_input
