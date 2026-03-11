@@ -26,7 +26,7 @@ public class FixedPoint {
         for(int i = 0; i<= seq1.length(); i++){
             forward[i][0] = i* gap;
         }
-        for(int j=0; j<seq2.length(); j++){
+        for(int j=0; j<= seq2.length(); j++){
             forward[0][j] = j*gap;
         }
         for (int i = 1; i <= seq1.length(); i++) {
@@ -51,7 +51,7 @@ public class FixedPoint {
         for(int i = 0; i<= seq1.length(); i++){
             backward[i][0] = i* gap;
         }
-        for(int j=0; j<seq2.length(); j++){
+        for(int j=0; j<=seq2.length(); j++){
             backward[0][j] = j*gap;
         }
         for (int i = 1; i <= seq1.length(); i++) {

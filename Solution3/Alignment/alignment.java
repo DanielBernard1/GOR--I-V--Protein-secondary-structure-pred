@@ -195,9 +195,12 @@ public class alignment {
                     }
                 }
                 try (FileWriter fw = new FileWriter(trace)) {
-                    List<String> indexes = scoring.getTracebackIndexes();
-                    for (String a : indexes){
-                        fw.write(a + "\n");
+                    char[][] tracing = scoring.getTraceback();
+                    for (char[] a : tracing){
+                        for (char b : a){
+                            fw.write(b + "\t");
+                        }
+                        fw.write("\n");
                     }
                 }
             }
@@ -277,9 +280,12 @@ public class alignment {
                     }
                 }
                 try (FileWriter fw = new FileWriter(trace)) {
-                    List<String> indexes = scoring.getTracebackIndexes();
-                    for (String a : indexes){
-                        fw.write(a + "\n");
+                    char[][] tracing = scoring.getTraceback();
+                    for (char[] a : tracing){
+                        for (char b : a){
+                            fw.write(b + "\t");
+                        }
+                        fw.write("\n");
                     }
                 }
             }

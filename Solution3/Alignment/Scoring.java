@@ -90,7 +90,7 @@ public class Scoring{
 
         return new finalAlignment(align[0], align[1], score);
     }
-
+    //Nur zur Verifizierung wollen das nicht mit ausgeben
     public double Rec_score(){
         return new Recursion(seq1, seq2, substitution_matrix, gap, mode).score() / 100.0;
     }
@@ -157,7 +157,13 @@ public class Scoring{
     }
 
     public String[] Gotoh_alignment(){
-        Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
+        Gotoh gotoh;
+        if (secStruct){
+            gotoh = new Gotoh(seq1, seq2, sseq1, sseq2, substitution_matrix, secondaryStructureMatrix, go, ge, mode);
+        }
+        else {
+            gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
+        }
         if (mode.isGlobal()){
             return gotoh.Global_alignment();
         }
@@ -180,7 +186,7 @@ public class Scoring{
 
         return dynamicProgramming.getScoring_matrix();
     }
-    public List<String> getTracebackIndexes(){
+    public char[][] getTraceback(){
         DynamicProgramming dynamicProgramming;
         if (secStruct){
             dynamicProgramming = new DynamicProgramming(seq1, seq2, sseq1, sseq2, substitution_matrix, secondaryStructureMatrix, gap, mode);
@@ -188,6 +194,6 @@ public class Scoring{
         else{
             dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
         }
-        return dynamicProgramming.getTraceback_indexes();
+        return dynamicProgramming.getTraceback();
     }
 }

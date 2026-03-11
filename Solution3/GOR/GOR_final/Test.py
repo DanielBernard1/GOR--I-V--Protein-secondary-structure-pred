@@ -2,6 +2,7 @@
 import sys
 import os
 
+from visualie_cgi import run_visualieze
 from train_CGI import run_train
 from validate_cgi import run_validate
 
@@ -34,6 +35,12 @@ elif action == "predict":
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
+elif action == "visualise":
+    try:
+        output_section = run_visualieze(form)
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
+
 
 elif action == "validate":
     try:
@@ -48,7 +55,7 @@ elif action == "validate":
         <thead>
             <tr style="background: #2c3e50; color: white;">
                 <th style="padding: 8px 12px;">Fold</th>
-                <th style="padding: 8px 12px;">Proteins</th>
+                <th style="padding: 8px 12px;">Nr of Prot</th>
                 <th style="padding: 8px 12px;">Mean Length</th>
                 <th style="padding: 8px 12px;">Sum Length</th>
                 <th style="padding: 8px 12px;">Sum Predicted</th>
@@ -108,7 +115,7 @@ print(f"""<!DOCTYPE html>
 <head>
     <title>GOR</title>
     <style>
-        body {{ font-family: monospace; max-width: 1000px; margin: auto; padding: 2rem; }}
+        body {{ font-family: monospace; max-width: 1700px; margin: auto; padding: 2rem; }}
         section {{ border: 1px solid #ccc; padding: 1rem; margin-bottom: 1.5rem; }}
         input, select, textarea {{ width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box;}}
         button {{ background: #2c3e50; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer; }}
@@ -207,13 +214,37 @@ print(f"""<!DOCTYPE html>
             <option value="gor4">GOR4</option>
         </select>
         <label>Fold Count</label>
-        <input type="number" name="--foldcount" value="5" min="2" max="20">
+        <input type="number" name="--foldcount" value="5" min="2" max="10">
         <label>Input Database</label>
             <input type="file" name="--input_seclib">
         <button type="submit">Run</button>
     </form>
     {output_section if action == "kfold" else ""}
 </section>
+<section>
+<h2>Validate</h2>
+       <p class="section-label">3D Visualisation</p>
 
+    <div class="card">
+        <h2>Struktur-Vergleich</h2>
+        <p>Vergleicht GOR-Prediction mit PDB-Referenzstruktur in 3D (JSmol). Erst Predict ausf&uuml;hren.</p>
+        <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="visualise">
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">PDB-ID</label>
+                    <input type="text" name="--vis_pdb" placeholder="z.B. 1a2p" required>
+                </div>
+                <div>
+                    <label class="field-label">GOR-Output (optional)</label>
+                    <input type="file" name="--vis_gorout">
+                </div>
+            </div>
+            <button type="submit">Visualise</button>
+        </form>
+        {output_section if action == "visualise" else ""}
+    </div>
+</section>
 </body>
 </html>""")

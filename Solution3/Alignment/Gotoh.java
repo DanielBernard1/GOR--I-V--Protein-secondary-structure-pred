@@ -1,14 +1,20 @@
 //Autor: Laura Martin
 
 public class Gotoh extends Scoring{
-    private enum State{M, Gx, Gy} //traceback
-    private int[][] M, Gx, Gy;
+    //State in dem wir sind
+    //M: Match/Missmatch --> diagonal
+    //Gx: Gap in Seq2 --> oben
+    //Gy: Gap in Seq1 --> links
 
-    private final int go;
-    private final int ge;
+    private enum State{M, Gx, Gy} //traceback
+    private int[][] M, Gx, Gy;//alle 3 initialisieren
+
+    //affine gap penalty = go + l*ge
+    private final int go;//open
+    private final int ge;//extend
     private final int min_inf = -10000000;
 
-    //Pointer für Traceback
+    //Pointer für Traceback --> Aus welcher Matrix kam letzter Wert
     private State[][] prevM;
     private State[][] prevGx;
     private State[][] prevGy;
@@ -37,12 +43,13 @@ public class Gotoh extends Scoring{
         int[][] Gy = new int[seq1.length()+1][seq2.length()+1];
         prevGy = new State[seq1.length()+1][seq2.length()+1];//pointer
 
+        //ganz rechts oben -->Erster wert (wird nicht von Seq überdeckt oder von beiden (einzel initialisierung))
         M[0][0] = 0;
         Gx[0][0] = min_inf;
         Gy[0][0] = min_inf;
         prevM[0][0] = State.M;
 
-        //gap in Seq1, nach links
+        //gap in Seq1, nach links --> initialisierung erste Zeile
         for(int j=1; j<=seq2.length(); j++){
             M[0][j] = min_inf;
             Gx[0][j] = min_inf;
@@ -50,7 +57,7 @@ public class Gotoh extends Scoring{
 
             prevGy[0][j] = State.Gy;
         }
-        //gap in Seq2, nach oben
+        //gap in Seq2, nach oben --> Initialisierung erste Spalte
         for(int i=1; i<=seq1.length(); i++){
             M[i][0] = min_inf;
             Gx[i][0] = go + i*ge;
@@ -58,19 +65,20 @@ public class Gotoh extends Scoring{
 
             prevGx[i][0] = State.Gx;
         }
-        //noch mit einbeziehung Match/Mismatch --> Matrix M
+        //noch mit einbeziehung Match/Mismatch --> Matrix M// hier gehen wir immer alle möglichen Pfade also dia/li/oben
+        //und wählen den der für die jeweilige Stelle (i,j) am besten geeignet ist
         for(int i =1; i<= seq1.length(); i++){
             for(int j = 1; j<= seq2.length(); j++){
 
-                //Start Traceback pointer
-                int fromM = M[i-1][j-1];
-                int fromGx = Gx[i-1][j-1];
-                int fromGy = Gy[i-1][j-1];
+                //wir gehen diagonal, was war bester Score vor Match/Missmatch
+                int fromM = M[i-1][j-1]; //aktuell bester score aus M
+                int fromGx = Gx[i-1][j-1]; //aktuell bester score aus Gx
+                int fromGy = Gy[i-1][j-1]; //aktuell bester score aus Gy
 
-                int bestPrev = fromM;
-                State preState = State.M;
+                int bestPrev = fromM;//erstmal M am besten
+                State preState = State.M;//State geht immer damit einher was gerade aktuell das beste ist
 
-                if(fromGx > bestPrev){
+                if(fromGx > bestPrev){ //
                     bestPrev = fromGx;
                     preState = State.Gx;
                 }
@@ -79,19 +87,20 @@ public class Gotoh extends Scoring{
                     preState = State.Gy;
                 }
 
-                M[i][j] = bestPrev + diaScore(i,j);
+                M[i][j] = bestPrev + diaScore(i,j);//Mit scoring Matrix eingerechneter Wert in Matrix eingetragen
                 prevM[i][j] = preState;
                 //Ende Tracebackpointer
 
+                //jetzt gehen wir eins nach oben und vergleichen
                 //Gap in seq2 (up)
                 int gxOpen_M  = M[i-1][j]  + go + ge;
                 int gxOpen_Gy = Gy[i-1][j] + go + ge; // habe vergessen diesen case miteinzubeziehen grrrr
-                int gxExtend      = Gx[i-1][j] + ge;
+                int gxExtend  = Gx[i-1][j] + ge;// Gap geht weiter
 
-                int gxBest = Math.max(gxOpen_M, Math.max(gxOpen_Gy, gxExtend));
-                Gx[i][j] = gxBest;
+                int gxBest = Math.max(gxOpen_M, Math.max(gxOpen_Gy, gxExtend));//beste der 3 Optionen von oben
+                Gx[i][j] = gxBest;//Speichern wir in der Matrix
 
-                // Pointer Gx: extend bevorzugt, dann Gy-Öffnung, dann M-Öffnung
+                // Pointer Gx: extend bevorzugt, dann Gy-Öffnung, dann M-Öffnung-> muss nur einheitlich sein
                 if(gxExtend >= gxOpen_M && gxExtend >= gxOpen_Gy){
                     prevGx[i][j] = State.Gx;
                 }else if(gxOpen_Gy >= gxOpen_M){
@@ -118,6 +127,7 @@ public class Gotoh extends Scoring{
                 }
             }
         }
+        //Abspeichern aktueller Matrizen --> Brauchen wir für traceback
         this.M = M;
         this.Gx = Gx;
         this.Gy = Gy;
@@ -126,9 +136,9 @@ public class Gotoh extends Scoring{
         return Math.max(M[seq1.length()][seq2.length()], maxGxGy);
     }
 
-    //In welcher Matrix starten wir:
+    //In welcher Matrix starten wir: -->STARTPUNKT
     public String[] Global_alignment(){
-        Global_score();
+        Global_score();//Holen uns die fertig gefüllten Matrizen
         //Matrix mit bestem Endwert?
         State state = State.M;
         int best = M[seq1.length()][seq2.length()];
@@ -141,7 +151,7 @@ public class Gotoh extends Scoring{
             best = Gy[seq1.length()][seq2.length()];
             state = State.Gy;
         }
-        return Global_alignment(seq1.length(), seq2.length(), state);
+        return Global_alignment(seq1.length(), seq2.length(), state);//wissen jetzt in welchem State wir starten
     }
 
     //Traceback Global -->  bauen die alignments von hinten auf
@@ -149,7 +159,8 @@ public class Gotoh extends Scoring{
         StringBuilder align1 = new StringBuilder();
         StringBuilder align2 = new StringBuilder();
 
-        while(i>0 || j>0){
+        while(i>0 || j>0){//solange nicht ganz obe  rechts
+            //diagonal
             if(state == State.M){
                 align1.append(seq1.charAt(i-1));
                 align2.append(seq2.charAt(j-1));
@@ -158,12 +169,14 @@ public class Gotoh extends Scoring{
                 j= j-1;
             }
             else{
+                //Gap in Seq2
                 if (state == State.Gx){
                     align1.append(seq1.charAt(i-1));
                     align2.append("-");
                     state = prevGx[i][j];
                     i = i-1;
                 }else{
+                    //Gap in Seq1
                     align1.append("-");
                     align2.append(seq2.charAt(j-1));
                     state = prevGy[i][j];
@@ -171,7 +184,9 @@ public class Gotoh extends Scoring{
                 }
             }
         }
+        //String Liste mit beiden Alignments
         String[] alignment = new String[2];
+        //hatten das ganze von hinten aufgebaut --> reverse
         String al1 = align1.reverse().toString();
         String al2 = align2.reverse().toString();
 
@@ -202,6 +217,7 @@ public class Gotoh extends Scoring{
         int[][] Gy = new int[seq1.length()+1][seq2.length()+1];
         prevGy = new State[seq1.length()+1][seq2.length()+1];//pointer
 
+        //geringster Wert 0
         //erste Zeile auf 0 initialisieren
         for(int i=0; i<= seq1.length(); i++){
             M[i][0] = 0;
@@ -223,6 +239,7 @@ public class Gotoh extends Scoring{
 
         for(int i=1; i <= seq1.length(); i++){
             for(int j=1; j<= seq2.length(); j++){
+
                 int fromM = M[i-1][j-1];
                 int fromGx = Gx[i-1][j-1];
                 int fromGy = Gy[i-1][j-1];
@@ -238,7 +255,7 @@ public class Gotoh extends Scoring{
                     best = fromGy;
                     preState = State.Gy;
                 }
-                int maxVal = best + diaScore(i,j);
+                int maxVal = best + diaScore(i,j);//Scoring Matrix miteinbezogen
                 if(maxVal < 0){
                     maxVal = 0; //alle negativen wert in matrix werden auf 0 gebracht
                 }
@@ -292,7 +309,7 @@ public class Gotoh extends Scoring{
                     einzelState = State.Gy;
                 }
 
-
+                //zusätzlich bester Wert der Matrix für Traceback
                 if(einzelBest > bestLocal){
                     bestLocal = einzelBest;
                     bestX = i;
@@ -326,7 +343,7 @@ public class Gotoh extends Scoring{
 
         while (true) {
             if (state == State.M) {
-                if (M[i][j] == 0) {
+                if (M[i][j] == 0) { //Sind fertig sobald wir bei einer 0 angekommen sind
                     break;
                 }
                 align1.append(seq1.charAt(i - 1));
