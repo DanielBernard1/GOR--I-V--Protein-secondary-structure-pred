@@ -230,12 +230,13 @@ print(f"""<!DOCTYPE html>
     {output_section if action == "kfold" else ""}
 </section>
 <section>
-<h2>Validate</h2>
+<h2>3D Protein</h2>
        <p class="section-label">3D Visualisation</p>
 
     <div class="card">
-        <h2>Struktur-Vergleich</h2>
-        <p>Vergleicht GOR-Prediction mit PDB-Referenzstruktur in 3D (JSmol). Erst Predict ausf&uuml;hren.</p>
+        <h2></h2>
+        <p>3D model of protein</p>
+        <p>For comparison of GOR-Prediction with observed in 3D (JSmol) attach gor output file</p>
         <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="visualise">
@@ -245,7 +246,7 @@ print(f"""<!DOCTYPE html>
                     <input type="text" name="--vis_pdb" placeholder="z.B. 1a2p" required>
                 </div>
                 <div>
-                    <label class="field-label">GOR-Output (optional)</label>
+                    <label class="field-label">GOR-Output</label>
                     <input type="file" name="--vis_gorout">
                 </div>
             </div>

@@ -19,8 +19,8 @@ def run_visualieze(form):
             else:
                 f.write(gorout_upload)
 
-    html_filename = f"uploads/{pdb_id.upper()}.html"
-    html_file = os.path.join("uploads", html_filename)
+    html_file = os.path.join("uploads", f"{pdb_id.upper()}.html")
+
 
     result = subprocess.run([
         "python3", "visualisediff2.py",
