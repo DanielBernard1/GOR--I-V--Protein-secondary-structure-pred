@@ -188,7 +188,7 @@ print(f"""<!DOCTYPE html>
         </label>
         <br><br>
         <label>Post-Processing Window Size</label>
-<input type="number" name="--windowsize" value="7" min="3" max="2" step="2">
+<input type="number" name="--windowsize" value="7" min="3" max="20" step="2">
 <br><br>
     
         <button type="submit" >Run</button>
