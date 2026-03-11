@@ -9,6 +9,8 @@ import mysql.connector
 
 form = mycgi.Form()
 
+print ("Content-type: text/html\n")
+
 # Werte einlesen
 if "input_type" in form:
     submitted = True
@@ -103,8 +105,44 @@ if use_nw == "nw":
     style_go = "display: none;"
 else:
     style_go = "display: block;"
+    
+try:
+    int(go)
+except ValueError:
+    go = "-12"
+    
+try:
+    int(ge)
+except ValueError:
+    go = "-"
+
+import re as _re
+def safe_id(val):
+    return _re.sub(r"[^\w\-]", "_", val)[:50]
+
+id1 = safe_id(id1)
+id2 = safe_id(id2)
+
+val_AA = set("ACDEFGHIKLMNPQRSTVWY")
+def clean_seq(seq):
+    seq = seq.upper()
+    invalid = set(seq) - val_AA - {" ", "\n"}
+    if invalid:
+        return None
+    return seq
+    
+seq1 = clean_seq(seq1)
+seq2 = clean_seq(seq2)
+
+if seq1 is None:
+    text_error = "ERROR: Sequence 1 contains invalid characters. Only amino acid letters allowed (ACDEFGHIKLMNPQRSTVWY)."
+    seq1 = ""
+if seq2 is None:
+    text_error = "ERROR: Sequence 2 contains invalid characters. Only amino acid letters allowed (ACDEFGHIKLMNPQRSTVWY)."
+    seq2 = ""
 
 file_error = ""
+#Fasta File
 if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
     try:
         content = form["seqfile"].file.read().decode("utf-8")
@@ -126,6 +164,11 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
         else:
             id1, seq1 = entries[0]
             id2, seq2 = entries[1]
+            if len(seq1) == 0 or len(seq2) == 0:
+                file_error = "ERROR: One or both sequences are empty after parsing."
+
+    except UnicodeDecodeError:
+        file_error = "ERROR: File is not valid."
     except Exception as e:
         file_error = f"ERROR reading file: {e}"
 
@@ -136,58 +179,68 @@ if input_type == "native":
     pairs_ok  = "pairs_file"  in form and hasattr(form["pairs_file"],  "file") and form["pairs_file"].filename
     seqlib_ok = "seqlib_file" in form and hasattr(form["seqlib_file"], "file") and form["seqlib_file"].filename
     if not pairs_ok or not seqlib_ok:
-        native_error = "ERROR: Bitte beide Dateien hochladen (pairs.txt und seqlib.txt)."
+        native_error = "ERROR: Please insert both Files (pairs.txt and seqlib.txt)."
     else:
         try:
             pairs_content  = form["pairs_file"].file.read().decode("utf-8")
             seqlib_content = form["seqlib_file"].file.read().decode("utf-8")
-            with open("pairs.txt", "w") as f:
-                f.write(pairs_content)
-            with open("seqlib.txt", "w") as f:
-                f.write(seqlib_content)
-            use_native = True
-            first_pair = pairs_content.strip().splitlines()[0].split()
-            if len(first_pair) >= 2:
-                id1 = first_pair[0]
-                id2 = first_pair[1]
+            if pairs_content.strip():
+                first_pair = pairs_content.strip().splitlines()[0].split()
+            else:
+                first_pair = []
+            if len(first_pair)<2:
+                native_error = "ERROR: pairs.txt must contain at least one line with two IDs."
+            else:
+                with open("pairs.txt", "w") as f:
+                    f.write(pairs_content)
+                with open("seqlib.txt", "w") as f:
+                    f.write(seqlib_content)
+                use_native = True
+
+                id1 = safe_id(first_pair[0])
+                id2 = safe_id(first_pair[1])
+
+        except UnicodeDecodeError:
+            file_error = "ERROR: File is not valid."
         except Exception as e:
-            native_error = f"ERROR beim Einlesen der Dateien: {e}"
+            native_error = f"ERROR while reading the file: {e}"
 
 # pdb_error hier initialisieren damit Java-Bedingung unten funktioniert
 pdb_error = ""
 
 text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
-    text_error = "Fehler: Bitte beide Sequenzen eingeben."
+    text_error = "ERROR: Please insert both Sequences."
 
 pdb_error = ""
 if input_type == "pdb" and pdb1_input:
-    try:
-        db = mysql.connector.connect(
-            host="mysql2-ext.bio.ifi.lmu.de",
-            user="bioprakt15",
-            password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
-            database="bioprakt15"
-        )
-        cursor = db.cursor()
-        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb1_input.lower(),))
-        row = cursor.fetchone()
-        seq1 = row[0] if row else None
-        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
-        row = cursor.fetchone()
-        seq2 = row[0] if row else None
-        id1 = pdb1_input
-        id2 = pdb2_input
-        db.close()
-        if not seq1 or not seq2:
-            pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
+    if not _re.match(r"^[A-Z0-9]{4,8}$", pdb1_input)or not _re.match(r"^[A-Za-z0-9]{4,8}$", pdb2_input):
+        pdb_error = "ERROR: Invalid PDB-ID format."
+    else:
+        try:
+            db = mysql.connector.connect(
+                host="mysql2-ext.bio.ifi.lmu.de",
+                user="bioprakt15",
+                password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
+                database="bioprakt15"
+            )
+            cursor = db.cursor()
+            cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb1_input.lower(),))
+            row = cursor.fetchone()
+            seq1 = row[0] if row else None
+            cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
+            row = cursor.fetchone()
+            seq2 = row[0] if row else None
+            id1 = pdb1_input
+            id2 = pdb2_input
+            db.close()
+            if not seq1 or not seq2:
+                pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
+                seq1 = seq2 = ""
+        except Exception as e:
+            pdb_error = f"ERROR: Datenbankverbindung fehlgeschlagen: {e}"
             seq1 = seq2 = ""
-    except Exception as e:
-        pdb_error = f"ERROR: Datenbankverbindung fehlgeschlagen: {e}"
-        seq1 = seq2 = ""
 
-if pdb_error:
-    print(f'<p class="error">{pdb_error}</p>')
 
 # Java starten — VOR dem HTML damit Download möglich ist
 import sys
@@ -221,7 +274,6 @@ if (use_native or (seq1 and seq2)) and not file_error and not text_error and not
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
-print("Content-type: text/html\n")
 
 if "download_output" in form:
     download_output = True
