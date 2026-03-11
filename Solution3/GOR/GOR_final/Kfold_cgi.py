@@ -105,6 +105,7 @@ def kfold(BASE_DIR, form):
              "-d", DETAILED_PATH,
              "-f", "txt"],
             capture_output=True, text=True)
+        return f"<pre>validate stdout: {validate_output.stdout}\nvalidate stderr: {validate_output.stderr}\nfoldvalues: {foldvalues}</pre>"
 
         foldvalues = []
         for line in validate_output.stdout.splitlines():
