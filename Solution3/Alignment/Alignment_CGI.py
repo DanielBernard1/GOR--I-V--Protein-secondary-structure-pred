@@ -501,8 +501,11 @@ print(f"""<!DOCTYPE html>
         <p style="font-size:0.8rem; color:var(--text-dim);">Upload pairs and seqlib File</p>
         <input type="button" value="pairs + seqlib" onclick="switchInput('native')">
 
-        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FastaFile:</p>
-        <input type="button" value="Enter Fasta-File" onclick="switchInput('file')">
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Enter Seqlib file including Secondary Structure:</p>
+        <input type="button" value="seqlib+SS and pairs" onclick="switchInput('native')">
+        
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FASTA-File:</p>
+        <input type="button" value="Enter FASTA-File" onclick="switchInput('file')">
 
         <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload PDB-IDs from the Database:</p>
         <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
