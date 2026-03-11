@@ -1,6 +1,6 @@
 #!/usr/bin/biopython
 # quelle w3school html-tutorial
-import re
+
 # Autor Laura Martin+
 import subprocess
 import mycgi
@@ -652,8 +652,10 @@ if text_error:
 
 if output:
     print("<pre>")
+
 if java_error:
     print (f"<p class='error'>{java_error}</p>")
+
 if output:
     import re
     java_out = output.stdout
@@ -676,7 +678,7 @@ if output:
         print('</pre>')
 
         print('<p class="section-label">Graphics</p>')
-    #print("<img src='benchmark.png'>")
+        print("<img src='benchmark.png'>")
 
 # DP-Matrix und Fixpoint
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
