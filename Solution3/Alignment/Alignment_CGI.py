@@ -675,7 +675,7 @@ if show_dp and seq1 and seq2 and output:
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
         scoring_matrix = dp_path + "scoring_matrix.txt"
-        traceback_matrix = dp_path + "traceback_matrix.txt"
+        traceback_matrix = dp_path + "traceback_index.txt"
         dp_png = dp_path + f"dp_matrix_{id1}_{id2}.png"
         result = subprocess.run(["python3", "dp_matrix.py", scoring_matrix, traceback_matrix, dp_png], capture_output=True, text=True)
         print("<h2>DP-Matrix:</h2>")
