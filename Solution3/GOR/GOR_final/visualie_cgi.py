@@ -1,34 +1,27 @@
-import os
-import subprocess
-
-
 def run_visualieze(form):
-    pdb_id = form.getvalue("--vis_pdb").strip()
+    pdb_id = form.getvalue("--vis_pdb")
 
+    # Debug: zeig was ankommt
+    if not pdb_id:
+        return "<pre>ERROR: pdb_id ist None/leer</pre>"
 
+    pdb_id = pdb_id.strip()
     gorout = os.path.join("uploads", "temp_seqAndStructure.txt")
 
-    gorout_upload = form.getvalue("--vis_gorout")
-    if gorout_upload:
-        gorout = os.path.join("uploads", "vis_gorout.txt")
-        with open(gorout, "wb") as f:
-            if isinstance(gorout_upload, str):
-                f.write(gorout_upload.encode())
-            else:
-                f.write(gorout_upload)
-
-
-    html_file = os.path.join("uploads", f"{pdb_id.upper()}.html")
+    # Debug: existiert die gorout datei?
+    if not os.path.exists(gorout):
+        return f"<pre>ERROR: gorout nicht gefunden: {gorout}</pre>"
 
     result = subprocess.run([
         "python3", "visualisediff2.py",
         "--pdb", pdb_id,
         "--gorout", gorout,
-        "--output", html_file
-    ], text=True)
-
+    ], capture_output=True, text=True)
 
     if result.returncode != 0:
         return f"<pre>SUBPROCESS ERROR:\n{result.stderr}</pre>"
 
     return result.stdout
+
+
+t
