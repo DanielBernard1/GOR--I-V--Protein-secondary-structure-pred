@@ -258,6 +258,10 @@ if output and not java_error and (input_type == "native" or download_output):
     print(output.stdout)
     sys.exit(0)
 
+if download_output:
+    download_output_checked = "checked"
+else:
+    download_output_checked = ""
 
 
 
@@ -646,11 +650,12 @@ if file_error:
 if text_error:
     print(f'<p class="error">{text_error}</p>')
 
+if output:
+    print("<pre>")
 if java_error:
     print (f"<p class='error'>{java_error}</p>")
-
 if output:
-
+    import re
     java_out = output.stdout
     # Java gibt bei format=html eine komplette HTML-Seite aus — nur Body-Inhalt nehmen
     # sonst wird unsere Seite blau/kaputt durch Java-eigenes CSS
@@ -670,7 +675,7 @@ if output:
         print(java_out)
         print('</pre>')
 
-    print('<p class="section-label">Graphics</p>')
+        print('<p class="section-label">Graphics</p>')
     #print("<img src='benchmark.png'>")
 
 # DP-Matrix und Fixpoint
@@ -710,8 +715,7 @@ if show_fp and seq1 and seq2 and output:
         fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
         subprocess.run(["python3", "FixPoint.py", fp_file, fp_png], capture_output=True, text=True)
         print("<h2>Fixed Point Alignment</h2>")
-        print(
-            f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
+        print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
     except Exception as e:
         print(f"<p class='error'>Fixed Point ERROR: {e}</p>")
 
