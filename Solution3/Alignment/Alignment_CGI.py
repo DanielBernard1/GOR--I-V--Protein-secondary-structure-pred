@@ -113,7 +113,7 @@ except ValueError:
 try:
     int(ge)
 except ValueError:
-    go = "-"
+    ge = "-1"
 
 import re as _re
 def safe_id(val):
