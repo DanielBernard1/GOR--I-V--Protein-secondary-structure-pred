@@ -117,7 +117,7 @@ def kfold(BASE_DIR, form):
             if not line:
                 continue
             else:
-                foldvalues.append(float(line))
+                foldvalues.append(round(float(line),2))
 
 
         allvalues.append(foldvalues)
@@ -141,7 +141,7 @@ def kfold(BASE_DIR, form):
 
 
     header= "<th style='padding: 8px 12px;'>Fold</th>\n"
-    for h in header:
+    for h in headers:
         header += f"<th style='padding: 8px 12px;'>{h}</th>\n"
 
     fold = ""
@@ -149,13 +149,13 @@ def kfold(BASE_DIR, form):
         fold += "<tr>\n"
         fold += f"<td style='padding: 8px 12px;'>Fold {i + 1}</td>\n"
         for value in fold:
-            fold += f"<td style='padding: 8px 12px; text-align:right;'>{round(value, 2)}</td>\n"
+            fold += f"<td style='padding: 8px 12px; text-align:right;'>{value}</td>\n"
         fold += "</tr>\n"
 
     avg = "<tr style='background: #ecf0f1; font-weight: bold;'>\n"
     avg += "<td style='padding: 8px 12px;'>Average</td>\n"
     for value in averages:
-        avg += f"<td style='padding: 8px 12px; text-align:right;'>{round(value, 2)}</td>\n"
+        avg += f"<td style='padding: 8px 12px; text-align:right;'>{value}</td>\n"
     avg += "</tr>\n"
 
     table_html = f"""
