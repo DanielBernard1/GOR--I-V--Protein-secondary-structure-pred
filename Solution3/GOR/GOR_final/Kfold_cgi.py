@@ -145,10 +145,11 @@ def kfold(BASE_DIR, form):
         header += f"<th style='padding: 8px 12px;'>{h}</th>\n"
 
     fold = ""
-    for i, fold in enumerate(allvalues):
+
+    for i, folddata in enumerate(allvalues):
         fold += "<tr>\n"
         fold += f"<td style='padding: 8px 12px;'>Fold {i + 1}</td>\n"
-        for value in fold:
+        for value in folddata:
             fold += f"<td style='padding: 8px 12px; text-align:right;'>{value}</td>\n"
         fold += "</tr>\n"
 
