@@ -152,7 +152,7 @@ print(f"""<!DOCTYPE html>
         propraGruppe15
     </a>
     <ul class="nav-links">
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI.py">Alignment</a></li>
         <li><a href="#" class="active">GOR</a></li>
         <li style="margin-left: auto;"><a href="help/index.html">Help</a></li>
