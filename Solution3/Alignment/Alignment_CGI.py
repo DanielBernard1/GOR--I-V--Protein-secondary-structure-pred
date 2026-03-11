@@ -314,7 +314,7 @@ try:
                 display: flex; align-items: center; gap: 8px;
                 white-space: nowrap; text-decoration: none;
             }}
-            .nav-links {{ display: flex; gap: 4px; list-style: none; }}
+            .nav-links {{ display: flex; gap: 4px; list-style: none; flex:1; }}
             .nav-links a {{
                 text-decoration: none; font-size: 0.85rem; font-weight: 500;
                 color: var(--text-dim); padding: 6px 13px; border-radius: 6px; transition: all 0.15s;
