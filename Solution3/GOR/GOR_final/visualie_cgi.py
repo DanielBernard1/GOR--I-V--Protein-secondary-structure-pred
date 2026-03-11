@@ -1,3 +1,8 @@
+#!/usr/bin/biopython
+import os
+import subprocess
+
+
 def run_visualieze(form):
     pdb_id = form.getvalue("--vis_pdb")
 
