@@ -9,7 +9,6 @@ import mysql.connector
 
 form = mycgi.Form()
 
-print ("Content-type: text/html\n")
 
 # Werte einlesen
 if "input_type" in form:
@@ -275,6 +274,7 @@ if (use_native or (seq1 and seq2)) and not file_error and not text_error and not
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
 
+print("Content-type: text/html\n")
 if "download_output" in form:
     download_output = True
 else:
