@@ -131,6 +131,7 @@ print(f"""<!DOCTYPE html>
 <html>
 <head>
     <title>GOR</title>
+    <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
     <style>
         body {{ font-family: monospace; max-width: 1700px; margin: auto; padding: 2rem; }}
         section {{ border: 1px solid #ccc; padding: 1rem; margin-bottom: 1.5rem; }}
@@ -243,13 +244,9 @@ print(f"""<!DOCTYPE html>
 </section>
 <section>
 <h2>3D Protein</h2>
-       <p class="section-label">3D Visualisation</p>
-
     <div class="card">
-        <h2></h2>
         <p>3D model of protein</p>
         <p>For comparison of GOR-Prediction with observed in 3D (JSmol) attach gor output file</p>
-        <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="visualise">
             <div class="param-grid">
@@ -259,7 +256,7 @@ print(f"""<!DOCTYPE html>
                 </div>
                 <div>
                     <label class="field-label">GOR-Output</label>
-                    <input type="file" name="--vis_gorout">
+                    <input type="file" name="--vis_gorout" required>
                 </div>
             </div>
             <button type="submit">Visualise</button>

@@ -92,18 +92,15 @@ for chain, resnum in matches:
     parts.append(f"(resno={resnum} and :{chain})")
 jsmolmatches = " or ".join(parts)
 
-print(f'''<div id="jsmol-container">
-<script type="text/javascript" src="jsmol/JSmol.min.js"></script>
+print(f'''
 <script type="text/javascript">
 var Info = {{
     width: 700,
     height: 500,
     j2sPath: "jsmol/j2s"
-}}
-</script>
-<script type="text/javascript">
-viewer = Jmol.getApplet("viewer", Info);
-Jmol.script(viewer, "background white; load ={id}; cartoon only; spin on; color red; select {jsmolmatches}; color green;")
+}};
+var viewer = Jmol.getApplet("viewer", Info);
+Jmol.script(viewer, "background white; load ={id}; cartoon only; spin on; color red; select {jsmolmatches}; color green;");
 </script>
 <p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: {len(matches)} / {len(matches)+len(mismatches)}</p>
-</div>''')
+''')
