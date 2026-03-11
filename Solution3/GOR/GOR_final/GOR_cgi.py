@@ -4,8 +4,8 @@ import shutil
 import copy
 from collections import Counter
 
-def postprocess(input, output, windowsize=None):
-    window = int(windowsize) if windowsize else 17
+def postprocess(input, output, windowsize):
+    window = int(windowsize) if windowsize else 5
 
     proteins = []
 
@@ -157,7 +157,8 @@ def run_predict(BASE_DIR, form):
     if form.getvalue("--postprocess") == "yes":
         pp_output_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure_pp.txt")
         try:
-            postprocess(tmp_path, pp_output_path)
+            windowsize = form.getvalue("--windowsize")
+            postprocess(tmp_path, pp_output_path, windowsize)
         except Exception as e:
             pp_output_path = str(e)
     else:
