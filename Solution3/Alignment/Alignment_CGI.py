@@ -317,7 +317,6 @@ print(f"""<!DOCTYPE html>
         .nav-links a:hover  {{ background: var(--green-bg); color: var(--green); }}
         .nav-links a.active {{ background: var(--green); color: white; }}
 
-        /* DESIGN: grüner Page-Header mit Algorithmen-Untertitel (alignment-spezifisch) */
         .page-header {{
             background: var(--green);
             padding: 32px 40px 28px; color: white;
@@ -325,7 +324,6 @@ print(f"""<!DOCTYPE html>
         .page-header h1 {{ font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }}
         .page-header p  {{ font-size: 0.87rem; opacity: 0.82; font-weight: 300; }}
 
-        /* DESIGN: Sequenz-Dekorationszeile (alignment-spezifisch) */
         .seq-deco {{
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.68rem; opacity: 0.22; letter-spacing: 0.12em;
@@ -353,7 +351,6 @@ print(f"""<!DOCTYPE html>
             color: var(--text-dim); margin-bottom: 5px; margin-top: 14px;
         }}
 
-        /* DESIGN: einheitliche Inputs mit grünem Focus-Ring */
         input[type=text], select {{
             width: 100%; padding: 9px 12px;
             background: var(--white); border: 1.5px solid var(--border);
@@ -367,7 +364,6 @@ print(f"""<!DOCTYPE html>
             box-shadow: 0 0 0 3px rgba(46,125,82,0.1);
         }}
 
-        /* DESIGN: Monospace + grünlicher Hintergrund für Sequenz-Textareas (alignment-spezifisch) */
         textarea {{
             width: 100%; padding: 9px 12px;
             background: #f6fdf9; border: 1.5px solid var(--border);
@@ -378,14 +374,12 @@ print(f"""<!DOCTYPE html>
         }}
         textarea:focus {{ border-color: var(--green); box-shadow: 0 0 0 3px rgba(46,125,82,0.1); }}
 
-        /* DESIGN: custom Select-Pfeil */
         select {{
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%235a7060' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 12px center;
             padding-right: 32px; cursor: pointer;
         }}
 
-        /* DESIGN: Input-Typ Buttons als Outline-Buttons */
         input[type=button] {{
             font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
             padding: 8px 16px; border: 1.5px solid var(--border); border-radius: 6px;
@@ -394,7 +388,6 @@ print(f"""<!DOCTYPE html>
         }}
         input[type=button]:hover {{ border-color: var(--green-lt); color: var(--green); background: var(--green-bg); }}
 
-        /* DESIGN: grüner Submit-Button */
         input[type=submit] {{
             margin-top: 20px; padding: 11px 28px;
             background: var(--green); color: white;
@@ -403,21 +396,17 @@ print(f"""<!DOCTYPE html>
         }}
         input[type=submit]:hover {{ background: var(--green-dk); }}
 
-        /* DESIGN: Checkbox grün */
         input[type=checkbox] {{ accent-color: var(--green); width: 15px; height: 15px; cursor: pointer; }}
         .checkbox-row {{ display: flex; align-items: center; gap: 9px; margin-top: 14px; font-size: 0.88rem; color: var(--text-dim); }}
 
-        /* DESIGN: 2-spaltiges Grid für Parameter */
         .param-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }}
 
-        /* DESIGN: Fehlerbox */
         .error {{
             color: #c0392b; font-weight: 500; padding: 10px 14px;
             background: #fff5f5; border: 1px solid #f0a0a0;
             border-radius: 6px; margin: 10px 0; font-size: 0.88rem;
         }}
 
-        /* DESIGN: Result-Bar (alignment-spezifisch) — grüner Header über dem Ergebnis */
         .result-bar {{
             background: var(--green); color: white;
             padding: 9px 18px; font-size: 0.75rem; font-weight: 600;
@@ -512,8 +501,11 @@ print(f"""<!DOCTYPE html>
         <p style="font-size:0.8rem; color:var(--text-dim);">Upload pairs and seqlib File</p>
         <input type="button" value="pairs + seqlib" onclick="switchInput('native')">
 
-        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FastaFile:</p>
-        <input type="button" value="Enter Fasta-File" onclick="switchInput('file')">
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Enter Seqlib file including Secondary Structure:</p>
+        <input type="button" value="seqlib+SS and pairs" onclick="switchInput('native')">
+        
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FASTA-File:</p>
+        <input type="button" value="Enter FASTA-File" onclick="switchInput('file')">
 
         <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload PDB-IDs from the Database:</p>
         <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
@@ -621,6 +613,7 @@ print(f"""<!DOCTYPE html>
 
     <hr>
     <p class="section-label">Result</p>
+    <p> IF THE OUTPUT DOES NOT MATCH THE EXPECTED RESULTS, PLEASE CHECK THE HELP SECTION AND TRY AGAIN. </p>
 """)
 
 if file_error:
