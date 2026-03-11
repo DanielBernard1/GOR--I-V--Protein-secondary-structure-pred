@@ -7,15 +7,15 @@ import numpy as np
 
 def kfold(BASE_DIR, form):
 
-    seclib = form.get("--inputSeq_lib")
-    gorType  =form.get("--gorType")
+    seclib = form.getvalue("--inputSeq_lib")
+    gorType  =form.getvalue("--gorType")
 
 
-    foldcount = 5
+    foldcount = int(form.getvalue("--foldcount") or 5)
 
-    VALIDATION_PATH = os.path.join(BASE_DIR, "jars/validateGor.jar")
-    TRAIN_JAR   = os.path.join(BASE_DIR, "jars/trainGor.jar")
-    PREDICT_JAR = os.path.join(BASE_DIR, "jars/predict.jar")
+    VALIDATION_PATH = os.path.join( "jars/validateGor.jar")
+    TRAIN_JAR   = os.path.join("jars/train.jar")
+    PREDICT_JAR = os.path.join("jars/predict.jar")
 
     proteins= []
     with open(seclib) as f:
@@ -55,9 +55,13 @@ def kfold(BASE_DIR, form):
     allvalues = []
     for split in splits:
         fold = split["fold"]
-        train_seclib = os.path.join(BASE_DIR, f"uploads/fold{fold}_train.txt")
-        test_fasta = os.path.join(BASE_DIR, f"uploads/fold{fold}_test.fasta")
-        model_file = os.path.join(BASE_DIR, f"uploads/fold{fold}_model.seclib")
+        train_seclib = os.path.join( f"uploads/fold{fold}_train.txt")
+        test_fasta = os.path.join(f"uploads/fold{fold}_test.fasta")
+        model_file = os.path.join( f"uploads/fold{fold}_model.seclib")
+        predict_output = os.path.join( f"uploads/fold{fold}_predict.txt")
+        PREDICTION_PATH = os.path.join( f"uploads/fold{fold}_prediction.txt")
+        REFERENCE_PATH = os.path.join(f"uploads/fold{fold}_reference.txt")
+        DETAILED_PATH = os.path.join( f"uploads/fold{fold}_detailed.txt")
 
         with open(train_seclib, "w") as f:
             for p in split["train"]:
@@ -80,20 +84,36 @@ def kfold(BASE_DIR, form):
             "--format", "txt"
         ], capture_output=True, text=True)
 
-        predict_output = os.path.join(BASE_DIR, f"uploads/fold{fold}_predict.txt")
+
         with open(predict_output, "w") as f:
             f.write( output.stdout)
 
-        PREDICTION_PATH = os.path.join(BASE_DIR, "uploads/prediction.txt")
-        REFERENCE_PATH = os.path.join(BASE_DIR, "uploads/reference.txt")
-        DETAILED_PATH = os.path.join(BASE_DIR, "uploads/detailedGor.txt")
+        with open(REFERENCE_PATH, "w") as f:
+            for p in split["test"]:
+                f.write(f"{p['ID']}\n{p['AS']}\n{p['SS']}\n")
+
+        with open(PREDICTION_PATH, "w") as f:
+            f.write(output.stdout)
 
         validate_output = subprocess.run(
-            ["java", "-jar", VALIDATION_PATH, "-p", PREDICTION_PATH, "-r", REFERENCE_PATH, "-d", DETAILED_PATH, "--format",
-             "txt"], capture_output=True, text=True)
-
+            ["java", "-jar", VALIDATION_PATH,
+             "-p", PREDICTION_PATH,
+             "-r", REFERENCE_PATH,
+             "-d", DETAILED_PATH,
+             "-f", "txt"],
+            capture_output=True, text=True)
 
         foldvalues = []
+        for line in validate_output.stdout.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            value_str = line.split(":")[-1].strip()
+            if value_str.replace(".", "").replace("-", "").isdigit():
+                foldvalues.append(float(value_str))
+            else:
+                continue
+        allvalues.append(foldvalues)
         for line in validate_output.stdout.splitlines():
             foldvalues.append(float(line))
         allvalues.append(foldvalues)
@@ -101,27 +121,49 @@ def kfold(BASE_DIR, form):
         for path in [train_seclib, test_fasta, model_file, predict_output, PREDICTION_PATH, REFERENCE_PATH, DETAILED_PATH]:
             if os.path.exists(path):
                 os.remove(path)
+        averages = []
 
-headers = ["Number of Proteins", "Mean Protein Length", "Sum of Protein Length",
-           "Sum of Predicted Positions", "Q3 mean", "Q2 Dev", "SOV Mean", "SOV Dev",
-           "qObs_H Mean", "qObs_E Mean", "qObs_C Mean", "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
-averages = []
-for column in range(len(headers)):
+        for col in range(len(allvalues[0])):
+            total = 0
+            for row in allvalues:
+                total += row[col]
+            averages.append(total / len(allvalues))
 
 
-
-
+    headers = ["Number of Proteins", "Mean Protein Length", "Sum of Protein Length",
+               "Sum of Predicted Positions", "Q3 mean", "Q2 Dev", "SOV Mean", "SOV Dev",
+               "qObs_H Mean", "qObs_E Mean", "qObs_C Mean", "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
 
     header_html = "<tr>\n    <th>Fold</th>\n"
     for h in headers:
         header_html += f"    <th>{h}</th>\n"
     header_html += "</tr>"
-fold_rows_html = ""
-for i, fold in enumerate(allvalues):
-    fold_rows_html += f"<tr>\n    <td>Fold {i + 1}</td>\n"
-    for value in fold:
-        fold_rows_html += f"    <td>{value}</td>\n"
-    fold_rows_html += "</tr>\n"
+
+    fold_rows = ""
+    for i, fold in enumerate(allvalues):
+        fold_rows += f"<tr>\n    <td>Fold {i + 1}</td>\n"
+        for value in fold:
+            fold_rows += f"    <td>{value}</td>\n"
+        fold_rows += "</tr>\n"
+
+    avg_row = "<tr>\n    <td><b>Average</b></td>\n"
+    for value in averages:
+        avg_row += f"    <td>{round(value, 4)}</td>\n"
+    avg_row += "</tr>\n"
+    table_html = f"""
+    <div style="overflow-x: auto;">
+        <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
+            <thead style="background: #2c3e50; color: white;">
+                {header_html}
+            </thead>
+            <tbody>
+                {fold_rows}
+                {avg_row}
+            </tbody>
+        </table>
+    </div>"""
+
+    return table_html
 
 
 

@@ -94,6 +94,12 @@ elif action == "train":
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href={model_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
+elif action == "kfold":
+    try:
+        from Kfold_cgi import kfold
+        output_section = kfold(BASE_DIR, form)
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
 
 
 
@@ -200,9 +206,11 @@ print(f"""<!DOCTYPE html>
             <option value="--GOR3">GOR3</option>
             <option value="--GOR4">GOR4</option>
         </select>
+        <label>Fold Count</label>
+        <input type="number" name="--foldcount" value="5" min="2" max="20">
         <label>Input Database</label>
         <textarea name="--inputdb" rows="4"></textarea>
-        <button type="submit" >Run</button>
+        <button type="submit">Run</button>
     </form>
     {output_section if action == "kfold" else ""}
 </section>
