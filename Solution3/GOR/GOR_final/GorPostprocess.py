@@ -13,7 +13,7 @@ args = parser.parse_args()
 input = args.input
 output = args.output
 
-window = int(args.windowsize) if args.windowsize else 5
+window = int(args.windowsize) if args.windowsize else 3
 
 proteins = []
 

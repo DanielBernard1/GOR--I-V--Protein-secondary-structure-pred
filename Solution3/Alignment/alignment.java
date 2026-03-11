@@ -179,8 +179,8 @@ public class alignment {
                 fp.fixedPointScores(fpFile.getPath());
                 File trace;
                 if (file.isDirectory()){
-                    file = new File(file, "scoring_matrix.txt");
                     trace = new File(file, "traceback_index.txt");
+                    file = new File(file, "scoring_matrix.txt");
                 }
                 else{
                     trace = new File("traceback_index.txt");
@@ -261,8 +261,8 @@ public class alignment {
                 fp.fixedPointScores(fpFile.getPath());
                 File trace;
                 if (file.isDirectory()){
-                    file = new File(file, "scoring_matrix.txt");
                     trace = new File(file, "traceback_index.txt");
+                    file = new File(file, "scoring_matrix.txt");
                 }
                 else{
                     trace = new File( "traceback_index.txt");
