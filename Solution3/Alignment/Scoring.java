@@ -90,7 +90,7 @@ public class Scoring{
 
         return new finalAlignment(align[0], align[1], score);
     }
-
+    //Nur zur Verifizierung wollen das nicht mit ausgeben
     public double Rec_score(){
         return new Recursion(seq1, seq2, substitution_matrix, gap, mode).score() / 100.0;
     }
