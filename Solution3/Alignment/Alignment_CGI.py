@@ -681,10 +681,10 @@ if show_dp and seq1 and seq2 and output:
             cmd_dp.append("--ss")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
-        scoring_matrix_file = dp_path + "scoring_matrix_" + matrix + ".txt"
-        dp_vis = subprocess.run(["python3", "../dp_matrix.py", scoring_matrix_file])
+        dp_png = dp_path + "dp_matrix_" +id1 + "_" + id2 + ".png"
+        dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_png], capture_output=True, text=True)
         print("<div><h2>DP-Matrix:</h2>")
-        print(dp_vis.stdout)
+        print(f"img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/{dp_png}.png'>")
         print("</div>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
