@@ -202,9 +202,9 @@ print(f"""<!DOCTYPE html>
         <input type="hidden" name="action" value="kfold">
         <label>GOR Typ</label>
         <select name="--gorType">
-            <option value="--GOR1">GOR1</option>
-            <option value="--GOR3">GOR3</option>
-            <option value="--GOR4">GOR4</option>
+            <option value="gor1">GOR1</option>
+            <option value="gor3">GOR3</option>
+            <option value="gor4">GOR4</option>
         </select>
         <label>Fold Count</label>
         <input type="number" name="--foldcount" value="5" min="2" max="20">
