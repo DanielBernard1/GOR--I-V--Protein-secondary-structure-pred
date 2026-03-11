@@ -35,4 +35,16 @@ def run_seclib(BASE_DIR, form):
     else:
         output = "Keine IDs bereitgestellt."
 
-    return output, seclib_path
+    generate_fasta = form.getvalue("--generate_fasta")
+
+    fasta_path = None
+    if generate_fasta == "yes" and os.path.exists(seclib_path):
+        fasta_path = os.path.join(BASE_DIR, "uploads/sec_lib.fasta")
+        with open(seclib_path) as f, open(fasta_path, "w") as out:
+            for line in f:
+                if line.startswith(">"):
+                    out.write(line)
+                elif line.startswith("AS "):
+                    out.write(line[3:])
+
+    return output, seclib_path, fasta_path
