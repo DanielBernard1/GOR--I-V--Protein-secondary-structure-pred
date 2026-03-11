@@ -2,6 +2,7 @@
 import sys
 import os
 
+from visualie_cgi import run_visualieze
 from train_CGI import run_train
 from validate_cgi import run_validate
 
@@ -34,6 +35,12 @@ elif action == "predict":
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
+elif action == "visualise":
+    try:
+        output_section = run_visualieze(form)
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
+
 
 elif action == "validate":
     try:
@@ -48,7 +55,7 @@ elif action == "validate":
         <thead>
             <tr style="background: #2c3e50; color: white;">
                 <th style="padding: 8px 12px;">Fold</th>
-                <th style="padding: 8px 12px;">Proteins</th>
+                <th style="padding: 8px 12px;">Nr of Prot</th>
                 <th style="padding: 8px 12px;">Mean Length</th>
                 <th style="padding: 8px 12px;">Sum Length</th>
                 <th style="padding: 8px 12px;">Sum Predicted</th>
@@ -108,7 +115,7 @@ print(f"""<!DOCTYPE html>
 <head>
     <title>GOR</title>
     <style>
-        body {{ font-family: monospace; max-width: 1200px; margin: auto; padding: 2rem; }}
+        body {{ font-family: monospace; max-width: 1700px; margin: auto; padding: 2rem; }}
         section {{ border: 1px solid #ccc; padding: 1rem; margin-bottom: 1.5rem; }}
         input, select, textarea {{ width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box;}}
         button {{ background: #2c3e50; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer; }}

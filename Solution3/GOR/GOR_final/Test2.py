@@ -2,6 +2,7 @@
 import sys
 import os
 
+from propragruppe15.Solution3.GOR.GOR_final.visualie_cgi import run_visualieze
 from train_CGI import run_train
 from validate_cgi import run_validate
 
@@ -36,29 +37,7 @@ elif action == "predict":
 
 elif action == "visualise":
     try:
-        import subprocess
-        pdb_id = form.getvalue("--vis_pdb", "").strip()
-
-        # GOR-Output: Upload oder letzter Predict-Lauf
-        gorout_upload = form.getvalue("--vis_gorout")
-        if gorout_upload:
-            gorout = os.path.join(BASE_DIR, "uploads", "vis_gorout.txt")
-            with open(gorout, "wb") as f:
-                f.write(gorout_upload)
-        else:
-            gorout = os.path.join(BASE_DIR, "uploads", "temp_seqAndStructure.txt")
-
-        outdir = os.path.join(BASE_DIR, "uploads")
-        subprocess.run([
-            sys.executable, os.path.join(BASE_DIR, "visualisediff2.py"),
-            "--pdb", pdb_id,
-            "--gorout", gorout,
-            "--output", outdir
-        ], check=True)
-        html_file = os.path.join(outdir, f"{pdb_id.upper()}.html")
-        with open(html_file) as f:
-            content = f.read()
-        output_section = content
+        output_section = run_visualieze()
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
