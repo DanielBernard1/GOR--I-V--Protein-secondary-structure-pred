@@ -221,6 +221,26 @@ print(f"""<!DOCTYPE html>
     </form>
     {output_section if action == "kfold" else ""}
 </section>
-
+<section>
+    <h2>Validate</h2>
+            <p>Vergleicht eine Prediction mit einer Referenzstruktur und berechnet Q3, SOV und weitere Metriken.</p>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="validate">
+                <div class="param-grid">
+                    <div>
+                        <label class="field-label">Prediction</label>
+                        <textarea name="--prediction" rows="4"></textarea>
+                        <input type="file" name="--prediction_file">
+                    </div>
+                    <div>
+                        <label class="field-label">Reference</label>
+                        <textarea name="--reference" rows="4"></textarea>
+                        <input type="file" name="--reference_file">
+                    </div>
+                </div>
+                <button type="submit">Run</button>
+            </form>
+            {output_section if action == "validate" else ""}
+    </section>
 </body>
 </html>""")
