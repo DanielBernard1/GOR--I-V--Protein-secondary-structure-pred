@@ -108,7 +108,7 @@ print(f"""<!DOCTYPE html>
 <head>
     <title>GOR</title>
     <style>
-        body {{ font-family: monospace; max-width: 1000px; margin: auto; padding: 2rem; }}
+        body {{ font-family: monospace; max-width: 1200px; margin: auto; padding: 2rem; }}
         section {{ border: 1px solid #ccc; padding: 1rem; margin-bottom: 1.5rem; }}
         input, select, textarea {{ width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box;}}
         button {{ background: #2c3e50; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer; }}
@@ -207,7 +207,7 @@ print(f"""<!DOCTYPE html>
             <option value="gor4">GOR4</option>
         </select>
         <label>Fold Count</label>
-        <input type="number" name="--foldcount" value="5" min="2" max="20">
+        <input type="number" name="--foldcount" value="5" min="2" max="10">
         <label>Input Database</label>
             <input type="file" name="--input_seclib">
         <button type="submit">Run</button>
