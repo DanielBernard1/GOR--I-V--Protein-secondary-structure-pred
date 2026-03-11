@@ -133,17 +133,21 @@ def kfold(BASE_DIR, form):
         for row in allvalues:
             total += row[col]
         averages.append(total / len(allvalues))
+    for i in range(len(allvalues)):
+        for j in range(len(allvalues[i])):
+            allvalues[i][j] = round(allvalues[i][j], 2)
 
-    headers = ["Number of Proteins", "Mean Protein Length", "Sum of Protein Length",
-               "Sum of Predicted Positions", "Q3 Mean", "SOV Mean", "SOV Dev",
+    for i in range(len(averages)):
+        averages[i] = round(averages[i], 2)
+
+    headers = ["Nr of Prot", "Mean Length", "Sum of Length",
+               "Sum of pred. pos", "Q3 Mean", "SOV Mean", "SOV Dev",
                "qObs_H Mean", "qObs_E Mean", "qObs_C Mean",
                "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
-
-    header_html = "<tr>\n    <th>Fold</th>\n"
+    header_html = "<tr>\n    <th style='padding: 8px 16px;'>Fold</th>\n"
     for h in headers:
-        header_html += f"    <th>{h}</th>\n"
+        header_html += f"    <th style='padding: 8px 16px;'>{h}</th>\n"
     header_html += "</tr>"
-
     fold_rows = ""
     for i, fold in enumerate(allvalues):
         fold_rows += f"<tr>\n    <td>Fold {i + 1}</td>\n"
