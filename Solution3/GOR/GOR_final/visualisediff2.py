@@ -112,7 +112,7 @@ jsmolmatches = " or ".join(parts)
 
 
 
-outfile = os.path.join(output, f"{id}.html").replace("\\", "/")
+outfile = output
 with open(outfile, "w") as f:
     f.write(f'''<div id="jsmol-container">
 <script type="text/javascript">
