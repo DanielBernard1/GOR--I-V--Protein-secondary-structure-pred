@@ -95,9 +95,9 @@ else:
 show_dp = "show_dp" in form
 
 if "ss" in form:
-    ss = form["ss"].value
+    use_ss = form["ss"].value
 else:
-    ss = "none"
+    use_ss = "none"
 
 if use_nw == "nw":
     style_go = "display: none;"

@@ -19,17 +19,22 @@ GOR_OUTPUT = os.path.join("uploads/temp_seqAndStructure.txt")
 
 if action == "seclib":
     try:
-        output = run_predict(BASE_DIR, form)
+        output, seclib_path = run_predict(BASE_DIR, form)
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
 elif action == "predict":
     try:
-        output = run_predict(BASE_DIR, form)
-        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
+        output, pp_path = run_predict(BASE_DIR, form)
+        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
+        output_section += f"<a href='uploads/temp_seqAndStructure.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none; margin-top:10px; display:inline-block;'>Prediction</a>"
+        if pp_path:
+            output_section += f" <a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Post-Processed</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
+
+
 elif action == "validate":
     try:
         output = run_validate(BASE_DIR, form)
@@ -158,6 +163,13 @@ print(f"""<!DOCTYPE html>
             <option value="no">No</option>
             <option value="yes">Yes</option>
         </select>
+        <br><br>
+    
+        <label>
+            <label><input type="checkbox" name="--postprocess" value="yes" style="width:auto;"> Post-Processing</label>
+        </label>
+        <br><br>
+    
         <button type="submit" >Run</button>
     </form>
     {output_section if action == "predict" else ""}
