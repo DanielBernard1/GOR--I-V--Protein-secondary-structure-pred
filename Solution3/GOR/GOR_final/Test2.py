@@ -20,7 +20,7 @@ GOR_OUTPUT = os.path.join("uploads/temp_seqAndStructure.txt")
 if action == "seclib":
     try:
         output, seclib_path = run_seclib(BASE_DIR, form)
-        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
+        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href={seclib_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
@@ -120,11 +120,21 @@ elif action == "train":
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
+elif action == "kfold":
+    try:
+        from Kfold_cgi import kfold
+        output_section = kfold(BASE_DIR, form)
+    except Exception as e:
+        output_section = f"<pre>ERROR: {e}</pre>"
 
-# ── CSS laden (vor dem f-String, damit {} im CSS nicht crashen) ──
+
+# ── CSS laden ──
 css_path = os.path.join(BASE_DIR, "style.css")
-with open(css_path) as _css:
-    css = _css.read()
+try:
+    with open(css_path) as _css:
+        css = _css.read()
+except Exception:
+    css = ""
 
 print(f"""<!DOCTYPE html>
 <html lang="de">
@@ -153,7 +163,7 @@ print(f"""<!DOCTYPE html>
     <ul class="nav-links">
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">Home</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI.py">Alignment</a></li>
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_final/Test.py" class="active">GOR</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_final/Test2.py" class="active">GOR</a></li>
     </ul>
 </nav>
 
@@ -286,16 +296,18 @@ print(f"""<!DOCTYPE html>
                 <div>
                     <label class="field-label">GOR Typ</label>
                     <select name="--gorType">
-                        <option value="--GOR1">GOR1</option>
-                        <option value="--GOR3">GOR3</option>
-                        <option value="--GOR4">GOR4</option>
+                        <option value="gor1">GOR1</option>
+                        <option value="gor3">GOR3</option>
+                        <option value="gor4">GOR4</option>
                     </select>
                 </div>
                 <div>
-                    <label class="field-label">Input Database</label>
-                    <textarea name="--inputdb" rows="4"></textarea>
+                    <label class="field-label">Fold Count</label>
+                    <input type="number" name="--foldcount" value="5" min="2" max="20">
                 </div>
             </div>
+            <label class="field-label">Input Database</label>
+            <input type="file" name="--input_seclib">
             <button type="submit">Run</button>
         </form>
         {output_section if action == "kfold" else ""}
