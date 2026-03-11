@@ -244,7 +244,7 @@ if "download_output" in form:
 else:
     download_output = False
 
-if output and "download_output" in form:
+if output and not java_error and (input_type == "native" or download_output):
     if fmt == "ali":
         ext = "ali"
     elif fmt == "scores":
@@ -567,10 +567,19 @@ print(f"""<!DOCTYPE html>
         </div>
 
         <div id="input_native" style="{style_native}">
+            <p style="font-size:0.82rem; color:var(--text-dim); margin:10px 0 6px;">
+                Direkt die nativen Java-Input-Dateien hochladen. Ermöglicht mehrere Paare auf einmal.
+            </p>
+            <div style="font-family:monospace;font-size:0.78rem;background:#f4f4f4;border:1px solid var(--border);padding:10px;border-radius:4px;margin-bottom:12px;">
+                <b>pairs.txt:</b>&nbsp; seq1 seq2<br>
+                <b>seqlib.txt:</b> seq1:MVLSPADKTN...<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq2:ACDEFGHIKL...
+            </div>
             <label class="field-label">pairs.txt</label>
             <input type="file" name="pairs_file" accept=".txt">
             <label class="field-label">seqlib.txt</label>
             <input type="file" name="seqlib_file" accept=".txt">
+
         </div>
 
     </div><!-- end card -->
