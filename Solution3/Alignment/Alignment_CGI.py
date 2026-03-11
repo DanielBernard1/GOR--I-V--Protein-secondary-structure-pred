@@ -644,7 +644,7 @@ if output:
         print(java_out)
         print('</pre>')
     print('<p class="section-label">Graphics</p>')
-    print("<img src='benchmark.png'>")
+
 
 # DP-Matrix und Fixpoint
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
@@ -673,7 +673,7 @@ if show_dp and seq1 and seq2 and output:
         subprocess.run(["python3", "FixPoint.py", fp_file, fp_png])
         print("<h2>Fixed Point Alignment</h2>")
         print(
-            f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
+            f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fp_png_{id1}_{id2}.png'>")
     except Exception as e:
         print(f"<p class='error'>DP-Matrix Fehler: {e}</p>")
 
