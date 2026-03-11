@@ -222,25 +222,29 @@ print(f"""<!DOCTYPE html>
     {output_section if action == "kfold" else ""}
 </section>
 <section>
-    <h2>Validate</h2>
-            <p>Vergleicht eine Prediction mit einer Referenzstruktur und berechnet Q3, SOV und weitere Metriken.</p>
-            <form method="post" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="validate">
-                <div class="param-grid">
-                    <div>
-                        <label class="field-label">Prediction</label>
-                        <textarea name="--prediction" rows="4"></textarea>
-                        <input type="file" name="--prediction_file">
-                    </div>
-                    <div>
-                        <label class="field-label">Reference</label>
-                        <textarea name="--reference" rows="4"></textarea>
-                        <input type="file" name="--reference_file">
-                    </div>
+<h2>Validate</h2>
+       <p class="section-label">3D Visualisation</p>
+
+    <div class="card">
+        <h2>Struktur-Vergleich</h2>
+        <p>Vergleicht GOR-Prediction mit PDB-Referenzstruktur in 3D (JSmol). Erst Predict ausf&uuml;hren.</p>
+        <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="visualise">
+            <div class="param-grid">
+                <div>
+                    <label class="field-label">PDB-ID</label>
+                    <input type="text" name="--vis_pdb" placeholder="z.B. 1a2p" required>
                 </div>
-                <button type="submit">Run</button>
-            </form>
-            {output_section if action == "validate" else ""}
-    </section>
+                <div>
+                    <label class="field-label">GOR-Output (optional)</label>
+                    <input type="file" name="--vis_gorout">
+                </div>
+            </div>
+            <button type="submit">Visualise</button>
+        </form>
+        {output_section if action == "visualise" else ""}
+    </div>
+</section>
 </body>
 </html>""")
