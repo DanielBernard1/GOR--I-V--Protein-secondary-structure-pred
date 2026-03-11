@@ -555,12 +555,6 @@ print(f"""<!DOCTYPE html>
         </div>
 
         <div id="input_native" style="{style_native}">
-            
-            <div style="font-family:monospace;font-size:0.78rem;background:#f4f4f4;border:1px solid var(--border);padding:10px;border-radius:4px;margin-bottom:12px;">
-                <b>pairs.txt:</b>&nbsp; seq1 seq2<br>
-                <b>seqlib.txt:</b> seq1:MVLSPADKTN...<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq2:ACDEFGHIKL...
-            </div>
             <label class="field-label">pairs.txt</label>
             <input type="file" name="pairs_file" accept=".txt">
             <label class="field-label">seqlib.txt</label>
