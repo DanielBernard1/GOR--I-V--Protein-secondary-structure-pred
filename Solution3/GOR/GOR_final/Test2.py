@@ -38,13 +38,16 @@ elif action == "visualise":
     try:
         import subprocess
         pdb_id = form.getvalue("--vis_pdb", "").strip()
-        gorout_upload = form.getfile("--vis_gorout")
+
+        # GOR-Output: Upload oder letzter Predict-Lauf
+        gorout_upload = form.getvalue("--vis_gorout")
         if gorout_upload:
             gorout = os.path.join(BASE_DIR, "uploads", "vis_gorout.txt")
-            with open(gorout, "wb") as f:
+            with open(gorout, "w") as f:
                 f.write(gorout_upload)
         else:
             gorout = os.path.join(BASE_DIR, "uploads", "temp_seqAndStructure.txt")
+
         outdir = os.path.join(BASE_DIR, "uploads")
         subprocess.run([
             sys.executable, os.path.join(BASE_DIR, "visualisediff2.py"),
