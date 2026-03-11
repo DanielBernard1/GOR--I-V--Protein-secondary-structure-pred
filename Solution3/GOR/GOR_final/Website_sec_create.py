@@ -1,3 +1,4 @@
+#!/usr/bin/biopython
 import os
 import subprocess
 
