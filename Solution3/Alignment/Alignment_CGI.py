@@ -94,6 +94,11 @@ else:
     use_nw = "gotoh"
 show_dp = "show_dp" in form
 
+if "ss" in form:
+    use_ss = form["ss"].value
+else:
+    use_ss = "none"
+
 if use_nw == "nw":
     style_go = "display: none;"
 else:
@@ -672,6 +677,8 @@ if show_dp and seq1 and seq2 and output:
                   "--dpmatrices", dp_path]
         if use_nw == "nw":
             cmd_dp.append("--nw")
+        if use_ss == "ss":
+            cmd_dp.append("--ss")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
         scoring_matrix_file = dp_path + "scoring_matrix_" + matrix + ".txt"

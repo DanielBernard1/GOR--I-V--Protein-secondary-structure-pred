@@ -177,8 +177,13 @@ public class alignment {
 
                 FixedPoint fp = new FixedPoint(aseq1, aseq2, matrix, ge);
                 fp.fixedPointScores(fpFile.getPath());
+                File trace;
                 if (file.isDirectory()){
                     file = new File(file, "scoring_matrix.txt");
+                    trace = new File(file, "traceback_index.txt");
+                }
+                else{
+                    trace = new File("traceback_index.txt");
                 }
                 int[][] scoring_matrix = scoring.getScoring_matrix();
                 try (FileWriter fw = new FileWriter(file)) {
@@ -189,7 +194,7 @@ public class alignment {
                         fw.write("\n");
                     }
                 }
-                try (FileWriter fw = new FileWriter("traceback_index.txt")) {
+                try (FileWriter fw = new FileWriter(trace)) {
                     List<String> indexes = scoring.getTracebackIndexes();
                     for (String a : indexes){
                         fw.write(a + "\n");
@@ -254,8 +259,13 @@ public class alignment {
 
                 FixedPoint fp = new FixedPoint(seq1, seq2, matrix, ge);
                 fp.fixedPointScores(fpFile.getPath());
+                File trace;
                 if (file.isDirectory()){
                     file = new File(file, "scoring_matrix.txt");
+                    trace = new File(file, "traceback_index.txt");
+                }
+                else{
+                    trace = new File( "traceback_index.txt");
                 }
                 int[][] scoring_matrix = scoring.getScoring_matrix();
                 try (FileWriter fw = new FileWriter(file)) {
@@ -266,7 +276,7 @@ public class alignment {
                         fw.write("\n");
                     }
                 }
-                try (FileWriter fw = new FileWriter("traceback_index.txt")) {
+                try (FileWriter fw = new FileWriter(trace)) {
                     List<String> indexes = scoring.getTracebackIndexes();
                     for (String a : indexes){
                         fw.write(a + "\n");
