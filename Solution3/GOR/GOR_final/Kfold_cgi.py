@@ -117,7 +117,7 @@ def kfold(BASE_DIR, form):
             if not line:
                 continue
             else:
-                foldvalues.append(round(float(line),2))
+                foldvalues.append(float(line))
 
 
         allvalues.append(foldvalues)
@@ -139,43 +139,37 @@ def kfold(BASE_DIR, form):
                "qObs_H Mean", "qObs_E Mean", "qObs_C Mean",
                "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
 
-
-    header= "<th style='padding: 8px 12px;'>Fold</th>\n"
+    header_html = "<tr>\n    <th>Fold</th>\n"
     for h in headers:
-        header += f"<th style='padding: 8px 12px;'>{h}</th>\n"
+        header_html += f"    <th>{h}</th>\n"
+    header_html += "</tr>"
 
-    fold = ""
+    fold_rows = ""
+    for i, fold in enumerate(allvalues):
+        fold_rows += f"<tr>\n    <td>Fold {i + 1}</td>\n"
+        for value in fold:
+            fold_rows += f"    <td>{value}</td>\n"
+        fold_rows += "</tr>\n"
 
-    for i, folddata in enumerate(allvalues):
-        fold += "<tr>\n"
-        fold += f"<td style='padding: 8px 12px;'>Fold {i + 1}</td>\n"
-        for value in folddata:
-            fold += f"<td style='padding: 8px 12px; text-align:right;'>{value}</td>\n"
-        fold += "</tr>\n"
-
-    avg = "<tr style='background: #ecf0f1; font-weight: bold;'>\n"
-    avg += "<td style='padding: 8px 12px;'>Average</td>\n"
+    avg_row = "<tr>\n    <td><b>Average</b></td>\n"
     for value in averages:
-        avg += f"<td style='padding: 8px 12px; text-align:right;'>{value}</td>\n"
-    avg += "</tr>\n"
+        avg_row += f"    <td>{round(value, 4)}</td>\n"
+    avg_row += "</tr>\n"
 
     table_html = f"""
-     <div style="overflow-x: auto; margin-top: 1rem;">
-         <table style="border-collapse: collapse; width: 100%; font-size: 0.85rem;">
-             <thead>
-                 <tr style="background: #2c3e50; color: white; text-align: center;">
-                     {header}
-                 </tr>
-             </thead>
-             <tbody>
-                 {fold}
-                 {avg}
-             </tbody>
-         </table>
-     </div>"""
+<div style="overflow-x: auto;">
+    <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
+        <thead style="background: #2c3e50; color: white;">
+            {header_html}
+        </thead>
+        <tbody>
+            {fold_rows}
+            {avg_row}
+        </tbody>
+    </table>
+</div>"""
 
     return table_html
-
 
 
 
