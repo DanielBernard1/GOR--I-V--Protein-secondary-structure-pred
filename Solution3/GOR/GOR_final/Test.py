@@ -130,129 +130,162 @@ elif action == "kfold":
         output_section = f"<pre>ERROR: {e}</pre>"
 
 
-
 print(f"""<!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-    <title>GOR</title>
-    <style>
-        body {{ font-family: monospace; max-width: 1700px; margin: auto; padding: 2rem; }}
-        section {{ border: 1px solid #ccc; padding: 1rem; margin-bottom: 1.5rem; }}
-        input, select, textarea {{ width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box;}}
-        button {{ background: #2c3e50; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer; }}
-        button:hover {{ background: #c0392b; }}
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GOR &mdash; propraGruppe15</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>GOR Prediction</h1>
-<section>
-    <h2>Sec Library</h2>
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="seclib">
-        <label>Protein ID</label>
-        <input type="text" name="--id" placeholder="z.B. 2MZ9">
-        <label>oder ID-Liste (File)</label>
-        <input type="file" name="--idlist">
-        <label>
-            <input type="checkbox" name="--generate_fasta" value="yes" style="width:auto;"> Generate FASTA
-        </label>
-        <br><br>
-        <button type="submit">Run</button>
-    </form>
-    {output_section if action == "seclib" else ""}
-</section>
 
-<section>
+<nav>
+    <a class="nav-logo" href="#">
+        <svg viewBox="0 0 22 22" fill="none" width="20" height="20">
+            <ellipse cx="11" cy="11" rx="4"  ry="10" stroke="#2e7d52" stroke-width="1.8" fill="none"/>
+            <ellipse cx="11" cy="11" rx="10" ry="4"  stroke="#4caf80" stroke-width="1.8" fill="none"/>
+            <circle  cx="11" cy="11" r="2"           fill="#2e7d52"/>
+        </svg>
+        propraGruppe15
+    </a>
+    <ul class="nav-links">
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI.py">Alignment</a></li>
+        <li><a href="#" class="active">GOR</a></li>
+        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html">Help</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/about/index.html">About</a></li>
+    </ul>
+</nav>
 
-    <h2>Train</h2>
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="train">
-        <label>GOR Methode</label>
-        <select name="--method">
-            <option value="1">GOR1</option>
-            <option value="3">GOR3</option>
-            <option value="4">GOR4</option>
-        </select>
-        <label>Database File</label>
-        <input type="file" name="--db">
-        <button type="submit" >Run</button>
-    </form>
-    <br><br>
-    {output_section if action == "train" else ""}
+<div class="hero">
+    <h1>GOR Prediction</h1>
+    <p>Secondary structure prediction &mdash; propraGruppe15 &middot; LMU/TUM &middot; Gruppe 15</p>
+</div>
 
-    <h2>Predict</h2>
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="predict">
-        <label>GOR Typ</label>
-        <select name="--Gor_type">
-            <option value="--GOR1">GOR1</option>
-            <option value="--GOR3">GOR3</option>
-            <option value="--GOR4">GOR4</option>
-        </select>
-        <label>Custom Model (pls use the same filename as provided by the generator or use the format gorXmodel.txt)</label>
-        <input type="file" name="--model_file">
-        <label>FASTA (File)</label>
-        <input type="file" name="--fasta">
-        <label>MAF (File)</label>
-        <input type="file" name="--maf">
-        <label>Probabilities</label>
-        <select name="--probabilities">
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-        </select>
-        <br><br>
-    
-        <label>
-            <label><input type="checkbox" name="--postprocess" value="yes" style="width:auto;"> Post-Processing</label>
-        </label>
-        <br><br>
-        <label>Post-Processing Window Size</label>
-<input type="number" name="--windowsize" value="7" min="3" max="20" step="2">
-<br><br>
-    
-        <button type="submit" >Run</button>
-    </form>
-    {output_section if action == "predict" else ""}
-</section>
+<div class="page-wrapper">
 
-<section>
-    <h2>Validate</h2>
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="validate">
-        <label>Prediction</label>
-        <textarea name="--prediction" rows="4"></textarea>
-        <input type="file" name="--prediction_file">
-        <label>Reference</label>
-        <textarea name="--reference" rows="4"></textarea>
-        <input type="file" name="--reference_file">
-        <button type="submit" >Run</button>
-    </form>
-    {output_section if action == "validate" else ""}
-</section>
+    <p class="section-label">Library &amp; Training</p>
 
-<section>
-    <h2>K-Fold</h2>
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="action" value="kfold">
-        <label>GOR Typ</label>
-        <select name="--gorType">
-            <option value="gor1">GOR1</option>
-            <option value="gor3">GOR3</option>
-            <option value="gor4">GOR4</option>
-        </select>
-        <label>Fold Count</label>
-        <input type="number" name="--foldcount" value="5" min="2" max="10">
-        <label>Input Database</label>
-            <input type="file" name="--input_seclib">
-        <button type="submit">Run</button>
-    </form>
-    {output_section if action == "kfold" else ""}
-</section>
-<section>
-<h2>3D Protein</h2>
     <div class="card">
-        <p>3D model of protein</p>
-        <p>For comparison of GOR-Prediction with observed in 3D (JSmol) attach gor output file</p>
+        <h2>Sec Library</h2>
+        <p>Create a secondary structure library from PDB protein IDs.</p>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="seclib">
+            <label class="field-label">Protein ID</label>
+            <input type="text" name="--id" placeholder="z.B. 2MZ9">
+            <label class="field-label">oder ID-Liste (File)</label>
+            <input type="file" name="--idlist">
+            <label class="field-label">
+                <input type="checkbox" name="--generate_fasta" value="yes" style="width:auto;"> Generate FASTA
+            </label>
+            <br>
+            <button type="submit">Run</button>
+        </form>
+        {output_section if action == "seclib" else ""}
+    </div>
+
+    <div class="card">
+        <h2>Train</h2>
+        <p>Train a GOR model on a secondary structure database.</p>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="train">
+            <label class="field-label">GOR Methode</label>
+            <select name="--method">
+                <option value="1">GOR1</option>
+                <option value="3">GOR3</option>
+                <option value="4">GOR4</option>
+            </select>
+            <label class="field-label">Database File</label>
+            <input type="file" name="--db">
+            <button type="submit">Run</button>
+        </form>
+        {output_section if action == "train" else ""}
+    </div>
+
+    <p class="section-label">Prediction</p>
+
+    <div class="card">
+        <h2>Predict</h2>
+        <p>Predict secondary structure from a FASTA or MAF file.</p>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="predict">
+            <label class="field-label">GOR Typ</label>
+            <select name="--Gor_type">
+                <option value="--GOR1">GOR1</option>
+                <option value="--GOR3">GOR3</option>
+                <option value="--GOR4">GOR4</option>
+            </select>
+            <label class="field-label">Custom Model (pls use the same filename as provided by the generator or use the format gorXmodel.txt)</label>
+            <input type="file" name="--model_file">
+            <label class="field-label">FASTA (File)</label>
+            <input type="file" name="--fasta">
+            <label class="field-label">MAF (File)</label>
+            <input type="file" name="--maf">
+            <label class="field-label">Probabilities</label>
+            <select name="--probabilities">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+            <label class="field-label">
+                <input type="checkbox" name="--postprocess" value="yes" style="width:auto;"> Post-Processing
+            </label>
+            <label class="field-label">Post-Processing Window Size</label>
+            <input type="number" name="--windowsize" value="7" min="3" max="20" step="2">
+            <button type="submit">Run</button>
+        </form>
+        {output_section if action == "predict" else ""}
+    </div>
+
+    <p class="section-label">Validation</p>
+
+    <div class="card">
+        <h2>Validate</h2>
+        <p>Compare a prediction against a reference to compute Q3/SOV scores.</p>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="validate">
+            <label class="field-label">Prediction</label>
+            <textarea name="--prediction" rows="4"></textarea>
+            <input type="file" name="--prediction_file">
+            <label class="field-label">Reference</label>
+            <textarea name="--reference" rows="4"></textarea>
+            <input type="file" name="--reference_file">
+            <button type="submit">Run</button>
+        </form>
+        {output_section if action == "validate" else ""}
+    </div>
+
+    <div class="card">
+        <h2>K-Fold</h2>
+        <p>Cross-validate a GOR model with k-fold evaluation.</p>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="kfold">
+            <label class="field-label">GOR Typ</label>
+            <select name="--gorType">
+                <option value="gor1">GOR1</option>
+                <option value="gor3">GOR3</option>
+                <option value="gor4">GOR4</option>
+            </select>
+            <label class="field-label">Fold Count</label>
+            <input type="number" name="--foldcount" value="5" min="2" max="10">
+            <label class="field-label">Input Database</label>
+            <input type="file" name="--input_seclib">
+            <button type="submit">Run</button>
+        </form>
+        {output_section if action == "kfold" else ""}
+    </div>
+
+    <p class="section-label">Visualisation</p>
+
+    <div class="card">
+        <h2>3D Protein</h2>
+        <p>
+    3D model of protein.
+    ---------------------------------------
+    For comparison of GOR-Prediction with observed in 3D (JSmol) attach gor output file.
+         </p>
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="visualise">
             <div class="param-grid">
@@ -268,8 +301,26 @@ print(f"""<!DOCTYPE html>
             <button type="submit">Visualise</button>
         </form>
         {output_section if action == "visualise" else ""}
+        
+        
+        <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
+        <script type="text/javascript">
+        var Info = {{
+            width: 1000,
+            height: 1000,
+            j2sPath: "jsmol/j2s"
+        }};
+        viewer = Jmol.getApplet("viewer", Info);
+        Jmol.script(viewer, "background white; load =8adh; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=13 and :A) or (resno=15 and :A); color green;");
+        </script>
     </div>
-</section>
+
+</div>
+
+<footer>
+    <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; LMU/TUM &middot; Gruppe 15</span>
+    <span>Laura Martin &middot; Lucas Nassonov &middot; Daniel Bernadi &middot; Toan David Huynh Ngoc</span>
+</footer>
 
 </body>
 </html>""")
