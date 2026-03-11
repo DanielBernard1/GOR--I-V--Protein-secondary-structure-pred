@@ -6,9 +6,7 @@ import subprocess
 import mycgi
 import mysql.connector
 
-
 form = mycgi.Form()
-
 
 # Werte einlesen
 if "input_type" in form:
@@ -104,44 +102,8 @@ if use_nw == "nw":
     style_go = "display: none;"
 else:
     style_go = "display: block;"
-    
-try:
-    int(go)
-except ValueError:
-    go = "-12"
-    
-try:
-    int(ge)
-except ValueError:
-    ge = "-1"
-
-import re as _re
-def safe_id(val):
-    return _re.sub(r"[^\w\-]", "_", val)[:50]
-
-id1 = safe_id(id1)
-id2 = safe_id(id2)
-
-val_AA = set("ACDEFGHIKLMNPQRSTVWY")
-def clean_seq(seq):
-    seq = seq.upper()
-    invalid = set(seq) - val_AA - {" ", "\n"}
-    if invalid:
-        return None
-    return seq
-    
-seq1 = clean_seq(seq1)
-seq2 = clean_seq(seq2)
-
-if seq1 is None:
-    text_error = "ERROR: Sequence 1 contains invalid characters. Only amino acid letters allowed (ACDEFGHIKLMNPQRSTVWY)."
-    seq1 = ""
-if seq2 is None:
-    text_error = "ERROR: Sequence 2 contains invalid characters. Only amino acid letters allowed (ACDEFGHIKLMNPQRSTVWY)."
-    seq2 = ""
 
 file_error = ""
-#Fasta File
 if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
     try:
         content = form["seqfile"].file.read().decode("utf-8")
@@ -163,83 +125,68 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
         else:
             id1, seq1 = entries[0]
             id2, seq2 = entries[1]
-            if len(seq1) == 0 or len(seq2) == 0:
-                file_error = "ERROR: One or both sequences are empty after parsing."
-
-    except UnicodeDecodeError:
-        file_error = "ERROR: File is not valid."
     except Exception as e:
         file_error = f"ERROR reading file: {e}"
 
 # Native pairs.txt + seqlib.txt Upload
 native_error = ""
-use_native   = False
+use_native = False
 if input_type == "native":
-    pairs_ok  = "pairs_file"  in form and hasattr(form["pairs_file"],  "file") and form["pairs_file"].filename
+    pairs_ok = "pairs_file" in form and hasattr(form["pairs_file"], "file") and form["pairs_file"].filename
     seqlib_ok = "seqlib_file" in form and hasattr(form["seqlib_file"], "file") and form["seqlib_file"].filename
     if not pairs_ok or not seqlib_ok:
-        native_error = "ERROR: Please insert both Files (pairs.txt and seqlib.txt)."
+        native_error = "ERROR: Bitte beide Dateien hochladen (pairs.txt und seqlib.txt)."
     else:
         try:
-            pairs_content  = form["pairs_file"].file.read().decode("utf-8")
+            pairs_content = form["pairs_file"].file.read().decode("utf-8")
             seqlib_content = form["seqlib_file"].file.read().decode("utf-8")
-            if pairs_content.strip():
-                first_pair = pairs_content.strip().splitlines()[0].split()
-            else:
-                first_pair = []
-            if len(first_pair)<2:
-                native_error = "ERROR: pairs.txt must contain at least one line with two IDs."
-            else:
-                with open("pairs.txt", "w") as f:
-                    f.write(pairs_content)
-                with open("seqlib.txt", "w") as f:
-                    f.write(seqlib_content)
-                use_native = True
-
-                id1 = safe_id(first_pair[0])
-                id2 = safe_id(first_pair[1])
-
-        except UnicodeDecodeError:
-            file_error = "ERROR: File is not valid."
+            with open("pairs.txt", "w") as f:
+                f.write(pairs_content)
+            with open("seqlib.txt", "w") as f:
+                f.write(seqlib_content)
+            use_native = True
+            first_pair = pairs_content.strip().splitlines()[0].split()
+            if len(first_pair) >= 2:
+                id1 = first_pair[0]
+                id2 = first_pair[1]
         except Exception as e:
-            native_error = f"ERROR while reading the file: {e}"
+            native_error = f"ERROR beim Einlesen der Dateien: {e}"
 
 # pdb_error hier initialisieren damit Java-Bedingung unten funktioniert
 pdb_error = ""
 
 text_error = ""
 if input_type == "text" and submitted and (not seq1 or not seq2):
-    text_error = "ERROR: Please insert both Sequences."
+    text_error = "Fehler: Bitte beide Sequenzen eingeben."
 
 pdb_error = ""
 if input_type == "pdb" and pdb1_input:
-    if not _re.match(r"^[A-Z0-9]{4,8}$", pdb1_input)or not _re.match(r"^[A-Za-z0-9]{4,8}$", pdb2_input):
-        pdb_error = "ERROR: Invalid PDB-ID format."
-    else:
-        try:
-            db = mysql.connector.connect(
-                host="mysql2-ext.bio.ifi.lmu.de",
-                user="bioprakt15",
-                password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
-                database="bioprakt15"
-            )
-            cursor = db.cursor()
-            cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb1_input.lower(),))
-            row = cursor.fetchone()
-            seq1 = row[0] if row else None
-            cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
-            row = cursor.fetchone()
-            seq2 = row[0] if row else None
-            id1 = pdb1_input
-            id2 = pdb2_input
-            db.close()
-            if not seq1 or not seq2:
-                pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
-                seq1 = seq2 = ""
-        except Exception as e:
-            pdb_error = f"ERROR: Datenbankverbindung fehlgeschlagen: {e}"
+    try:
+        db = mysql.connector.connect(
+            host="mysql2-ext.bio.ifi.lmu.de",
+            user="bioprakt15",
+            password="$1$/NQ9xkkh$BnZDjreVX/1q0MGqWEc3M0",
+            database="bioprakt15"
+        )
+        cursor = db.cursor()
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb1_input.lower(),))
+        row = cursor.fetchone()
+        seq1 = row[0] if row else None
+        cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
+        row = cursor.fetchone()
+        seq2 = row[0] if row else None
+        id1 = pdb1_input
+        id2 = pdb2_input
+        db.close()
+        if not seq1 or not seq2:
+            pdb_error = f"ERROR: PDB-ID nicht gefunden ('{pdb1_input}' oder '{pdb2_input}' nicht in der Datenbank)"
             seq1 = seq2 = ""
+    except Exception as e:
+        pdb_error = f"ERROR: Datenbankverbindung fehlgeschlagen: {e}"
+        seq1 = seq2 = ""
 
+if pdb_error:
+    print(f'<p class="error">{pdb_error}</p>')
 
 # Java starten — VOR dem HTML damit Download möglich ist
 import sys
@@ -273,8 +220,8 @@ if (use_native or (seq1 and seq2)) and not file_error and not text_error and not
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
-
 print("Content-type: text/html\n")
+
 if "download_output" in form:
     download_output = True
 else:
@@ -288,13 +235,11 @@ if output and not java_error and (input_type == "native" or download_output):
     else:
         ext = "txt"
     filename = f"alignment_{id1}_vs_{id2}.{ext}"
-    #print("Content-Type: text/plain")
-    #print(f"Content-Disposition: attachment; filename=\"{filename}\"")
-    #print()
+    # print("Content-Type: text/plain")
+    # print(f"Content-Disposition: attachment; filename=\"{filename}\"")
+    # print()
     print(output.stdout)
     sys.exit(0)
-
-
 
 # Vorberechnete Werte für HTML-Template
 if download_output:
@@ -310,7 +255,7 @@ print(f"""<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Alignment — propraGruppe15</title>
 
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
@@ -467,7 +412,7 @@ print(f"""<!DOCTYPE html>
         }}
         .result-dot {{ width: 7px; height: 7px; border-radius: 50%; background: #a8efd0; }}
 
-        
+
         pre.result {{
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.82rem; line-height: 1.7;
@@ -666,13 +611,10 @@ if file_error:
 if text_error:
     print(f'<p class="error">{text_error}</p>')
 
-
-
-
 if output:
     print("<pre>")
 if java_error:
-    print (f"<p class='error'>{java_error}</p>")
+    print(f"<p class='error'>{java_error}</p>")
 if output:
     import re
 
@@ -697,7 +639,6 @@ if output:
         print('</pre>')
     print('<p class="section-label">Graphics</p>')
 
-
 # DP-Matrix und Fixpoint
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
 
@@ -714,12 +655,12 @@ if show_dp and seq1 and seq2 and output:
             cmd_dp.append("--ss")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
-        dp_png = dp_path + "dp_matrix_" +id1 + "_" + id2 + ".png"
+        dp_png = dp_path + "dp_matrix_" + id1 + "_" + id2 + ".png"
         dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_png], capture_output=True, text=True)
         print("<h2>DP-Matrix:</h2>")
         print(
             f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/dp_matrix_{id1}_{id2}.png'>")
-        #print("</div>")
+        # print("</div>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
         fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
