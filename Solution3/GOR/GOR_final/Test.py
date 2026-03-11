@@ -187,7 +187,11 @@ print(f"""<!DOCTYPE html>
         {output_section if action == "seclib" else ""}
     </div>
 
-    <div class="card">
+   
+
+    <p class="section-label">Prediction</p>
+    
+     <div class="card">
         <h2>Train</h2>
         <p>Train a GOR model on a secondary structure database.</p>
         <form method="post" enctype="multipart/form-data">
@@ -204,8 +208,6 @@ print(f"""<!DOCTYPE html>
         </form>
         {output_section if action == "train" else ""}
     </div>
-
-    <p class="section-label">Prediction</p>
 
     <div class="card">
         <h2>Predict</h2>
@@ -306,8 +308,8 @@ print(f"""<!DOCTYPE html>
         <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
         <script type="text/javascript">
         var Info = {{
-            width: 1000,
-            height: 1000,
+            width: 750,
+            height: 750,
             j2sPath: "jsmol/j2s"
         }};
         viewer = Jmol.getApplet("viewer", Info);
