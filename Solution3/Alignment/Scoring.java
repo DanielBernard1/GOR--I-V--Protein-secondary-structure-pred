@@ -157,7 +157,13 @@ public class Scoring{
     }
 
     public String[] Gotoh_alignment(){
-        Gotoh gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
+        Gotoh gotoh;
+        if (secStruct){
+            gotoh = new Gotoh(seq1, seq2, sseq1, sseq2, substitution_matrix, secondaryStructureMatrix, go, ge, mode);
+        }
+        else {
+            gotoh = new Gotoh(seq1, seq2, substitution_matrix, go, ge, mode);
+        }
         if (mode.isGlobal()){
             return gotoh.Global_alignment();
         }
