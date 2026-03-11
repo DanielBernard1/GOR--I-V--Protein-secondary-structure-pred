@@ -258,6 +258,10 @@ if output and not java_error and (input_type == "native" or download_output):
     print(output.stdout)
     sys.exit(0)
 
+if download_output:
+    download_output_checked = "checked"
+else:
+    download_output_checked = ""
 
 
 
@@ -568,14 +572,6 @@ print(f"""<!DOCTYPE html>
         </div>
 
         <div id="input_native" style="{style_native}">
-            <p style="font-size:0.82rem; color:var(--text-dim); margin:10px 0 6px;">
-                Direkt die nativen Java-Input-Dateien hochladen. Ermöglicht mehrere Paare auf einmal.
-            </p>
-            <div style="font-family:monospace;font-size:0.78rem;background:#f4f4f4;border:1px solid var(--border);padding:10px;border-radius:4px;margin-bottom:12px;">
-                <b>pairs.txt:</b>&nbsp; seq1 seq2<br>
-                <b>seqlib.txt:</b> seq1:MVLSPADKTN...<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq2:ACDEFGHIKL...
-            </div>
             <label class="field-label">pairs.txt</label>
             <input type="file" name="pairs_file" accept=".txt">
             <label class="field-label">seqlib.txt</label>
@@ -583,7 +579,7 @@ print(f"""<!DOCTYPE html>
 
         </div>
 
-    </div><!-- end card -->
+    </div>
 
     <p class="section-label">Parameters</p>
     <div class="card">
@@ -634,9 +630,11 @@ print(f"""<!DOCTYPE html>
             <input type="checkbox" name="show_dp" id="show_dp" {'checked' if show_dp else ''}>
             <label for="show_dp">show DP-Matrix</label>
         </div>
+        
         <div class="checkbox-row">
             <input type="checkbox" name="show_Fixpoint" id="show_FP" {'checked' if show_fp else ''}>
             <label for="show_FP">Show FixedPoint-Graphics</label>
+        </div>
     </div><!-- end card -->
 
         <input type="submit" value="Calculate Alignment">
@@ -652,11 +650,12 @@ if file_error:
 if text_error:
     print(f'<p class="error">{text_error}</p>')
 
+if output:
+    print("<pre>")
 if java_error:
     print (f"<p class='error'>{java_error}</p>")
-
 if output:
-
+    import re
     java_out = output.stdout
     # Java gibt bei format=html eine komplette HTML-Seite aus — nur Body-Inhalt nehmen
     # sonst wird unsere Seite blau/kaputt durch Java-eigenes CSS
@@ -676,7 +675,7 @@ if output:
         print(java_out)
         print('</pre>')
 
-    print('<p class="section-label">Graphics</p>')
+        print('<p class="section-label">Graphics</p>')
     #print("<img src='benchmark.png'>")
 
 # DP-Matrix und Fixpoint
@@ -707,14 +706,18 @@ if show_dp and seq1 and seq2 and output:
 
         print("</div>")
 
-        fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
-        fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
-        subprocess.run(["python3", "FixPoint.py", fp_file, fp_png],capture_output=True, text=True)
-        print("<h2>Fixed Point Alignment</h2>")
-        print(
-            f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
     except Exception as e:
         print(f"<p class='error'>DP-Matrix ERROR: {e}</p>")
+
+if show_fp and seq1 and seq2 and output:
+    try:
+        fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
+        fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
+        subprocess.run(["python3", "FixPoint.py", fp_file, fp_png], capture_output=True, text=True)
+        print("<h2>Fixed Point Alignment</h2>")
+        print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
+    except Exception as e:
+        print(f"<p class='error'>Fixed Point ERROR: {e}</p>")
 
 print("""
 </div>
