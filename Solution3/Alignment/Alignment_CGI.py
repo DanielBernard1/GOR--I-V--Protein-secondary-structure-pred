@@ -475,7 +475,7 @@ print(f"""<!DOCTYPE html>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/Test.py">GOR</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
         <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
-        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html" class="active">Help</a></li>
+        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html">Help</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/about/index.html">About</a></li>
     </ul>
 </nav>
