@@ -50,7 +50,7 @@ elif action == "visualise":
 
         outdir = os.path.join(BASE_DIR, "uploads")
         subprocess.run([
-            sys.executable, os.path.join(BASE_DIR, "visualisediff2.py"),
+            sys.executable, os.path.join(BASE_DIR,"visualsediff2.py"),
             "--pdb", pdb_id,
             "--gorout", gorout,
             "--output", outdir
@@ -75,25 +75,32 @@ elif action == "validate":
         <thead>
             <tr style="background: #2c3e50; color: white;">
                 <th style="padding: 8px 12px;">Fold</th>
-                <th style="padding: 8px 12px;">Proteins</th>
+                <th style="padding: 8px 12px;">Nr of Prot</th>
                 <th style="padding: 8px 12px;">Mean Length</th>
-                <th style="padding: 8px 12px;">Sum Length</th>
-                <th style="padding: 8px 12px;">Sum Predicted</th>
+                <th style="padding: 8px 12px;">Sum of Length</th>
+                <th style="padding: 8px 12px;">Sum of pred. pos</th>
                 <th style="padding: 8px 12px;">Q3 Mean</th>
                 <th style="padding: 8px 12px;">Q3 Dev</th>
                 <th style="padding: 8px 12px;">SOV Mean</th>
                 <th style="padding: 8px 12px;">SOV Dev</th>
-                <th style="padding: 8px 12px;">qObs H</th>
-                <th style="padding: 8px 12px;">qObs E</th>
-                <th style="padding: 8px 12px;">qObs C</th>
-                <th style="padding: 8px 12px;">SOV H</th>
-                <th style="padding: 8px 12px;">SOV E</th>
-                <th style="padding: 8px 12px;">SOV C</th>
+                <th style="padding: 8px 12px;">Q3_H Mean</th>
+                <th style="padding: 8px 12px;">Q3_H Dev</th>
+                <th style="padding: 8px 12px;">Q3_E Mean</th>
+                <th style="padding: 8px 12px;">Q3_E Dev</th>
+                <th style="padding: 8px 12px;">Q3_C Mean</th>
+                <th style="padding: 8px 12px;">Q3_C Dev</th>
+                <th style="padding: 8px 12px;">SOV_H Mean</th>
+                <th style="padding: 8px 12px;">SOV_H Dev</th>
+                <th style="padding: 8px 12px;">SOV_E Mean</th>
+                <th style="padding: 8px 12px;">SOV_E Dev</th>
+                <th style="padding: 8px 12px;">SOV_C Mean</th>
+                <th style="padding: 8px 12px;">SOV_C Dev</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td style="padding: 8px 12px;">validation</td>
+                <td style="padding: 8px 12px;">{values[0]}</td>
                 <td style="padding: 8px 12px;">{values[1]}</td>
                 <td style="padding: 8px 12px;">{values[2]}</td>
                 <td style="padding: 8px 12px;">{values[3]}</td>
@@ -108,6 +115,11 @@ elif action == "validate":
                 <td style="padding: 8px 12px;">{values[12]}</td>
                 <td style="padding: 8px 12px;">{values[13]}</td>
                 <td style="padding: 8px 12px;">{values[14]}</td>
+                <td style="padding: 8px 12px;">{values[15]}</td>
+                <td style="padding: 8px 12px;">{values[16]}</td>
+                <td style="padding: 8px 12px;">{values[17]}</td>
+                <td style="padding: 8px 12px;">{values[18]}</td>
+                <td style="padding: 8px 12px;">{values[19]}</td>
             </tr>
         </tbody>
     </table>
@@ -395,6 +407,9 @@ print(f"""<!DOCTYPE html>
         }})();
         </script>
     </div>
+    
+    
+print(f"<img src='"513counts.png"' alt="Beschreibung" width="600">")
 
 </div>
 
