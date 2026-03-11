@@ -194,6 +194,7 @@ public class Scoring{
         else{
             dynamicProgramming = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
         }
+        dynamicProgramming.getScoring_matrix();
         return dynamicProgramming.getTraceback();
     }
 }
