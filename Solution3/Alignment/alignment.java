@@ -280,12 +280,9 @@ public class alignment {
                     }
                 }
                 try (FileWriter fw = new FileWriter(trace)) {
-                    char[][] tracing = scoring.getTraceback();
-                    for (char[] a : tracing){
-                        for (char b : a){
-                            fw.write(b + "\t");
-                        }
-                        fw.write("\n");
+                    List<String> indexes = scoring.getTracebackIndexes();
+                    for (String idx : indexes){
+                        fw.write(idx + "\n");
                     }
                 }
             }
