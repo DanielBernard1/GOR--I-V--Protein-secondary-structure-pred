@@ -140,8 +140,8 @@ def kfold(BASE_DIR, form):
     for i in range(len(averages)):
         averages[i] = round(averages[i], 2)
 
-    headers = ["Number of Proteins", "Mean Protein Length", "Sum of Protein Length",
-               "Sum of Predicted Positions", "Q3 Mean", "SOV Mean", "SOV Dev",
+    headers = ["Nr of Prot", "Mean Length", "Sum of Length",
+               "Sum of pred. pos", "Q3 Mean", "SOV Mean", "SOV Dev",
                "qObs_H Mean", "qObs_E Mean", "qObs_C Mean",
                "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
     header_html = "<tr>\n    <th style='padding: 8px 16px;'>Fold</th>\n"
