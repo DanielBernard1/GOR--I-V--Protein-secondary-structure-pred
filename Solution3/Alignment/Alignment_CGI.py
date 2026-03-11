@@ -515,10 +515,18 @@ print(f"""<!DOCTYPE html>
 
         <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:10px;">Input-Type:</p>
 
+        <p style="font-size:0.8rem; color:var(--text-dim);">Own Sequences:</p>
         <input type="button" value="Enter Sequences manually" onclick="switchInput('text')">
+
+        <p style="font-size:0.8rem; color:var(--text-dim);">Upload pairs and seqlib File</p>
         <input type="button" value="pairs + seqlib" onclick="switchInput('native')">
+
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FastaFile:</p>
         <input type="button" value="Enter Fasta-File" onclick="switchInput('file')">
+
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload PDB-IDs from the Database:</p>
         <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
+
 
         <input type="hidden" name="input_type" id="input_type_hidden" value="{input_type}">
         <br>
