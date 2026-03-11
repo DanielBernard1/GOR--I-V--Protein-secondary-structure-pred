@@ -103,6 +103,16 @@ if use_nw == "nw":
 else:
     style_go = "display: block;"
 
+try:
+    int(go)
+except ValueError:
+    go = "-12"
+
+try:
+    int(ge)
+except ValueError:
+    ge = "-1"
+
 file_error = ""
 if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
     try:
