@@ -236,9 +236,9 @@ if output and not java_error and (input_type == "native" or download_output):
     else:
         ext = "txt"
     filename = f"alignment_{id1}_vs_{id2}.{ext}"
-    print("Content-Type: text/plain")
-    print(f"Content-Disposition: attachment; filename=\"{filename}\"")
-    print()
+    #print("Content-Type: text/plain")
+    #print(f"Content-Disposition: attachment; filename=\"{filename}\"")
+    #print()
     print(output.stdout)
     sys.exit(0)
 
