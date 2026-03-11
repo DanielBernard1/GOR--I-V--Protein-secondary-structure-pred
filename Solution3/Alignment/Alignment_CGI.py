@@ -626,9 +626,11 @@ print(f"""<!DOCTYPE html>
             <input type="checkbox" name="show_dp" id="show_dp" {'checked' if show_dp else ''}>
             <label for="show_dp">show DP-Matrix</label>
         </div>
+        
         <div class="checkbox-row">
             <input type="checkbox" name="show_Fixpoint" id="show_FP" {'checked' if show_fp else ''}>
             <label for="show_FP">Show FixedPoint-Graphics</label>
+        </div>
     </div><!-- end card -->
 
         <input type="submit" value="Calculate Alignment">
