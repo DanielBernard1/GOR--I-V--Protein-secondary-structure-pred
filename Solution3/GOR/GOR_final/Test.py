@@ -19,7 +19,7 @@ GOR_OUTPUT = os.path.join("uploads/temp_seqAndStructure.txt")
 
 if action == "seclib":
     try:
-        output, seclib_path = run_predict(BASE_DIR, form)
+        output, seclib_path = run_seclib(BASE_DIR, form)
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href='uploads/temp_seqAndStructure.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
@@ -30,7 +30,7 @@ elif action == "predict":
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
         output_section += f"<a href='uploads/temp_seqAndStructure.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none; margin-top:10px; display:inline-block;'>Prediction</a>"
         if pp_path:
-            output_section += f" <a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Post-Processed</a>"
+            output_section += f" <br><br><a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Post-Processed</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 

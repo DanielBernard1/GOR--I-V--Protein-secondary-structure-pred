@@ -62,18 +62,18 @@ def run_predict(BASE_DIR, form):
             modelGor1 = custom_model
             if GorType != "--GOR1":
                 os.remove(custom_model)
-                return "wrong combination of GOR and model"
+                return "wrong combination of GOR and model", None
 
         elif "gor3" in filename:
             modelGor3 = custom_model
             if GorType != "--GOR3":
                 os.remove(custom_model)
-                return "wrong combination of GOR and model"
+                return "wrong combination of GOR and model", None
         elif "gor4" in filename:
             modelGor4 = custom_model
             if GorType != "--GOR4":
                 os.remove(custom_model)
-                return "wrong combination of GOR and model"
+                return "wrong combination of GOR and model", None
 
 
 
@@ -155,7 +155,7 @@ def run_predict(BASE_DIR, form):
         os.remove(custom_model)
 
     if form.getvalue("--postprocess") == "yes":
-        pp_output_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure_pp.txt")
+        pp_output_path = os.path.join("uploads/temp_seqAndStructure_pp.txt")
         try:
             postprocess(tmp_path, pp_output_path)
         except Exception:
