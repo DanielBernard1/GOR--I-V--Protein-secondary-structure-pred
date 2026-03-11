@@ -43,7 +43,7 @@ elif action == "visualise":
         gorout_upload = form.getvalue("--vis_gorout")
         if gorout_upload:
             gorout = os.path.join(BASE_DIR, "uploads", "vis_gorout.txt")
-            with open(gorout, "w") as f:
+            with open(gorout, "wb") as f:
                 f.write(gorout_upload)
         else:
             gorout = os.path.join(BASE_DIR, "uploads", "temp_seqAndStructure.txt")

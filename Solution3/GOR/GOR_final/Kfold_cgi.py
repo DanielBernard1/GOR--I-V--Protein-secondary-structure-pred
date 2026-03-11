@@ -132,50 +132,47 @@ def kfold(BASE_DIR, form):
         for j in range(len(allvalues[i])):
             allvalues[i][j] = round(allvalues[i][j], 2)
 
-    for i in range(len(averages)):
-        averages[i] = round(averages[i], 2)
-
     averages = []
     for col in range(len(allvalues[0])):
         total = 0
         for row in allvalues:
             total += row[col]
-        averages.append(total / len(allvalues))
+        averages.append(round( (total / len(allvalues)) , 2))
 
     headers = ["Nr of Prot", "Mean Length", "Sum of Length",
                "Sum of pred. pos", "Q3 Mean", "SOV Mean", "SOV Dev",
                "qObs_H Mean", "qObs_E Mean", "qObs_C Mean",
                "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
-    header_html = "<tr>\n    <th style='padding: 8px 16px;'>Fold</th>\n"
+    header = "<tr>\n    <th style='padding: 8px 16px;'>Fold</th>\n"
     for h in headers:
-        header_html += f"    <th style='padding: 8px 16px;'>{h}</th>\n"
-    header_html += "</tr>"
-    fold_rows = ""
+        header += f"    <th style='padding: 8px 16px;'>{h}</th>\n"
+    header += "</tr>"
+    rows = ""
     for i, fold in enumerate(allvalues):
-        fold_rows += f"<tr>\n    <td style='padding: 8px 16px;'>Fold {i + 1}</td>\n"
+        rows += f"<tr>\n    <td style='padding: 8px 16px;'>Fold {i + 1}</td>\n"
         for value in fold:
-            fold_rows += f"    <td style='padding: 8px 16px;'>{value}</td>\n"
-        fold_rows += "</tr>\n"
+            rows += f"    <td style='padding: 8px 16px;'>{value}</td>\n"
+        rows += "</tr>\n"
 
-    avg_row = "<tr>\n    <td style='padding: 8px 16px;'><b>Average</b></td>\n"
+    avg = "<tr>\n    <td style='padding: 8px 16px;'><b>Average</b></td>\n"
     for value in averages:
-        avg_row += f"    <td style='padding: 8px 16px;'>{value}</td>\n"
-    avg_row += "</tr>\n"
+        avg += f"    <td style='padding: 8px 16px;'>{value}</td>\n"
+    avg += "</tr>\n"
 
-    table_html = f"""
+    table = f"""
 <div style="overflow-x: auto;">
     <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
         <thead style="background: #2c3e50; color: white;">
-            {header_html}
+            {header}
         </thead>
         <tbody>
-            {fold_rows}
-            {avg_row}
+            {rows}
+            {avg}
         </tbody>
     </table>
 </div>"""
 
-    return table_html
+    return table
 
 
 
