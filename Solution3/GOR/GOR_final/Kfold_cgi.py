@@ -17,6 +17,7 @@ def kfold(BASE_DIR, form):
     with open(seclib, "w") as f:
         f.write(seclib_with_data)
 
+
     VALIDATION_PATH = os.path.join( "jars/validateGor.jar")
     TRAIN_JAR   = os.path.join("jars/train.jar")
     PREDICT_JAR = os.path.join("jars/predict.jar")
@@ -24,6 +25,7 @@ def kfold(BASE_DIR, form):
     proteins= []
     with open(seclib) as f:
         lines = f.readlines()
+    os.remove(seclib)
 
 
     i = 0
@@ -107,9 +109,6 @@ def kfold(BASE_DIR, form):
              "-f", "txt"],
             capture_output=True, text=True)
 
-        return f"<pre>foldvalues: {foldvalues}\nallvalues: {allvalues}\nvalidate stdout: {validate_output.stdout}</pre>"
-
-
 
 
         foldvalues = []
@@ -117,19 +116,12 @@ def kfold(BASE_DIR, form):
             line = line.strip()
             if not line:
                 continue
-            value_str = line.split(":")[-1].strip()
-            if value_str.replace(".", "").replace("-", "").isdigit():
-                foldvalues.append(float(value_str))
             else:
-                continue
+                foldvalues.append(float(line))
 
-        print(f"validate stdout: {validate_output.stdout}", file=sys.stderr)
-        print(f"validate stderr: {validate_output.stderr}", file=sys.stderr)
+
         allvalues.append(foldvalues)
-        allvalues.append(foldvalues)
-        for line in validate_output.stdout.splitlines():
-            foldvalues.append(float(line))
-        allvalues.append(foldvalues)
+
 
         for path in [train_seclib, test_fasta, model_file, predict_output, PREDICTION_PATH, REFERENCE_PATH, DETAILED_PATH]:
             if os.path.exists(path):
@@ -141,9 +133,13 @@ def kfold(BASE_DIR, form):
         for row in allvalues:
             total += row[col]
         averages.append(total / len(allvalues))
-    headers = []
-    for i in range(len(allvalues[0])):
-        headers.append(f"Val {i + 1}")
+
+    headers = ["Number of Proteins", "Mean Protein Length", "Sum of Protein Length",
+               "Sum of Predicted Positions", "Q3 Mean", "SOV Mean", "SOV Dev",
+               "qObs_H Mean", "qObs_E Mean", "qObs_C Mean",
+               "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
+
+
     header_html = "<tr>\n    <th>Fold</th>\n"
     for h in headers:
         header_html += f"    <th>{h}</th>\n"
