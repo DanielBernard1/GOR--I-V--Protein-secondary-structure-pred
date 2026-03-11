@@ -140,35 +140,40 @@ def kfold(BASE_DIR, form):
                "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
 
 
-    header_html = "<tr>\n    <th>Fold</th>\n"
+    header = "<tr>\n    <th>Fold</th>\n"
     for h in headers:
-        header_html += f"    <th>{h}</th>\n"
-    header_html += "</tr>"
+        header += f"    <th>{h}</th>\n"
+    header += "</tr>"
 
     fold_rows = ""
     for i, fold in enumerate(allvalues):
-        fold_rows += f"<tr>\n    <td>Fold {i + 1}</td>\n"
+        fold_rows += f"<tr>\n  <td style='padding: 6px 10px;'>Fold {i + 1}</td>\n"
         for value in fold:
-            fold_rows += f"    <td>{value}</td>\n"
+            fold_rows += f"  <td style='text-align:right; padding: 6px 10px;'>{value}</td>\n"
         fold_rows += "</tr>\n"
 
 
-    avg_row = "<tr>\n    <td><b>Average</b></td>\n"
+    avg_row =  "<td>Avg</td>\n"
     for value in averages:
-        avg_row += f"    <td>{round(value, 4)}</td>\n"
+        avg_row += f"<td style='text-align:right; padding: 6px 10px;'>{round(value, 2)}</td>\n"
     avg_row += "</tr>\n"
+
     table_html = f"""
-    <div style="overflow-x: auto;">
-        <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
-            <thead style="background: #2c3e50; color: white;">
-                {header_html}
-            </thead>
-            <tbody>
-                {fold_rows}
-                {avg_row}
-            </tbody>
-        </table>
-    </div>"""
+        <div style="overflow-x: auto; margin-top: 1rem;">
+            <table style="border-collapse: collapse; width: 100%; font-size: 0.7rem;">
+                <thead>
+                    <tr style="background: #2c3e50; color: white; text-align: center;">
+                        {header}
+                    </tr>
+                </thead>
+                <tbody>
+                    {fold}
+                    <tr style="background: #ecf0f1; font-weight: bold;">
+                        {avg_row}
+                    </tr>
+                </tbody>
+            </table>
+        </div>"""
 
     return table_html
 
