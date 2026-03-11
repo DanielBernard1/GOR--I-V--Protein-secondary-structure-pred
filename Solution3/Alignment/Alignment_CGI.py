@@ -9,6 +9,9 @@ import mysql.connector
 
 form = mycgi.Form()
 
+print("Content-type: text/html\n")
+
+
 # Werte einlesen
 if "input_type" in form:
     submitted = True
@@ -184,7 +187,6 @@ if input_type == "pdb" and pdb1_input:
         row = cursor.fetchone()
         seq1 = row[0] if row else None
         cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
-        print(f'<p class="error">seq1={seq1} seq2={seq2}</p>')
         row = cursor.fetchone()
         seq2 = row[0] if row else None
         id1 = pdb1_input
@@ -232,7 +234,6 @@ if (use_native or (seq1 and seq2)) and not file_error and not text_error and not
     except Exception as e:
         print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
-print("Content-type: text/html\n")
 
 if "download_output" in form:
     download_output = True
