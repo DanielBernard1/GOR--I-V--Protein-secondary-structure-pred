@@ -10,9 +10,13 @@ import mysql.connector
 
 
 print("Content-type: text/html\n")
-
 try:
     form = mycgi.Form()
+except Exception:
+    form = {}
+
+
+try:
     # Werte einlesen
     if "input_type" in form:
         submitted = True
