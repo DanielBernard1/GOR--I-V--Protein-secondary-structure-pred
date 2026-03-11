@@ -182,6 +182,9 @@ print(f"""<!DOCTYPE html>
             <label><input type="checkbox" name="--postprocess" value="yes" style="width:auto;"> Post-Processing</label>
         </label>
         <br><br>
+        <label>Post-Processing Window Size</label>
+<input type="number" name="--windowsize" value="17" min="3" max="20" step="2">
+<br><br>
     
         <button type="submit" >Run</button>
     </form>
