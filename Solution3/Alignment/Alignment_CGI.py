@@ -6,6 +6,7 @@ import subprocess
 import mycgi
 import mysql.connector
 
+
 form = mycgi.Form()
 
 # Werte einlesen
@@ -103,16 +104,6 @@ if use_nw == "nw":
 else:
     style_go = "display: block;"
 
-try:
-    int(go)
-except ValueError:
-    go = "-12"
-
-try:
-    int(ge)
-except ValueError:
-    ge = "-1"
-
 file_error = ""
 if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
     try:
@@ -140,15 +131,15 @@ if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file
 
 # Native pairs.txt + seqlib.txt Upload
 native_error = ""
-use_native = False
+use_native   = False
 if input_type == "native":
-    pairs_ok = "pairs_file" in form and hasattr(form["pairs_file"], "file") and form["pairs_file"].filename
+    pairs_ok  = "pairs_file"  in form and hasattr(form["pairs_file"],  "file") and form["pairs_file"].filename
     seqlib_ok = "seqlib_file" in form and hasattr(form["seqlib_file"], "file") and form["seqlib_file"].filename
     if not pairs_ok or not seqlib_ok:
         native_error = "ERROR: Bitte beide Dateien hochladen (pairs.txt und seqlib.txt)."
     else:
         try:
-            pairs_content = form["pairs_file"].file.read().decode("utf-8")
+            pairs_content  = form["pairs_file"].file.read().decode("utf-8")
             seqlib_content = form["seqlib_file"].file.read().decode("utf-8")
             with open("pairs.txt", "w") as f:
                 f.write(pairs_content)
@@ -245,11 +236,13 @@ if output and not java_error and (input_type == "native" or download_output):
     else:
         ext = "txt"
     filename = f"alignment_{id1}_vs_{id2}.{ext}"
-    # print("Content-Type: text/plain")
-    # print(f"Content-Disposition: attachment; filename=\"{filename}\"")
-    # print()
+    print("Content-Type: text/plain")
+    print(f"Content-Disposition: attachment; filename=\"{filename}\"")
+    print()
     print(output.stdout)
     sys.exit(0)
+
+
 
 # Vorberechnete Werte für HTML-Template
 if download_output:
@@ -265,11 +258,184 @@ print(f"""<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Alignment — propraGruppe15</title>
 
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/style.css">
-      
+
+    <style>
+        :root {{
+            --green:     #2e7d52;
+            --green-dk:  #1f5c3a;
+            --green-lt:  #4caf80;
+            --green-bg:  #edf7f2;
+            --green-mid: #c5ddd0;
+            --text:      #1c2b1e;
+            --text-dim:  #5a7060;
+            --border:    #c5ddd0;
+            --bg:        #f2f8f4;
+            --white:     #ffffff;
+        }}
+        *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+        body {{
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }}
+
+        nav {{
+            background: var(--white);
+            border-bottom: 2px solid var(--green-mid);
+            padding: 0 32px;
+            display: flex; align-items: center; gap: 32px;
+            height: 54px; position: sticky; top: 0; z-index: 10;
+            box-shadow: 0 1px 6px rgba(30,80,50,0.07);
+        }}
+        .nav-logo {{
+            font-weight: 600; font-size: 0.95rem; color: var(--green);
+            display: flex; align-items: center; gap: 8px;
+            white-space: nowrap; text-decoration: none;
+        }}
+        .nav-links {{ display: flex; gap: 4px; list-style: none; }}
+        .nav-links a {{
+            text-decoration: none; font-size: 0.85rem; font-weight: 500;
+            color: var(--text-dim); padding: 6px 13px; border-radius: 6px; transition: all 0.15s;
+        }}
+        .nav-links a:hover  {{ background: var(--green-bg); color: var(--green); }}
+        .nav-links a.active {{ background: var(--green); color: white; }}
+
+        /* DESIGN: grüner Page-Header mit Algorithmen-Untertitel (alignment-spezifisch) */
+        .page-header {{
+            background: var(--green);
+            padding: 32px 40px 28px; color: white;
+        }}
+        .page-header h1 {{ font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }}
+        .page-header p  {{ font-size: 0.87rem; opacity: 0.82; font-weight: 300; }}
+
+        /* DESIGN: Sequenz-Dekorationszeile (alignment-spezifisch) */
+        .seq-deco {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; opacity: 0.22; letter-spacing: 0.12em;
+            margin-top: 14px; overflow: hidden; white-space: nowrap;
+        }}
+
+        .page-wrapper {{ max-width: 900px; margin: 0 auto; padding: 24px 24px 80px; }}
+
+        .section-label {{
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em;
+            text-transform: uppercase; color: var(--green);
+            margin-bottom: 10px; margin-top: 24px;
+            display: flex; align-items: center; gap: 8px;
+        }}
+        .section-label::after {{ content: ''; flex: 1; height: 1px; background: var(--green-mid); }}
+
+        .card {{
+            background: var(--white); border: 1px solid var(--border);
+            border-radius: 8px; padding: 22px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 4px rgba(30,80,50,0.07);
+        }}
+
+        .field-label {{
+            display: block; font-size: 0.78rem; font-weight: 500;
+            color: var(--text-dim); margin-bottom: 5px; margin-top: 14px;
+        }}
+
+        /* DESIGN: einheitliche Inputs mit grünem Focus-Ring */
+        input[type=text], select {{
+            width: 100%; padding: 9px 12px;
+            background: var(--white); border: 1.5px solid var(--border);
+            border-radius: 6px; color: var(--text);
+            font-family: 'Inter', sans-serif; font-size: 0.9rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none; appearance: none;
+        }}
+        input[type=text]:focus, select:focus {{
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(46,125,82,0.1);
+        }}
+
+        /* DESIGN: Monospace + grünlicher Hintergrund für Sequenz-Textareas (alignment-spezifisch) */
+        textarea {{
+            width: 100%; padding: 9px 12px;
+            background: #f6fdf9; border: 1.5px solid var(--border);
+            border-radius: 6px; color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem; resize: vertical; min-height: 72px;
+            transition: border-color 0.15s, box-shadow 0.15s; outline: none;
+        }}
+        textarea:focus {{ border-color: var(--green); box-shadow: 0 0 0 3px rgba(46,125,82,0.1); }}
+
+        /* DESIGN: custom Select-Pfeil */
+        select {{
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%235a7060' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center;
+            padding-right: 32px; cursor: pointer;
+        }}
+
+        /* DESIGN: Input-Typ Buttons als Outline-Buttons */
+        input[type=button] {{
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+            padding: 8px 16px; border: 1.5px solid var(--border); border-radius: 6px;
+            background: var(--white); color: var(--text-dim);
+            cursor: pointer; transition: all 0.15s; margin-right: 8px; margin-bottom: 6px;
+        }}
+        input[type=button]:hover {{ border-color: var(--green-lt); color: var(--green); background: var(--green-bg); }}
+
+        /* DESIGN: grüner Submit-Button */
+        input[type=submit] {{
+            margin-top: 20px; padding: 11px 28px;
+            background: var(--green); color: white;
+            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem;
+            border: none; border-radius: 6px; cursor: pointer; transition: background 0.15s;
+        }}
+        input[type=submit]:hover {{ background: var(--green-dk); }}
+
+        /* DESIGN: Checkbox grün */
+        input[type=checkbox] {{ accent-color: var(--green); width: 15px; height: 15px; cursor: pointer; }}
+        .checkbox-row {{ display: flex; align-items: center; gap: 9px; margin-top: 14px; font-size: 0.88rem; color: var(--text-dim); }}
+
+        /* DESIGN: 2-spaltiges Grid für Parameter */
+        .param-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }}
+
+        /* DESIGN: Fehlerbox */
+        .error {{
+            color: #c0392b; font-weight: 500; padding: 10px 14px;
+            background: #fff5f5; border: 1px solid #f0a0a0;
+            border-radius: 6px; margin: 10px 0; font-size: 0.88rem;
+        }}
+
+        /* DESIGN: Result-Bar (alignment-spezifisch) — grüner Header über dem Ergebnis */
+        .result-bar {{
+            background: var(--green); color: white;
+            padding: 9px 18px; font-size: 0.75rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            border-radius: 8px 8px 0 0;
+            display: flex; align-items: center; gap: 10px;
+        }}
+        .result-dot {{ width: 7px; height: 7px; border-radius: 50%; background: #a8efd0; }}
+
+        
+        pre.result {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem; line-height: 1.7;
+            white-space: pre; overflow-x: auto;
+            background: #f7fbf8;
+            border: 1.5px solid var(--border); border-top: none;
+            border-radius: 0 0 8px 8px; padding: 20px 24px;
+        }}
+
+        img {{ max-width: 100%; border-radius: 6px; border: 1px solid var(--border); margin-top: 12px; }}
+
+        hr {{ border: none; border-top: 1px solid var(--border); margin: 20px 0; }}
+
+        footer {{
+            background: var(--white); border-top: 1px solid var(--border);
+            padding: 14px 40px; font-size: 0.78rem; color: var(--text-dim);
+            display: flex; justify-content: space-between; margin-top: 40px;
+        }}
+    </style>
+
     <script>
     function switchInput(type) {{
         document.getElementById('input_text').style.display = 'none';
@@ -307,10 +473,10 @@ print(f"""<!DOCTYPE html>
     <ul class="nav-links">
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/Test.py">GOR</a></li>
-        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html">Help</a></li>
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/about/index.html">About</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
         <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
+        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html" class="active">Help</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/about/index.html">About</a></li>
     </ul>
 </nav>
 
@@ -450,10 +616,13 @@ if file_error:
 if text_error:
     print(f'<p class="error">{text_error}</p>')
 
+
+
+
 if output:
     print("<pre>")
 if java_error:
-    print(f"<p class='error'>{java_error}</p>")
+    print (f"<p class='error'>{java_error}</p>")
 if output:
     import re
 
@@ -477,6 +646,7 @@ if output:
         print(java_out)
         print('</pre>')
     print('<p class="section-label">Graphics</p>')
+    print("<img src='benchmark.png'>")
 
 # DP-Matrix und Fixpoint
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
@@ -494,12 +664,11 @@ if show_dp and seq1 and seq2 and output:
             cmd_dp.append("--ss")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
-        dp_png = dp_path + "dp_matrix_" + id1 + "_" + id2 + ".png"
+        dp_png = dp_path + "dp_matrix_" +id1 + "_" + id2 + ".png"
         dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_png], capture_output=True, text=True)
-        print("<h2>DP-Matrix:</h2>")
-        print(
-            f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/dp_matrix_{id1}_{id2}.png'>")
-        # print("</div>")
+        print("<div><h2>DP-Matrix:</h2>")
+        print(f"img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/dp_png_{id1}_{id2}.png'>")
+        print("</div>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
         fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
