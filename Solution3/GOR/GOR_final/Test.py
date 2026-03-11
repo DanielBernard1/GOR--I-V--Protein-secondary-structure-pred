@@ -151,11 +151,11 @@ print(f"""<!DOCTYPE html>
         propraGruppe15
     </a>
     <ul class="nav-links">
-        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI.py">Alignment</a></li>
         <li><a href="#" class="active">GOR</a></li>
-        <li style="margin-left: auto;"><a href="help/index.html">Help</a></li>
-        <li><a href="about/index.html">About</a></li>
+        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html">Help</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/about/index.html">About</a></li>
     </ul>
 </nav>
 
@@ -186,7 +186,11 @@ print(f"""<!DOCTYPE html>
         {output_section if action == "seclib" else ""}
     </div>
 
-    <div class="card">
+   
+
+    <p class="section-label">Prediction</p>
+    
+     <div class="card">
         <h2>Train</h2>
         <p>Train a GOR model on a secondary structure database.</p>
         <form method="post" enctype="multipart/form-data">
@@ -203,8 +207,6 @@ print(f"""<!DOCTYPE html>
         </form>
         {output_section if action == "train" else ""}
     </div>
-
-    <p class="section-label">Prediction</p>
 
     <div class="card">
         <h2>Predict</h2>
@@ -280,7 +282,11 @@ print(f"""<!DOCTYPE html>
 
     <div class="card">
         <h2>3D Protein</h2>
-        <p>3D model of protein. For comparison of GOR-Prediction with observed in 3D (JSmol) attach gor output file.</p>
+        <p>
+    3D model of protein.
+    ---------------------------------------
+    For comparison of GOR-Prediction with observed in 3D (JSmol) attach gor output file.
+         </p>
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="visualise">
             <div class="param-grid">
@@ -296,6 +302,18 @@ print(f"""<!DOCTYPE html>
             <button type="submit">Visualise</button>
         </form>
         {output_section if action == "visualise" else ""}
+        
+        
+        <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
+        <script type="text/javascript">
+        var Info = {{
+            width: 750,
+            height: 750,
+            j2sPath: "jsmol/j2s"
+        }};
+        viewer = Jmol.getApplet("viewer", Info);
+        Jmol.script(viewer, "background white; load =8adh; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=13 and :A) or (resno=15 and :A); color green;");
+        </script>
     </div>
 
 </div>
