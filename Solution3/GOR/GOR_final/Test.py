@@ -163,10 +163,13 @@ print(f"""<!DOCTYPE html>
             <option value="no">No</option>
             <option value="yes">Yes</option>
         </select>
-        <label>Post-Processing</label>
+        <br><br>
+    
         <label>
             <input type="checkbox" name="--postprocess" value="yes"> Post-Processing
         </label>
+        <br><br>
+    
         <button type="submit" >Run</button>
     </form>
     {output_section if action == "predict" else ""}
