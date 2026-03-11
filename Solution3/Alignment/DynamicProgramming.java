@@ -35,8 +35,8 @@ public class DynamicProgramming extends Scoring {
         return scoring_matrix;
     }
 
-    public List<String> getTraceback_indexes() {
-        return traceback_indexes;
+    public char[][] getTraceback() {
+        return traceback_matrix;
     }
 
     public void calculate_alignment_matrix_NW() {
