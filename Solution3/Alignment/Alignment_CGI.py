@@ -687,6 +687,10 @@ if show_dp and seq1 and seq2 and output:
         print("<h2>Fixed Point Alignment</h2>")
         print(
             f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
+        traceback_file = dp_path + "traceback_index.txt"
+        with open(traceback_file) as f:
+            content = f.read()
+        print(f'<p class="error">TRACEBACK INHALT: {content[:200]}</p>')
     except Exception as e:
         print(f"<p class='error'>DP-Matrix Fehler: {e}</p>")
 

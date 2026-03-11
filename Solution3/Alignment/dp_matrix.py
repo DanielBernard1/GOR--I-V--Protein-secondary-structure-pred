@@ -18,7 +18,7 @@ with open(traceback_file) as f:
         path_i.append(int(i))
         path_j.append(int(j))
 
-plt.figure(figsize=(8, 8))
+plt.figure(figsize=(5, 5))
 plt.scatter(path_j, path_i, s=1, color="red")
 plt.title("Traceback Path")
 plt.gca().invert_yaxis()
