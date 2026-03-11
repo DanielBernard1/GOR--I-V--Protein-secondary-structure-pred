@@ -7,11 +7,12 @@ import mycgi
 import mysql.connector
 
 
-form = mycgi.Form()
+
 
 print("Content-type: text/html\n")
 
 try:
+    form = mycgi.Form()
     # Werte einlesen
     if "input_type" in form:
         submitted = True
