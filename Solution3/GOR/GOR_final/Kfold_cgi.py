@@ -139,10 +139,10 @@ def kfold(BASE_DIR, form):
             total += row[col]
         averages.append(round( (total / len(allvalues)) , 2))
 
-    headers = ["Nr of Prot", "Mean Length", "Sum Length",
-               "Sum Predicted", "Q3 Mean", "SOV Mean", "SOV Dev",
-               "qObs_H Mean", "qObs_E Mean", "qObs_C Mean",
-               "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
+    headers = ["Nr of Prot", "Mean Length", "Sum of Length",
+               "Sum of pred. pos", "Q3 Mean", "Q3 Dev","SOV Mean", "SOV Dev",
+               "Q3_H Mean", "Q3_H Dev", "Q3_E Mean", "Q3_E Dev", "Q3_C Mean","Q3_C Dev",
+               "SOV_H Mean","SOV_H Dev", "SOV_E Mean","SOV_E Dev", "SOV_C Mean","SOV_C Dev"]
     header = "<tr>\n    <th style='padding: 8px 16px;'>Fold</th>\n"
     for h in headers:
         header += f"    <th style='padding: 8px 16px;'>{h}</th>\n"

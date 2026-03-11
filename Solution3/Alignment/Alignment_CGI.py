@@ -104,6 +104,16 @@ if use_nw == "nw":
 else:
     style_go = "display: block;"
 
+try:
+    int(go)
+except ValueError:
+    go = "-12"
+
+try:
+    int(ge)
+except ValueError:
+    ge = "-1"
+
 file_error = ""
 if input_type == "file" and "seqfile" in form and hasattr(form["seqfile"], "file") and form["seqfile"].filename:
     try:
@@ -475,7 +485,7 @@ print(f"""<!DOCTYPE html>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/Test.py">GOR</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
         <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
-        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html" class="active">Help</a></li>
+        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html">Help</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/about/index.html">About</a></li>
     </ul>
 </nav>
@@ -664,10 +674,12 @@ if show_dp and seq1 and seq2 and output:
             cmd_dp.append("--ss")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
-        dp_png = dp_path + "dp_matrix_" +id1 + "_" + id2 + ".png"
-        dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_png], capture_output=True, text=True)
+        scoring_matrix = dp_path + "scoring_matrix.txt"
+        traceback_matrix = dp_path + "traceback_matrix.txt"
+        dp_png = dp_path + f"dp_matrix_{id1}_{id2}.png"
+        dp_vis = subprocess.run(["python3", "../dp_matrix.py", scoring_matrix, traceback_matrix, dp_png], capture_output=True, text=True)
         print("<div><h2>DP-Matrix:</h2>")
-        print(f"img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/dp_png_{id1}_{id2}.png'>")
+        print(f"img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/dp_matrix_{id1}_{id2}.png'>")
         print("</div>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
