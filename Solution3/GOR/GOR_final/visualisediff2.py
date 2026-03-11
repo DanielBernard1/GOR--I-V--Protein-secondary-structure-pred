@@ -112,18 +112,19 @@ jsmolmatches = " or ".join(parts)
 
 
 
-outfile = output
-with open(outfile, "w") as f:
-    f.write(f'''<div id="jsmol-container">
+outfile = os.path.join(output, f"{id}.html").replace("\\", "/")
+print(f'''<div id="jsmol-container">
+<script type="text/javascript" src="jsmol/JSmol.min.js"></script>
 <script type="text/javascript">
 var Info = {{
     width: 700,
     height: 500,
     j2sPath: "jsmol/j2s"
-}};
-var viewer = Jmol.getApplet("viewer", Info);
-Jmol.script(viewer, "background white; load ={id}; cartoon only; color red; select {jsmolmatches}; color green;");
+}}
+</script>
+<script type="text/javascript">
+viewer = Jmol.getApplet("viewer", Info);
+Jmol.script(viewer, "background white; load ={id}; cartoon only; spin on; color red; select {jsmolmatches}; color green;")
 </script>
 <p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: {len(matches)} / {len(matches)+len(mismatches)}</p>
 </div>''')
-
