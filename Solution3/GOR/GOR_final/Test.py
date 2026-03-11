@@ -88,7 +88,6 @@ elif action == "validate":
         </thead>
         <tbody>
             <tr>
-                <td style="padding: 8px 12px;">validation</td>
                 <td style="padding: 8px 12px;">{values[0]}</td>
                 <td style="padding: 8px 12px;">{values[1]}</td>
                 <td style="padding: 8px 12px;">{values[2]}</td>
