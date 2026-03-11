@@ -5,7 +5,7 @@ import copy
 from collections import Counter
 
 def postprocess(input, output, windowsize=None):
-    window = int(windowsize) if windowsize else 5
+    window = int(windowsize) if windowsize else 17
 
     proteins = []
 
@@ -62,18 +62,18 @@ def run_predict(BASE_DIR, form):
             modelGor1 = custom_model
             if GorType != "--GOR1":
                 os.remove(custom_model)
-                return "wrong combination of GOR and model"
+                return "wrong combination of GOR and model", None
 
         elif "gor3" in filename:
             modelGor3 = custom_model
             if GorType != "--GOR3":
                 os.remove(custom_model)
-                return "wrong combination of GOR and model"
+                return "wrong combination of GOR and model", None
         elif "gor4" in filename:
             modelGor4 = custom_model
             if GorType != "--GOR4":
                 os.remove(custom_model)
-                return "wrong combination of GOR and model"
+                return "wrong combination of GOR and model", None
 
 
 
@@ -158,10 +158,9 @@ def run_predict(BASE_DIR, form):
         pp_output_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure_pp.txt")
         try:
             postprocess(tmp_path, pp_output_path)
-        except Exception:
-            pp_output_path = None
+        except Exception as e:
+            pp_output_path = str(e)
     else:
         pp_output_path = None
 
     return output, pp_output_path
-

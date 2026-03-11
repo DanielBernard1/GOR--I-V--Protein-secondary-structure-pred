@@ -258,12 +258,11 @@ print(f"""<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Alignment — propraGruppe15</title>
 
-    <!-- DESIGN: gleiche Fonts wie index.html -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* DESIGN: gleiche CSS-Variablen wie index.html */
         :root {{
             --green:     #2e7d52;
             --green-dk:  #1f5c3a;
@@ -285,7 +284,6 @@ print(f"""<!DOCTYPE html>
             line-height: 1.6;
         }}
 
-        /* DESIGN: sticky Navbar identisch mit index.html */
         nav {{
             background: var(--white);
             border-bottom: 2px solid var(--green-mid);
@@ -322,10 +320,8 @@ print(f"""<!DOCTYPE html>
             margin-top: 14px; overflow: hidden; white-space: nowrap;
         }}
 
-        /* DESIGN: zentrierter Wrapper wie index.html */
         .page-wrapper {{ max-width: 900px; margin: 0 auto; padding: 24px 24px 80px; }}
 
-        /* DESIGN: section-label mit Trennlinie wie index.html */
         .section-label {{
             font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em;
             text-transform: uppercase; color: var(--green);
@@ -334,14 +330,12 @@ print(f"""<!DOCTYPE html>
         }}
         .section-label::after {{ content: ''; flex: 1; height: 1px; background: var(--green-mid); }}
 
-        /* DESIGN: weiße Cards mit Schatten wie index.html */
         .card {{
             background: var(--white); border: 1px solid var(--border);
             border-radius: 8px; padding: 22px 24px; margin-bottom: 14px;
             box-shadow: 0 1px 4px rgba(30,80,50,0.07);
         }}
 
-        /* DESIGN: field-label über Eingabefeldern wie index.html */
         .field-label {{
             display: block; font-size: 0.78rem; font-weight: 500;
             color: var(--text-dim); margin-bottom: 5px; margin-top: 14px;
@@ -421,8 +415,7 @@ print(f"""<!DOCTYPE html>
         }}
         .result-dot {{ width: 7px; height: 7px; border-radius: 50%; background: #a8efd0; }}
 
-        /* DESIGN: pre für Ergebnis-Output (alignment-spezifisch)
-           KEIN color — Java-HTML nutzt eigene span-Farben für Matches */
+        
         pre.result {{
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.82rem; line-height: 1.7;
@@ -432,12 +425,10 @@ print(f"""<!DOCTYPE html>
             border-radius: 0 0 8px 8px; padding: 20px 24px;
         }}
 
-        /* DESIGN: img mit grünem Border für Plots */
         img {{ max-width: 100%; border-radius: 6px; border: 1px solid var(--border); margin-top: 12px; }}
 
         hr {{ border: none; border-top: 1px solid var(--border); margin: 20px 0; }}
 
-        /* DESIGN: Footer wie index.html */
         footer {{
             background: var(--white); border-top: 1px solid var(--border);
             padding: 14px 40px; font-size: 0.78rem; color: var(--text-dim);
@@ -450,6 +441,7 @@ print(f"""<!DOCTYPE html>
         document.getElementById('input_text').style.display = 'none';
         document.getElementById('input_file').style.display = 'none';
         document.getElementById('input_pdb').style.display  = 'none';
+        document.getElementById('input_native').style.display = 'none';
         document.getElementById('input_' + type).style.display = 'block';
         document.getElementById('input_type_hidden').value = type;
     }}
@@ -469,9 +461,8 @@ print(f"""<!DOCTYPE html>
 </head>
 <body>
 
-<!-- DESIGN: Navbar mit Zurück-Link zur Hauptseite -->
 <nav>
-    <a class="nav-logo" href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/index.html">
+    <a class="nav-logo" href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">
         <svg viewBox="0 0 22 22" fill="none" width="20" height="20">
             <ellipse cx="11" cy="11" rx="4"  ry="10" stroke="#2e7d52" stroke-width="1.8" fill="none"/>
             <ellipse cx="11" cy="11" rx="10" ry="4"  stroke="#4caf80" stroke-width="1.8" fill="none"/>
@@ -480,7 +471,6 @@ print(f"""<!DOCTYPE html>
         propraGruppe15
     </a>
     <ul class="nav-links">
-        <!-- Home-Link: zurück zur Hauptseite -->
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/Test.py">GOR</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
@@ -488,7 +478,6 @@ print(f"""<!DOCTYPE html>
     </ul>
 </nav>
 
-<!-- DESIGN: grüner Header mit Algorithmen-Untertitel und Sequenz-Deko -->
 <div class="page-header">
     <h1>Alignment</h1>
     <p>Gotoh &nbsp;&middot;&nbsp; Needleman-Wunsch &nbsp;&middot;&nbsp; Smith-Waterman</p>
@@ -544,24 +533,16 @@ print(f"""<!DOCTYPE html>
             <div class="param-grid">
                 <div>
                     <label class="field-label">PDB-ID 1</label>
-                    <input type="text" name="pdb1" value="{pdb1_input}" placeholder="z.B. 1hba">
+                    <input type="text" name="pdb1" value="{pdb1_input}" placeholder="z.B. 13pk">
                 </div>
                 <div>
                     <label class="field-label">PDB-ID 2</label>
-                    <input type="text" name="pdb2" value="{pdb2_input}" placeholder="z.B. 2hbb">
+                    <input type="text" name="pdb2" value="{pdb2_input}" placeholder="z.B. 155c">
                 </div>
             </div>
         </div>
 
         <div id="input_native" style="{style_native}">
-            <p style="font-size:0.82rem; color:var(--text-dim); margin:10px 0 6px;">
-                Direkt die nativen Java-Input-Dateien hochladen. Ermöglicht mehrere Paare auf einmal.
-            </p>
-            <div style="font-family:monospace;font-size:0.78rem;background:#f4f4f4;border:1px solid var(--border);padding:10px;border-radius:4px;margin-bottom:12px;">
-                <b>pairs.txt:</b>&nbsp; seq1 seq2<br>
-                <b>seqlib.txt:</b> seq1:MVLSPADKTN...<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq2:ACDEFGHIKL...
-            </div>
             <label class="field-label">pairs.txt</label>
             <input type="file" name="pairs_file" accept=".txt">
             <label class="field-label">seqlib.txt</label>
@@ -681,10 +662,10 @@ if show_dp and seq1 and seq2 and output:
             cmd_dp.append("--ss")
         subprocess.run(cmd_dp, capture_output=True, text=True)
 
-        scoring_matrix_file = dp_path + "scoring_matrix_" + matrix + ".txt"
-        dp_vis = subprocess.run(["python3", "../dp_matrix.py", scoring_matrix_file])
+        dp_png = dp_path + "dp_matrix_" +id1 + "_" + id2 + ".png"
+        dp_vis = subprocess.run(["python3", "../dp_matrix.py", dp_png], capture_output=True, text=True)
         print("<div><h2>DP-Matrix:</h2>")
-        print(dp_vis.stdout)
+        print(f"img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/dp_png_{id1}_{id2}.png'>")
         print("</div>")
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
@@ -699,7 +680,7 @@ if show_dp and seq1 and seq2 and output:
 print("""
 </div>
 
-<!-- DESIGN: Footer wie index.html -->
+
 <footer>
     <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; Gruppe 15</span>
     <span>Alignment</span>
