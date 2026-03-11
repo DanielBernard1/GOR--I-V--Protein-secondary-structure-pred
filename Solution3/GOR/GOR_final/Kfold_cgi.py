@@ -107,7 +107,7 @@ def kfold(BASE_DIR, form):
              "-f", "txt"],
             capture_output=True, text=True)
 
-        return f"<pre>stdout: {validate_output.stdout}\nstderr: {validate_output.stderr}</pre>"
+
 
 
         foldvalues = []
@@ -132,19 +132,16 @@ def kfold(BASE_DIR, form):
         for path in [train_seclib, test_fasta, model_file, predict_output, PREDICTION_PATH, REFERENCE_PATH, DETAILED_PATH]:
             if os.path.exists(path):
                 os.remove(path)
-        averages = []
 
-        for col in range(len(allvalues[0])):
-            total = 0
-            for row in allvalues:
-                total += row[col]
-            averages.append(total / len(allvalues))
-
-
-    headers = ["Number of Proteins", "Mean Protein Length", "Sum of Protein Length",
-               "Sum of Predicted Positions", "Q3 mean", "Q2 Dev", "SOV Mean", "SOV Dev",
-               "qObs_H Mean", "qObs_E Mean", "qObs_C Mean", "SOV_H Mean", "SOV_E Mean", "SOV_C Mean"]
-
+    averages = []
+    for col in range(len(allvalues[0])):
+        total = 0
+        for row in allvalues:
+            total += row[col]
+        averages.append(total / len(allvalues))
+    headers = []
+    for i in range(len(allvalues[0])):
+        headers.append(f"Val {i + 1}")
     header_html = "<tr>\n    <th>Fold</th>\n"
     for h in headers:
         header_html += f"    <th>{h}</th>\n"
@@ -156,6 +153,7 @@ def kfold(BASE_DIR, form):
         for value in fold:
             fold_rows += f"    <td>{value}</td>\n"
         fold_rows += "</tr>\n"
+
 
     avg_row = "<tr>\n    <td><b>Average</b></td>\n"
     for value in averages:
