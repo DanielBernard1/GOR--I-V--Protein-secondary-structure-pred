@@ -136,6 +136,11 @@ print(f"""<!DOCTYPE html>
 <html>
 <head>
     <title>GOR</title>
+    <title>GOR</title>
+    <!-- ÄNDERUNG: Fonts + style.css der Hauptseite eingebunden (Pfad ggf. anpassen) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
         body {{ font-family: monospace; max-width: 1700px; margin: auto; padding: 2rem; }}
         section {{ border: 1px solid #ccc; padding: 1rem; margin-bottom: 1.5rem; }}
@@ -145,6 +150,23 @@ print(f"""<!DOCTYPE html>
     </style>
 </head>
 <body>
+<nav>
+    <a class="nav-logo" href="#">
+        <svg viewBox="0 0 22 22" fill="none" width="20" height="20">
+            <ellipse cx="11" cy="11" rx="4"  ry="10" stroke="#2e7d52" stroke-width="1.8" fill="none"/>
+            <ellipse cx="11" cy="11" rx="10" ry="4"  stroke="#4caf80" stroke-width="1.8" fill="none"/>
+            <circle  cx="11" cy="11" r="2"           fill="#2e7d52"/>
+        </svg>
+        propraGruppe15
+    </a>
+    <ul class="nav-links">
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/">Home</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/Alignment_CGI.py">Alignment</a></li>
+        <li><a href="#" class="active">GOR</a></li>
+        <li style="margin-left: auto;"><a href="help/index.html">Help</a></li>
+        <li><a href="about/index.html">About</a></li>
+    </ul>
+</nav>
 <h1>GOR Prediction</h1>
 <section>
     <h2>Sec Library</h2>
@@ -271,6 +293,10 @@ print(f"""<!DOCTYPE html>
         {output_section if action == "visualise" else ""}
     </div>
 </section>
+<footer>
+    <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; LMU/TUM &middot; Gruppe 15</span>
+    <span>Laura Martin &middot; Lucas Nassonov &middot; Daniel Bernadi &middot; Toan David Huynh Ngoc</span>
+</footer>
 
 </body>
 </html>""")
