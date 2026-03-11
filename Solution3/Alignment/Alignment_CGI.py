@@ -680,7 +680,6 @@ if show_dp and seq1 and seq2 and output:
         print("<h2>DP-Matrix:</h2>")
         print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/dp_matrix_{id1}_{id2}.png'>")
         print(f'<p class="error">{result.stderr}</p>')
-        print(f'<p class="error">TRACEBACK INHALT: {content[:200]}</p>')
 
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
