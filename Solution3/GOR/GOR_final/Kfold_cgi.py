@@ -127,18 +127,20 @@ def kfold(BASE_DIR, form):
             if os.path.exists(path):
                 os.remove(path)
 
-    averages = []
-    for col in range(len(allvalues[0])):
-        total = 0
-        for row in allvalues:
-            total += row[col]
-        averages.append(total / len(allvalues))
+
     for i in range(len(allvalues)):
         for j in range(len(allvalues[i])):
             allvalues[i][j] = round(allvalues[i][j], 2)
 
     for i in range(len(averages)):
         averages[i] = round(averages[i], 2)
+
+    averages = []
+    for col in range(len(allvalues[0])):
+        total = 0
+        for row in allvalues:
+            total += row[col]
+        averages.append(total / len(allvalues))
 
     headers = ["Nr of Prot", "Mean Length", "Sum of Length",
                "Sum of pred. pos", "Q3 Mean", "SOV Mean", "SOV Dev",
@@ -150,14 +152,14 @@ def kfold(BASE_DIR, form):
     header_html += "</tr>"
     fold_rows = ""
     for i, fold in enumerate(allvalues):
-        fold_rows += f"<tr>\n    <td>Fold {i + 1}</td>\n"
+        fold_rows += f"<tr>\n    <td style='padding: 8px 16px;'>Fold {i + 1}</td>\n"
         for value in fold:
-            fold_rows += f"    <td>{value}</td>\n"
+            fold_rows += f"    <td style='padding: 8px 16px;'>{value}</td>\n"
         fold_rows += "</tr>\n"
 
-    avg_row = "<tr>\n    <td><b>Average</b></td>\n"
+    avg_row = "<tr>\n    <td style='padding: 8px 16px;'><b>Average</b></td>\n"
     for value in averages:
-        avg_row += f"    <td>{round(value, 4)}</td>\n"
+        avg_row += f"    <td style='padding: 8px 16px;'>{value}</td>\n"
     avg_row += "</tr>\n"
 
     table_html = f"""
