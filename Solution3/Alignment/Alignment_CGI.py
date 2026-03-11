@@ -568,14 +568,6 @@ print(f"""<!DOCTYPE html>
         </div>
 
         <div id="input_native" style="{style_native}">
-            <p style="font-size:0.82rem; color:var(--text-dim); margin:10px 0 6px;">
-                Direkt die nativen Java-Input-Dateien hochladen. Ermöglicht mehrere Paare auf einmal.
-            </p>
-            <div style="font-family:monospace;font-size:0.78rem;background:#f4f4f4;border:1px solid var(--border);padding:10px;border-radius:4px;margin-bottom:12px;">
-                <b>pairs.txt:</b>&nbsp; seq1 seq2<br>
-                <b>seqlib.txt:</b> seq1:MVLSPADKTN...<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq2:ACDEFGHIKL...
-            </div>
             <label class="field-label">pairs.txt</label>
             <input type="file" name="pairs_file" accept=".txt">
             <label class="field-label">seqlib.txt</label>
@@ -583,7 +575,7 @@ print(f"""<!DOCTYPE html>
 
         </div>
 
-    </div><!-- end card -->
+    </div>
 
     <p class="section-label">Parameters</p>
     <div class="card">
@@ -707,14 +699,19 @@ if show_dp and seq1 and seq2 and output:
 
         print("</div>")
 
+    except Exception as e:
+        print(f"<p class='error'>DP-Matrix ERROR: {e}</p>")
+
+if show_fp and seq1 and seq2 and output:
+    try:
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
         fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
-        subprocess.run(["python3", "FixPoint.py", fp_file, fp_png],capture_output=True, text=True)
+        subprocess.run(["python3", "FixPoint.py", fp_file, fp_png], capture_output=True, text=True)
         print("<h2>Fixed Point Alignment</h2>")
         print(
             f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/fixedpoint_{id1}_{id2}.png'>")
     except Exception as e:
-        print(f"<p class='error'>DP-Matrix ERROR: {e}</p>")
+        print(f"<p class='error'>Fixed Point ERROR: {e}</p>")
 
 print("""
 </div>
