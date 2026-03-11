@@ -1,6 +1,38 @@
 import os
 import subprocess
 import shutil
+import copy
+from collections import Counter
+
+def postprocess(input, output, windowsize=None):
+    window = int(windowsize) if windowsize else 5
+
+    proteins = []
+
+    with open(input) as g:
+        half = window // 2
+
+        for line in g:
+            if line.startswith(">"):
+                header = line.strip()
+                seq = g.readline()
+                predicted = (g.readline()[2:].strip())
+                proteins.append((header, list(seq), list(predicted)))
+
+    proteinsmoothed = copy.deepcopy(proteins)
+    for a, p in enumerate(proteins):
+        for i, char in enumerate(p[2]):
+            if i - half < 0 or i + half >= len(p[2]):
+                continue
+            seen = []
+            for j in range(i - half, i + half + 1):
+                seen.append(p[2][j])
+            häufigster = Counter(seen).most_common(1)[0][0]
+            proteinsmoothed[a][2][i] = häufigster
+
+    with open(output, "w", newline="\n") as f:
+        for row in proteinsmoothed:
+            f.write(row[0] + "\n" + ''.join(row[1]) + "SS " + ''.join(row[2]) + "\n")
 
 def run_predict(BASE_DIR, form):
 
@@ -114,6 +146,7 @@ def run_predict(BASE_DIR, form):
 
         f.write(output)
 
+
     if fasta and os.path.exists(fasta):
         os.remove(fasta)
     if maf and os.path.exists(maf):
@@ -121,4 +154,14 @@ def run_predict(BASE_DIR, form):
     if custom_model and os.path.exists(custom_model):
         os.remove(custom_model)
 
-    return output
+    if form.getvalue("--postprocess") == "yes":
+        pp_output_path = os.path.join(BASE_DIR, "uploads/temp_seqAndStructure_pp.txt")
+        try:
+            postprocess(tmp_path, pp_output_path)
+        except Exception:
+            pp_output_path = None
+    else:
+        pp_output_path = None
+
+    return output, pp_output_path
+
