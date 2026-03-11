@@ -7,11 +7,14 @@ import numpy as np
 
 def kfold(BASE_DIR, form):
 
-    seclib = form.getvalue("--inputSeq_lib")
+
     gorType  =form.getvalue("--gorType")
-
-
     foldcount = int(form.getvalue("--foldcount") or 5)
+
+    seclib = os.path.join(BASE_DIR, "uploads/kfold_input.txt")
+    seclib_with_data = form["--input_seclib"].file.read().decode()
+    with open(seclib, "w") as f:
+        f.write(seclib_with_data)
 
     VALIDATION_PATH = os.path.join( "jars/validateGor.jar")
     TRAIN_JAR   = os.path.join("jars/train.jar")

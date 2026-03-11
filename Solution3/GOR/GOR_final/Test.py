@@ -209,7 +209,7 @@ print(f"""<!DOCTYPE html>
         <label>Fold Count</label>
         <input type="number" name="--foldcount" value="5" min="2" max="20">
         <label>Input Database</label>
-        <textarea name="--inputdb" rows="4"></textarea>
+            <input type="file" name="--input_seclib">
         <button type="submit">Run</button>
     </form>
     {output_section if action == "kfold" else ""}
