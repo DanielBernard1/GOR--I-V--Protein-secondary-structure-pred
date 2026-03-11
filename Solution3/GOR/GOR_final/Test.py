@@ -27,6 +27,7 @@ if action == "seclib":
 elif action == "predict":
     try:
         output, pp_path = run_predict(BASE_DIR, form)
+        output_section += f"<br><br><h3>Prediction Output</h3>"
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
         output_section += f"<a href='uploads/temp_seqAndStructure.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none; margin-top:10px; display:inline-block;'>Prediction</a>"
         if pp_path:
