@@ -5,7 +5,7 @@ import copy
 from collections import Counter
 
 def postprocess(input, output, windowsize=None):
-    window = int(windowsize) if windowsize else 5
+    window = int(windowsize) if windowsize else 17
 
     proteins = []
 
