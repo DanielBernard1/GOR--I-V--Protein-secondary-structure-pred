@@ -1,4 +1,3 @@
-#!/usr/bin/biopython
 import os
 import subprocess
 
@@ -6,16 +5,21 @@ import subprocess
 def run_visualieze(form):
     pdb_id = form.getvalue("--vis_pdb")
 
-    # Debug: zeig was ankommt
     if not pdb_id:
         return "<pre>ERROR: pdb_id ist None/leer</pre>"
 
     pdb_id = pdb_id.strip()
-    gorout = os.path.join("uploads", "temp_seqAndStructure.txt")
 
-    # Debug: existiert die gorout datei?
-    if not os.path.exists(gorout):
-        return f"<pre>ERROR: gorout nicht gefunden: {gorout}</pre>"
+    gorout_upload = form.getvalue("--vis_gorout")
+    if not gorout_upload:
+        return "<pre>ERROR: Kein GOR-Output File hochgeladen</pre>"
+
+    gorout = os.path.join("uploads", "vis_gorout.txt")
+    with open(gorout, "wb") as f:
+        if isinstance(gorout_upload, str):
+            f.write(gorout_upload.encode())
+        else:
+            f.write(gorout_upload)
 
     result = subprocess.run([
         "python3", "visualisediff2.py",
@@ -27,5 +31,3 @@ def run_visualieze(form):
         return f"<pre>SUBPROCESS ERROR:\n{result.stderr}</pre>"
 
     return result.stdout
-
-

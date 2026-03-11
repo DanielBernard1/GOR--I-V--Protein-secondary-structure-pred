@@ -259,7 +259,7 @@ print(f"""<!DOCTYPE html>
                 </div>
                 <div>
                     <label class="field-label">GOR-Output</label>
-                    <input type="file" name="--vis_gorout">
+                    <input type="file" name="--vis_gorout" required>
                 </div>
             </div>
             <button type="submit">Visualise</button>
