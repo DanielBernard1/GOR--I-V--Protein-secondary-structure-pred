@@ -64,7 +64,6 @@ elif action == "validate":
     <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
         <thead>
             <tr style="background: #2c3e50; color: white;">
-                <th style="padding: 8px 12px;">Fold</th>
                 <th style="padding: 8px 12px;">Nr of Prot</th>
                 <th style="padding: 8px 12px;">Mean Length</th>
                 <th style="padding: 8px 12px;">Sum of Length</th>
@@ -73,18 +72,18 @@ elif action == "validate":
                 <th style="padding: 8px 12px;">Q3 Dev</th>
                 <th style="padding: 8px 12px;">SOV Mean</th>
                 <th style="padding: 8px 12px;">SOV Dev</th>
-                <th style="padding: 8px 12px;">Q3_H Mean</th>
-                <th style="padding: 8px 12px;">Q3_H Dev</th>
-                <th style="padding: 8px 12px;">Q3_E Mean</th>
-                <th style="padding: 8px 12px;">Q3_E Dev</th>
                 <th style="padding: 8px 12px;">Q3_C Mean</th>
                 <th style="padding: 8px 12px;">Q3_C Dev</th>
-                <th style="padding: 8px 12px;">SOV_H Mean</th>
-                <th style="padding: 8px 12px;">SOV_H Dev</th>
-                <th style="padding: 8px 12px;">SOV_E Mean</th>
-                <th style="padding: 8px 12px;">SOV_E Dev</th>
+                <th style="padding: 8px 12px;">Q3_E Mean</th>
+                <th style="padding: 8px 12px;">Q3_E Dev</th>
+                <th style="padding: 8px 12px;">Q3_H Mean</th>
+                <th style="padding: 8px 12px;">Q3_H Dev</th>
                 <th style="padding: 8px 12px;">SOV_C Mean</th>
                 <th style="padding: 8px 12px;">SOV_C Dev</th>
+                <th style="padding: 8px 12px;">SOV_E Mean</th>
+                <th style="padding: 8px 12px;">SOV_E Dev</th>
+                <th style="padding: 8px 12px;">SOV_H Mean</th>
+                <th style="padding: 8px 12px;">SOV_H Dev</th>
             </tr>
         </thead>
         <tbody>

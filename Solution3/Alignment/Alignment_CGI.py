@@ -184,6 +184,7 @@ if input_type == "pdb" and pdb1_input:
         row = cursor.fetchone()
         seq1 = row[0] if row else None
         cursor.execute("SELECT sequence FROM Homstrad WHERE pdb_id = %s", (pdb2_input.lower(),))
+        print(f'<p class="error">seq1={seq1} seq2={seq2}</p>')
         row = cursor.fetchone()
         seq2 = row[0] if row else None
         id1 = pdb1_input
@@ -656,14 +657,13 @@ if output:
         print(java_out)
         print('</pre>')
     print('<p class="section-label">Graphics</p>')
-    print("<img src='benchmark.png'>")
 
 # DP-Matrix und Fixpoint
 dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
 
 if show_dp and seq1 and seq2 and output:
     try:
-        cmd_dp = ["java", "-jar", alignment_jar,
+        cmd_dp = ["java", "alignment.java",
                   "--pairs", pairs_file, "--seqlib", seqlib_file,
                   "-m", matrix_path, "--mode", mode,
                   "--go", go, "--ge", ge, "--format", fmt,
@@ -679,7 +679,7 @@ if show_dp and seq1 and seq2 and output:
         result = subprocess.run(["python3", "dp_matrix.py", traceback_matrix, dp_png], capture_output=True, text=True)
         print("<h2>DP-Matrix:</h2>")
         print(f"<img src='https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/dp/dp_matrix_{id1}_{id2}.png'>")
-        print(f'<p class="error">{result.stderr}</p>')
+
 
         fp_file = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".txt"
         fp_png = dp_path + "fixedpoint_" + id1 + "_" + id2 + ".png"
@@ -690,7 +690,6 @@ if show_dp and seq1 and seq2 and output:
         traceback_file = dp_path + "traceback_index.txt"
         with open(traceback_file) as f:
             content = f.read()
-        print(f'<p class="error">TRACEBACK INHALT: {content[:200]}</p>')
     except Exception as e:
         print(f"<p class='error'>DP-Matrix Fehler: {e}</p>")
 
