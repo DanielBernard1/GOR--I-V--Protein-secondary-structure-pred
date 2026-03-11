@@ -197,4 +197,14 @@ public class Scoring{
         dynamicProgramming.getScoring_matrix();
         return dynamicProgramming.getTraceback();
     }
+    public List<String> getTracebackIndexes() {
+        DynamicProgramming dp;
+        if (secStruct){
+            dp = new DynamicProgramming(seq1, seq2, sseq1, sseq2, substitution_matrix, secondaryStructureMatrix, gap, mode);
+        } else {
+            dp = new DynamicProgramming(seq1, seq2, substitution_matrix, gap, mode);
+        }
+        dp.getScoring_matrix();
+        return dp.getTracebackIndexes();
+    }
 }
