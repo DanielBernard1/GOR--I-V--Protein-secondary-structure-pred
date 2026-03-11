@@ -44,8 +44,8 @@ elif action == "visualise":
     try:
         output_section = run_visualieze(form)
     except Exception as e:
-        output_section = f"<pre>ERROR: {e}</pre>"
-
+        import traceback
+        output_section = f"<pre>ERROR: {e}\n{traceback.format_exc()}</pre>"
 
 elif action == "validate":
     try:

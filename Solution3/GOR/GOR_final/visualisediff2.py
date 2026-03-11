@@ -1,4 +1,3 @@
-#!/usr/bin/biopython
 import argparse
 import os
 import urllib
@@ -7,14 +6,11 @@ import urllib.request
 parser = argparse.ArgumentParser()
 parser.add_argument("--pdb", required=True)
 parser.add_argument("--gorout", required=True)
-parser.add_argument("--output", required=True)
 
 args = parser.parse_args()
 
 id = args.pdb
 gorout = args.gorout
-output = args.output
-
 
 as_map = {
         'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C',
@@ -28,15 +24,12 @@ sequence = ""
 ss = ""
 seen = set()
 
-
 helixes = set()
 sheets = set()
-
 residues = []
 
 with urllib.request.urlopen("https://files.rcsb.org/download/" + id + ".pdb") as r:
     text = r.read().decode("utf-8")
-
 
 for line in text.splitlines():
 
@@ -63,7 +56,7 @@ for line in text.splitlines():
         if key not in seen:
             seen.add(key)
             chains += chain
-            sequence += as_map.get(resname)
+            sequence += as_map.get(resname, 'X')
             residues.append(key)
 
             if key in helixes:
@@ -77,14 +70,9 @@ predicted = ""
 
 with open(gorout) as g:
     for line in g:
-        if line.startswith(f">{id}"):
-            print(line.strip()[1:])
+        if line.startswith(">") and id.lower() in line.lower():
             g.readline()
-            predicted =(g.readline()[2:].strip())
-
-print(chains)
-print(ss)
-print(predicted)
+            predicted = g.readline()[3:].strip()
 
 chain = list(chains)
 referencess = list(ss)
@@ -93,37 +81,29 @@ predicted = list(predicted)
 matches = []
 mismatches = []
 
-
-for int in range(len(chain)):
-    if referencess[int] == predicted[int]:
-        matches.append(residues[int])
+for i in range(min(len(chain), len(predicted))):
+    if referencess[i] == predicted[i]:
+        matches.append(residues[i])
     else:
-        mismatches.append(residues[int])
+        mismatches.append(residues[i])
 
-
-print(matches)
-print(mismatches)
-
-jsmolmatches = ""
 parts = []
 for chain, resnum in matches:
     parts.append(f"(resno={resnum} and :{chain})")
 jsmolmatches = " or ".join(parts)
 
-
-
-outfile = output
-with open(outfile, "w") as f:
-    f.write(f'''<div id="jsmol-container">
+print(f'''<div id="jsmol-container">
+<script type="text/javascript" src="jsmol/JSmol.min.js"></script>
 <script type="text/javascript">
 var Info = {{
     width: 700,
     height: 500,
     j2sPath: "jsmol/j2s"
-}};
-var viewer = Jmol.getApplet("viewer", Info);
-Jmol.script(viewer, "background white; load ={id}; cartoon only; color red; select {jsmolmatches}; color green;");
+}}
+</script>
+<script type="text/javascript">
+viewer = Jmol.getApplet("viewer", Info);
+Jmol.script(viewer, "background white; load ={id}; cartoon only; spin on; color red; select {jsmolmatches}; color green;")
 </script>
 <p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: {len(matches)} / {len(matches)+len(mismatches)}</p>
 </div>''')
-
