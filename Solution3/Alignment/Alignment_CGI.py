@@ -663,7 +663,7 @@ dp_path = "/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/dp/"
 
 if show_dp and seq1 and seq2 and output:
     try:
-        cmd_dp = ["java", "-jar", alignment_jar,
+        cmd_dp = ["java", "alignment.java",
                   "--pairs", pairs_file, "--seqlib", seqlib_file,
                   "-m", matrix_path, "--mode", mode,
                   "--go", go, "--ge", ge, "--format", fmt,
