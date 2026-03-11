@@ -4,6 +4,7 @@ import subprocess
 
 def run_visualieze(form):
     pdb_id = form.getvalue("--vis_pdb").strip()
+    return "hello"
 
     # Fix 1: default gorout auf temp_seqAndStructure.txt
     gorout = os.path.join("uploads", "temp_seqAndStructure.txt")
