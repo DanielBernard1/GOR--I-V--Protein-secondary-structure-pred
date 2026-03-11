@@ -24,14 +24,19 @@ if action == "seclib":
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href={seclib_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
-
 elif action == "predict":
     try:
         output, pp_path = run_predict(BASE_DIR, form)
+        output_section += f"<br><br><h3>Prediction Output</h3>"
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
         output_section += f"<a href='uploads/temp_seqAndStructure.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none; margin-top:10px; display:inline-block;'>Prediction</a>"
         if pp_path:
-            output_section += f" <br><br><a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Post-Processed</a>"
+
+            with open(pp_path) as f:
+                pp_content = f.read()
+            output_section += f"<br><br><h3>Post-Processed Output</h3>"
+            output_section += f"<textarea readonly rows='10' style='width:100%; resize:both;'>{pp_content}</textarea>"
+            output_section += f"<a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Post-Processed</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
@@ -183,7 +188,7 @@ print(f"""<!DOCTYPE html>
         </label>
         <br><br>
         <label>Post-Processing Window Size</label>
-<input type="number" name="--windowsize" value="17" min="3" max="20" step="2">
+<input type="number" name="--windowsize" value="7" min="3" max="20" step="2">
 <br><br>
     
         <button type="submit" >Run</button>
