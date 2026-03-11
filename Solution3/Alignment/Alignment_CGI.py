@@ -268,7 +268,7 @@ print(f"""<!DOCTYPE html>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../../Solution1/Assignemnt03/style.css">
+    <link rel="stylesheet" href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/style.css">
       
     <script>
     function switchInput(type) {{
@@ -307,8 +307,8 @@ print(f"""<!DOCTYPE html>
     <ul class="nav-links">
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
         <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/Test.py">GOR</a></li>
-        <li style="margin-left: auto;"><a href="../../../Solution1/Assignment03/help/index.html">Help</a></li>
-        <li><a href="../../../Solution1/Assignment03/about/index.html">About</a></li>
+        <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html">Help</a></li>
+        <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/about/index.html">About</a></li>
         <!-- class="active": markiert die aktuelle Seite -->
         <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
     </ul>
