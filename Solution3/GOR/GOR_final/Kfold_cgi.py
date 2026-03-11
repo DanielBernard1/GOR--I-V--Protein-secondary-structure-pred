@@ -69,7 +69,7 @@ def kfold(BASE_DIR, form):
         with open(train_seclib, "w") as f:
             for p in split["train"]:
                 f.write(f"{p['ID']}\n{p['AS']}\n{p['SS']}\n")
-        subprocess.run([
+        train_result = subprocess.run([
             "java", "-jar", TRAIN_JAR,
             "--db", train_seclib,
             "--method", gorType,
