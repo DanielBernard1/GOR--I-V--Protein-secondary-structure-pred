@@ -571,11 +571,10 @@ try:
             <div id="input_native" style="{style_native}">
                 <label class="field-label">pairs.txt</label>
                 <input type="file" name="pairs_file" accept=".txt">
-                <label class="field-label">seqlib.txt</label>
+                <label class="field-label">struct_lib.txt</label>
                 <input type="file" name="seqlib_file" accept=".txt">
             </div>
 
-        </div><!-- end card -->
     
         <p class="section-label">Parameters</p>
         <div class="card">
