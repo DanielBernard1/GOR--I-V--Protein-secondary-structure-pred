@@ -327,10 +327,16 @@ print(f"""<!DOCTYPE html>
 
 </div>
 
+
+
+
+
 <footer>
     <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; LMU/TUM &middot; Gruppe 15</span>
     <span>Laura Martin &middot; Lucas Nassonov &middot; Daniel Bernadi &middot; Toan David Huynh Ngoc</span>
 </footer>
+
+
 
 </body>
 </html>""")
