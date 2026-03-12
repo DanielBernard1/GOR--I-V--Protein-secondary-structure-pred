@@ -23,7 +23,7 @@ if action == "seclib":
     try:
         output, seclib_path, fasta_path = run_seclib(BASE_DIR, form)
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
-        output_section += f"<a href={seclib_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Seclib</a>"
+        output_section += f"<a href='uploads/sec_lib.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Seclib</a>"
         if fasta_path:
             output_section += f" <a href='uploads/sec_lib.fasta' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download FASTA</a>"
     except Exception as e:
@@ -61,53 +61,54 @@ elif action == "validate":
         output_section = f"""<br><br>
     <h2>Results</h2>
 <div style="overflow-x:auto;">
-<table style="border-collapse:collapse; font-family:Arial,sans-serif;">
+<table style="border-collapse: collapse; width:500%; font-family: Arial, sans-serif;">
     <thead>
-        <tr style="background:#1f5c3a; color:white;">
-            <th style="padding:8px 12px; white-space:nowrap;">Nr of Prot</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Mean Length</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Sum of Length</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Sum of pred. pos</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Q3 Mean</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Q3 Dev</th>
-            <th style="padding:8px 12px; white-space:nowrap;">SOV Mean</th>
-            <th style="padding:8px 12px; white-space:nowrap;">SOV Dev</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Q3_C Mean</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Q3_C Dev</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Q3_E Mean</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Q3_E Dev</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Q3_H Mean</th>
-            <th style="padding:8px 12px; white-space:nowrap;">Q3_H Dev</th>
-            <th style="padding:8px 12px; white-space:nowrap;">SOV_C Mean</th>
-            <th style="padding:8px 12px; white-space:nowrap;">SOV_C Dev</th>
-            <th style="padding:8px 12px; white-space:nowrap;">SOV_E Mean</th>
-            <th style="padding:8px 12px; white-space:nowrap;">SOV_E Dev</th>
-            <th style="padding:8px 12px; white-space:nowrap;">SOV_H Mean</th>
-            <th style="padding:8px 12px; white-space:nowrap;">SOV_H Dev</th>
+        <tr style="background:#2c3e50; color:white;">
+            <th>Nr of Prot</th>
+            <th>Mean Length</th>
+            <th>Sum of Length</th>
+            <th>Sum of pred. pos</th>
+            <th>Q3 Mean</th>
+            <th>Q3 Dev</th>
+            <th>SOV Mean</th>
+            <th>SOV Dev</th>
+            <th>Q3_C Mean</th>
+            <th>Q3_C Dev</th>
+            <th>Q3_E Mean</th>
+            <th>Q3_E Dev</th>
+            <th>Q3_H Mean</th>
+            <th>Q3_H Dev</th>
+            <th>SOV_C Mean</th>
+            <th>SOV_C Dev</th>
+            <th>SOV_E Mean</th>
+            <th>SOV_E Dev</th>
+            <th>SOV_H Mean</th>
+            <th>SOV_H Dev</th>
         </tr>
     </thead>
+
     <tbody>
         <tr>
-            <td style="padding:8px 12px; text-align:center;">{values[1]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[2]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[3]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[4]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[5]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[6]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[7]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[8]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[9]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[10]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[11]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[12]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[13]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[14]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[15]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[16]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[17]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[18]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[19]}</td>
-            <td style="padding:8px 12px; text-align:center;">{values[20]}</td>
+            <td>{values[0]}</td>
+            <td>{values[1]}</td>
+            <td>{values[2]}</td>
+            <td>{values[3]}</td>
+            <td>{values[4]}</td>
+            <td>{values[5]}</td>
+            <td>{values[6]}</td>
+            <td>{values[7]}</td>
+            <td>{values[8]}</td>
+            <td>{values[9]}</td>
+            <td>{values[10]}</td>
+            <td>{values[11]}</td>
+            <td>{values[12]}</td>
+            <td>{values[13]}</td>
+            <td>{values[14]}</td>
+            <td>{values[15]}</td>
+            <td>{values[16]}</td>
+            <td>{values[17]}</td>
+            <td>{values[18]}</td>
+            <td>{values[19]}</td>
         </tr>
     </tbody>
 </table>
@@ -305,21 +306,27 @@ print(f"""<!DOCTYPE html>
         </form>
         {output_section if action == "visualise" else ""}
         
+          <!-- HARDCODE TEST: testprot direkt eingebettet -->
+        <script type = "text/javascript" src = "jsmol/JSmol.min.js"></script>
+        <script type = "text/javascript">
+        var Info2 = {{
+            width: 700,
+            height: 700,
+            j2sPath: "jsmol/j2s"
+        }}
         </script>
+        <script type = "text/javascript">
+        viewer2 = Jmol.getApplet("viewer2", Info2);
+        Jmol.script(viewer2, "background white; load =2MZ9; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=10 and :A) or (resno=11 and :A) or (resno=13 and :A) or (resno=14 and :A) or (resno=15 and :A) or (resno=16 and :A) or (resno=19 and :A) or (resno=22 and :A) or (resno=23 and :A) or (resno=24 and :A) or (resno=25 and :A) or (resno=26 and :A) or (resno=27 and :A) or (resno=31 and :A) or (resno=32 and :A) or (resno=33 and :A) or (resno=34 and :A) or (resno=35 and :A) or (resno=36 and :A) or (resno=49 and :A) or (resno=50 and :A) or (resno=60 and :A) or (resno=61 and :A) or (resno=62 and :A) or (resno=63 and :A) or (resno=71 and :A); color green;")
+        </script>
+        <p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: 27 / 71</p>
     </div>
-
 </div>
-
-
-
-
 
 <footer>
     <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; LMU/TUM &middot; Gruppe 15</span>
     <span>Laura Martin &middot; Lucas Nassonov &middot; Daniel Bernadi &middot; Toan David Huynh Ngoc</span>
 </footer>
-
-
 
 </body>
 </html>""")
