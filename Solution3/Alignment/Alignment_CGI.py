@@ -275,21 +275,8 @@ try:
         sys.exit(0)
 
     if output and not java_error:
-        fasta_out = ""
-        for line in ali_output.stdout.splitlines():
-            line = line.strip()
-            if not line or line.startswith(">"):
-                continue
-            if ": " in line:
-                seq_id, seq = line.split(": ", 1)
-                fasta_out += f">{seq_id.strip()}\n"
-                seq = seq.strip()
-                fasta_out += seq + "\n" 
-
-        if not fasta_out:
-            fasta_out = f">{id1}\n{seq1}\n>{id2}\n{seq2}\n"
-
-        fasta_filename = f"alignment.fasta"
+        fasta_out = ali_output.stdout
+        fasta_filename = "alignment.fasta"
         fasta_path = f"/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/{fasta_filename}"
         with open(fasta_path, "w") as f:
             f.write(fasta_out)
