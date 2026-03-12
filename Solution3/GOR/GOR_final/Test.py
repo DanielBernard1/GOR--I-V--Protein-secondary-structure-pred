@@ -46,6 +46,7 @@ elif action == "predict":
         output_section = f"<pre>ERROR: {e}</pre>"
 
 elif action == "visualise":
+    run_visualieze(form)
     try:
         with open("testprot.html") as f:
             content = f.read()
