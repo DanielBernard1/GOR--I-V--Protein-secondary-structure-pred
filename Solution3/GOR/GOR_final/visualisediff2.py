@@ -1,15 +1,19 @@
 import argparse
 import os
-import subprocess
+import urllib
+import urllib.request
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--pdb", required=True)
 parser.add_argument("--gorout", required=True)
 
+
 args = parser.parse_args()
 
-id = args.pdb.strip()
+id = args.pdb
 gorout = args.gorout
+
+
 
 as_map = {
         'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C',
@@ -23,14 +27,15 @@ sequence = ""
 ss = ""
 seen = set()
 
+
 helixes = set()
 sheets = set()
+
 residues = []
 
-pdb_path = f"uploads/{id.lower()}.pdb"
-subprocess.run(["wget", "-q", f"https://files.rcsb.org/download/{id.lower()}.pdb", "-O", pdb_path])
-with open(pdb_path) as r:
-    text = r.read()
+with urllib.request.urlopen("https://files.rcsb.org/download/" + id + ".pdb") as r:
+    text = r.read().decode("utf-8")
+
 
 for line in text.splitlines():
 
@@ -57,7 +62,7 @@ for line in text.splitlines():
         if key not in seen:
             seen.add(key)
             chains += chain
-            sequence += as_map.get(resname, 'X')
+            sequence += as_map.get(resname)
             residues.append(key)
 
             if key in helixes:
@@ -71,12 +76,13 @@ predicted = ""
 
 with open(gorout) as g:
     for line in g:
-        if line.startswith(">"):
-            header = line[1:].strip()
-            if id.lower() == header.lower():
-                g.readline()
-                predicted = g.readline()[3:].strip()
-                break
+        if line.startswith(f">{id}"):
+
+            g.readline()
+            predicted =(g.readline()[2:].strip())
+
+
+
 
 chain = list(chains)
 referencess = list(ss)
@@ -85,43 +91,44 @@ predicted = list(predicted)
 matches = []
 mismatches = []
 
-for i in range(min(len(chain), len(predicted))):
-    if referencess[i] == predicted[i]:
-        matches.append(residues[i])
-    else:
-        mismatches.append(residues[i])
 
+for int in range(len(chain)):
+    if referencess[int] == predicted[int]:
+        matches.append(residues[int])
+    else:
+        mismatches.append(residues[int])
+
+
+
+
+jsmolmatches = ""
 parts = []
 for chain, resnum in matches:
     parts.append(f"(resno={resnum} and :{chain})")
 jsmolmatches = " or ".join(parts)
 
-result_html = f'''<script type = "text/javascript">
-viewer = Jmol.getApplet("viewer", Info);
-Jmol.script(viewer, "background white; load ={id}; cartoon only; spin on; color red; select {jsmolmatches}; color green;")
-</script>
-<p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: {len(matches)} / {len(matches)+len(mismatches)}</p>'''
 
-# für CGI einbetten
-with open("uploads/vis_result.html", "w") as f:
-    f.write(result_html)
 
-# testprot.html überschreiben zum direkten Testen im Browser
-with open("testprot.html", "w") as f:
+outfile = os.path.join( "testprot.html")
+with open(outfile, "w") as f:
     f.write(f'''<!doctype html >
     <html>
-    <title> GOR Visualisation {id} </title>
+    <title> A simple Jsmol example </title>
     <head>
     <script type = "text/javascript" src = "jsmol/JSmol.min.js"></script>
     <script type = "text/javascript">
     var Info = {{
-        width: 700,
-        height: 700,
+        width: 1000,GF
+        height: 1000,
         j2sPath: "jsmol/j2s"
     }}
 </script>
 </head>
 <body>
-{result_html}
+<script type = "text/javascript">
+viewer = Jmol.getApplet("viewer", Info);
+Jmol.script(viewer, "background white; load ={id}; cartoon only; spin on; color red; select {jsmolmatches}; color green;")
+</script>
+
 </body>
-</html>''')
+</html> ''')
