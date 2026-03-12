@@ -26,7 +26,6 @@ def run_visualieze(form):
         "python3", "visualisediff2.py",
         "--pdb", pdb_id,
         "--gorout", gorout,
-        "--output", "."
     ], capture_output=True, text=True)
 
     if result.returncode != 0:
