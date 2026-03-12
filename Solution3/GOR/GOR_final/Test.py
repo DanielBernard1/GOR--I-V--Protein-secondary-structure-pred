@@ -61,7 +61,7 @@ elif action == "validate":
         output_section = f"""<br><br>
     <h2>Results</h2>
 <div style="overflow-x:auto;">
-<table style="border-collapse: collapse; width:200%; font-family: Arial, sans-serif;">
+<table style="border-collapse: collapse; width:500%; font-family: Arial, sans-serif;">
     <thead>
         <tr style="background:#2c3e50; color:white;">
             <th>Nr of Prot</th>
