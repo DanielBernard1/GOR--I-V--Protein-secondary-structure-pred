@@ -73,9 +73,12 @@ predicted = ""
 
 with open(gorout) as g:
     for line in g:
-        if line.startswith(">") and id.lower() in line.lower():
-            g.readline()
-            predicted = g.readline()[3:].strip()
+        if line.startswith(">"):
+            header = line[1:].strip()
+            if id.lower() == header.lower():
+                g.readline()
+                predicted = g.readline()[3:].strip()
+                break
 
 chain = list(chains)
 referencess = list(ss)
@@ -96,6 +99,8 @@ for chain, resnum in matches:
 jsmolmatches = " or ".join(parts)
 
 print(f'''
+
+<div id="viewer"></div>
 <script type="text/javascript">
 var Info = {{
     width: 700,

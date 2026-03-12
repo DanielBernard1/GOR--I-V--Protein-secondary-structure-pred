@@ -305,23 +305,6 @@ print(f"""<!DOCTYPE html>
         </form>
         {output_section if action == "visualise" else ""}
         
-        
-        <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
-        <script type="text/javascript">
-        var Info = {{
-            width: 750,
-            height: 750,
-            j2sPath: "jsmol/j2s"
-        }};
-        viewer = Jmol.getApplet("viewer", Info);
-        Jmol.script(viewer, "background white; load =8adh; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=13 and :A) or (resno=15 and :A); color green;");
-        </script> var Info = {{
-            width: 750,
-            height: 750,
-            j2sPath: "jsmol/j2s"
-        }};
-        viewer = Jmol.getApplet("viewer", Info);
-        Jmol.script(viewer, "background white; load =8adh; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=13 and :A) or (resno=15 and :A); color green;");
         </script>
     </div>
 
