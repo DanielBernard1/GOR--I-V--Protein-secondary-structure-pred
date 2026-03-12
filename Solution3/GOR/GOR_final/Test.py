@@ -60,59 +60,61 @@ elif action == "validate":
             values.append(line.strip())
         output_section = f"""<br><br>
     <h2>Results</h2>
-<div style="overflow-x: auto;">
-    <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
-        <thead>
-            <tr style="background: #2c3e50; color: white;">
-                <th style="padding: 8px 12px;">Nr of Prot</th>
-                <th style="padding: 8px 12px;">Mean Length</th>
-                <th style="padding: 8px 12px;">Sum of Length</th>
-                <th style="padding: 8px 12px;">Sum of pred. pos</th>
-                <th style="padding: 8px 12px;">Q3 Mean</th>
-                <th style="padding: 8px 12px;">Q3 Dev</th>
-                <th style="padding: 8px 12px;">SOV Mean</th>
-                <th style="padding: 8px 12px;">SOV Dev</th>
-                <th style="padding: 8px 12px;">Q3_C Mean</th>
-                <th style="padding: 8px 12px;">Q3_C Dev</th>
-                <th style="padding: 8px 12px;">Q3_E Mean</th>
-                <th style="padding: 8px 12px;">Q3_E Dev</th>
-                <th style="padding: 8px 12px;">Q3_H Mean</th>
-                <th style="padding: 8px 12px;">Q3_H Dev</th>
-                <th style="padding: 8px 12px;">SOV_C Mean</th>
-                <th style="padding: 8px 12px;">SOV_C Dev</th>
-                <th style="padding: 8px 12px;">SOV_E Mean</th>
-                <th style="padding: 8px 12px;">SOV_E Dev</th>
-                <th style="padding: 8px 12px;">SOV_H Mean</th>
-                <th style="padding: 8px 12px;">SOV_H Dev</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="padding: 8px 12px;">validation</td>
-                <td style="padding: 8px 12px;">{values[0]}</td>
-                <td style="padding: 8px 12px;">{values[1]}</td>
-                <td style="padding: 8px 12px;">{values[2]}</td>
-                <td style="padding: 8px 12px;">{values[3]}</td>
-                <td style="padding: 8px 12px;">{values[4]}</td>
-                <td style="padding: 8px 12px;">{values[5]}</td>
-                <td style="padding: 8px 12px;">{values[6]}</td>
-                <td style="padding: 8px 12px;">{values[7]}</td>
-                <td style="padding: 8px 12px;">{values[8]}</td>
-                <td style="padding: 8px 12px;">{values[9]}</td>
-                <td style="padding: 8px 12px;">{values[10]}</td>
-                <td style="padding: 8px 12px;">{values[11]}</td>
-                <td style="padding: 8px 12px;">{values[12]}</td>
-                <td style="padding: 8px 12px;">{values[13]}</td>
-                <td style="padding: 8px 12px;">{values[14]}</td>
-                <td style="padding: 8px 12px;">{values[15]}</td>
-                <td style="padding: 8px 12px;">{values[16]}</td>
-                <td style="padding: 8px 12px;">{values[17]}</td>
-                <td style="padding: 8px 12px;">{values[18]}</td>
-                <td style="padding: 8px 12px;">{values[19]}</td>
-            </tr>
-        </tbody>
-    </table>
+<div style="overflow-x:auto;">
+<table style="border-collapse: collapse; width:100%; font-family: Arial, sans-serif;">
+    <thead>
+        <tr style="background:#2c3e50; color:white;">
+            <th>Nr of Prot</th>
+            <th>Mean Length</th>
+            <th>Sum of Length</th>
+            <th>Sum of pred. pos</th>
+            <th>Q3 Mean</th>
+            <th>Q3 Dev</th>
+            <th>SOV Mean</th>
+            <th>SOV Dev</th>
+            <th>Q3_C Mean</th>
+            <th>Q3_C Dev</th>
+            <th>Q3_E Mean</th>
+            <th>Q3_E Dev</th>
+            <th>Q3_H Mean</th>
+            <th>Q3_H Dev</th>
+            <th>SOV_C Mean</th>
+            <th>SOV_C Dev</th>
+            <th>SOV_E Mean</th>
+            <th>SOV_E Dev</th>
+            <th>SOV_H Mean</th>
+            <th>SOV_H Dev</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>{values[0]}</td>
+            <td>{values[1]}</td>
+            <td>{values[2]}</td>
+            <td>{values[3]}</td>
+            <td>{values[4]}</td>
+            <td>{values[5]}</td>
+            <td>{values[6]}</td>
+            <td>{values[7]}</td>
+            <td>{values[8]}</td>
+            <td>{values[9]}</td>
+            <td>{values[10]}</td>
+            <td>{values[11]}</td>
+            <td>{values[12]}</td>
+            <td>{values[13]}</td>
+            <td>{values[14]}</td>
+            <td>{values[15]}</td>
+            <td>{values[16]}</td>
+            <td>{values[17]}</td>
+            <td>{values[18]}</td>
+            <td>{values[19]}</td>
+        </tr>
+    </tbody>
+</table>
 </div>
+
+
 <a href="uploads/detailedGor.txt" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">Download</a>"""
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
