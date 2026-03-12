@@ -99,6 +99,8 @@ for chain, resnum in matches:
 jsmolmatches = " or ".join(parts)
 
 print(f'''
+
+<div id="viewer"></div>
 <script type="text/javascript">
 var Info = {{
     width: 700,
