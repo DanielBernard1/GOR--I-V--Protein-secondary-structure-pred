@@ -6,13 +6,13 @@ import urllib.request
 parser = argparse.ArgumentParser()
 parser.add_argument("--pdb", required=True)
 parser.add_argument("--gorout", required=True)
-parser.add_argument("--output", required=True)
+
 
 args = parser.parse_args()
 
 id = args.pdb
 gorout = args.gorout
-output = args.output
+
 
 
 as_map = {
@@ -109,7 +109,7 @@ jsmolmatches = " or ".join(parts)
 
 
 
-outfile = os.path.join(output, "tempprot.html")
+outfile = os.path.join( "testprot.html")
 with open(outfile, "w") as f:
     f.write(f'''<!doctype html >
     <html>
