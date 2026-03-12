@@ -96,10 +96,32 @@ for chain, resnum in matches:
     parts.append(f"(resno={resnum} and :{chain})")
 jsmolmatches = " or ".join(parts)
 
-# Ergebnis in uploads/vis_result.html schreiben
-with open("uploads/vis_result.html", "w") as f:
-    f.write(f'''<script type = "text/javascript">
+result_html = f'''<script type = "text/javascript">
 viewer = Jmol.getApplet("viewer", Info);
 Jmol.script(viewer, "background white; load ={id}; cartoon only; spin on; color red; select {jsmolmatches}; color green;")
 </script>
-<p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: {len(matches)} / {len(matches)+len(mismatches)}</p>''')
+<p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: {len(matches)} / {len(matches)+len(mismatches)}</p>'''
+
+# für CGI einbetten
+with open("uploads/vis_result.html", "w") as f:
+    f.write(result_html)
+
+# testprot.html überschreiben zum direkten Testen im Browser
+with open("testprot.html", "w") as f:
+    f.write(f'''<!doctype html >
+    <html>
+    <title> GOR Visualisation {id} </title>
+    <head>
+    <script type = "text/javascript" src = "jsmol/JSmol.min.js"></script>
+    <script type = "text/javascript">
+    var Info = {{
+        width: 700,
+        height: 700,
+        j2sPath: "jsmol/j2s"
+    }}
+</script>
+</head>
+<body>
+{result_html}
+</body>
+</html>''')
