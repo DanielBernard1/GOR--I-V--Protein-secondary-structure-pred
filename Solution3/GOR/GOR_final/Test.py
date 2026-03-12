@@ -47,11 +47,12 @@ elif action == "predict":
 
 elif action == "visualise":
     try:
-        output_section = run_visualieze(form)
+        with open("testprot.html") as f:
+            content = f.read()
+        output_section = content.split("<body>")[1].split("</body>")[0]
     except Exception as e:
         import traceback
         output_section = f"<pre>ERROR: {e}\n{traceback.format_exc()}</pre>"
-
 elif action == "validate":
     try:
         output = run_validate(BASE_DIR, form)
@@ -286,8 +287,8 @@ print(f"""<!DOCTYPE html>
     <div class="card">
         <h2>3D Protein</h2>
         <p>
-    3D model of protein.
-    ---------------------------------------
+    3D model of protein.                          
+    
     For comparison of GOR-Prediction with ground truth in 3D (JSmol) attach gor output file.
          </p>
         <form method="post" enctype="multipart/form-data">
@@ -307,25 +308,7 @@ print(f"""<!DOCTYPE html>
         {output_section if action == "visualise" else ""}
         
         
-        <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
-        <script type="text/javascript">
-        var Info = {{
-            width: 750,
-            height: 750,
-            j2sPath: "jsmol/j2s"
-        }};
-        viewer = Jmol.getApplet("viewer", Info);
-        Jmol.script(viewer, "background white; load =8adh; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=13 and :A) or (resno=15 and :A); color green;");
-        </script> var Info = {{
-            width: 750,
-            height: 750,
-            j2sPath: "jsmol/j2s"
-        }};
-        viewer = Jmol.getApplet("viewer", Info);
-        Jmol.script(viewer, "background white; load =8adh; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=13 and :A) or (resno=15 and :A); color green;");
-        </script>
     </div>
-
 </div>
 
 <footer>
