@@ -682,8 +682,8 @@ try:
                 print(f'''
                 <a href="{fasta_url}" download="{fasta_filename}"
                 style="display:inline-block;background:#2e7d52;color:white;text-decoration:none;
-                        padding:9px 20px;border-radius:6px;font-size:0.85rem;font-weight:600;margin-bottom:12px;">
-                    ⬇ Download as FASTA
+                        padding:9px 20px;border-radius:6px;font-size:0.85rem;font-weight:600;margin-bottom:12px; margin-top:12px">
+                    Download as FASTA
                 </a>
                 ''')
             print(java_out)
@@ -698,7 +698,7 @@ try:
                 <a href="{fasta_url}" download="{fasta_filename}"
                 style="display:inline-block;background:#2e7d52;color:white;text-decoration:none;
                         padding:9px 20px;border-radius:6px;font-size:0.85rem;font-weight:600;margin-bottom:12px;">
-                    ⬇ Download as FASTA
+                    Download as FASTA
                 </a>
                 ''')
             print('<pre class="result">')
