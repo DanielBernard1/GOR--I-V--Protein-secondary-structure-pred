@@ -28,8 +28,11 @@ helixes = set()
 sheets = set()
 residues = []
 
-with urllib.request.urlopen("https://www.rcsb.org/pdb/files/" + id.lower() + ".pdb") as r:
-    text = r.read().decode("utf-8")
+import subprocess
+pdb_path = f"uploads/{id.lower()}.pdb"
+subprocess.run(["wget", "-q", f"https://files.rcsb.org/download/{id.lower()}.pdb", "-O", pdb_path])
+with open(pdb_path) as r:
+    text = r.read()
 
 for line in text.splitlines():
 
