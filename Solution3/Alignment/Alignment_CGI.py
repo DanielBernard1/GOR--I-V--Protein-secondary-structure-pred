@@ -469,6 +469,10 @@ try:
                 border: 1.5px solid var(--border); border-top: none;
                 border-radius: 0 0 8px 8px; padding: 20px 24px;
             }}
+            div.result a {{
+                font-family: 'Inter', sans-serif;
+                white-space: normal;
+            }}
         </style>
     
         <script>
