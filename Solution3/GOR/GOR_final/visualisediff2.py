@@ -1,7 +1,6 @@
 import argparse
 import os
-import urllib
-import urllib.request
+import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--pdb", required=True)
@@ -9,7 +8,7 @@ parser.add_argument("--gorout", required=True)
 
 args = parser.parse_args()
 
-id = args.pdb
+id = args.pdb.strip()
 gorout = args.gorout
 
 as_map = {
@@ -28,7 +27,6 @@ helixes = set()
 sheets = set()
 residues = []
 
-import subprocess
 pdb_path = f"uploads/{id.lower()}.pdb"
 subprocess.run(["wget", "-q", f"https://files.rcsb.org/download/{id.lower()}.pdb", "-O", pdb_path])
 with open(pdb_path) as r:
@@ -98,29 +96,10 @@ for chain, resnum in matches:
     parts.append(f"(resno={resnum} and :{chain})")
 jsmolmatches = " or ".join(parts)
 
-output_html = f'''<!doctype html >
-    <html>
-    <title> GOR Visualisation </title>
-    <head>
-    <script type = "text/javascript" src = "jsmol/JSmol.min.js"></script>
-    <script type = "text/javascript">
-    var Info = {{
-        width: 700,
-        height: 700,
-        j2sPath: "jsmol/j2s"
-    }}
-</script>
-</head>
-<body>
-<script type = "text/javascript">
+# Ergebnis in uploads/vis_result.html schreiben
+with open("uploads/vis_result.html", "w") as f:
+    f.write(f'''<script type = "text/javascript">
 viewer = Jmol.getApplet("viewer", Info);
 Jmol.script(viewer, "background white; load ={id}; cartoon only; spin on; color red; select {jsmolmatches}; color green;")
 </script>
-<p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: {len(matches)} / {len(matches)+len(mismatches)}</p>
-</body>
-</html>'''
-
-
-with open("testprot.html", "w") as f:
-    f.write(output_html)
-
+<p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: {len(matches)} / {len(matches)+len(mismatches)}</p>''')
