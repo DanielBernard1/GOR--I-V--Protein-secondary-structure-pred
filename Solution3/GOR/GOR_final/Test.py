@@ -122,7 +122,7 @@ elif action == "validate":
 elif action == "train":
     try:
         output , model_path = run_train(BASE_DIR, form)
-        output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea><a href={model_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
+        output_section = f"<a href={model_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 elif action == "kfold":
@@ -256,13 +256,13 @@ print(f"""<!DOCTYPE html>
 
     <div class="card">
         <h2>Validate</h2>
-        <p>Compare a prediction against a reference to compute Q3/SOV scores.</p>
+        <p>Compare a prediction against a ground truth to compute Q3/SOV scores.</p>
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="validate">
             <label class="field-label">Prediction</label>
             <textarea name="--prediction" rows="4"></textarea>
             <input type="file" name="--prediction_file">
-            <label class="field-label">Reference</label>
+            <label class="field-label">Ground truth</label>
             <textarea name="--reference" rows="4"></textarea>
             <input type="file" name="--reference_file">
             <button type="submit">Run</button>
