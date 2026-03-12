@@ -284,8 +284,7 @@ try:
                 seq_id, seq = line.split(": ", 1)
                 fasta_out += f">{seq_id.strip()}\n"
                 seq = seq.strip()
-                for i in range(0, len(seq), 60):
-                    fasta_out += seq[i:i+60] + "\n"
+                fasta_out += seq + "\n" 
 
         if not fasta_out:
             fasta_out = f">{id1}\n{seq1}\n>{id2}\n{seq2}\n"
@@ -588,7 +587,7 @@ try:
                 <label class="field-label">seqlib.txt</label>
                 <input type="file" name="seqlib_file" accept=".txt">
             </div>
-    
+
         </div><!-- end card -->
     
         <p class="section-label">Parameters</p>
