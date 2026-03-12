@@ -34,14 +34,14 @@ elif action == "predict":
         output, pp_path = run_predict(BASE_DIR, form)
         output_section += f"<br><br><h3>Prediction Output</h3>"
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
-        output_section += f"<a href='uploads/temp_seqAndStructure.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none; margin-top:10px; display:inline-block;'>Prediction</a>"
+        output_section += f"<a href='uploads/temp_seqAndStructure.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none; margin-top:10px; display:inline-block;'>Download Prediction</a>"
         if pp_path:
 
             with open(pp_path) as f:
                 pp_content = f.read()
             output_section += f"<br><br><h3>Post-Processed Output</h3>"
             output_section += f"<textarea readonly rows='10' style='width:100%; resize:both;'>{pp_content}</textarea>"
-            output_section += f"<a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Post-Processed</a>"
+            output_section += f"<a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Download Post-Processed</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
@@ -57,62 +57,63 @@ elif action == "validate":
         output = run_validate(BASE_DIR, form)
         values = [""]
         for line in output.splitlines():
-            values.append(line.strip())
+            values.append(round(float(line.strip()),2))
         output_section = f"""<br><br>
     <h2>Results</h2>
-<div style="overflow-x: auto;">
-    <table style="border-collapse: collapse; white-space: nowrap; width: 100%;">
-        <thead>
-            <tr style="background: #2c3e50; color: white;">
-                <th style="padding: 8px 12px;">Nr of Prot</th>
-                <th style="padding: 8px 12px;">Mean Length</th>
-                <th style="padding: 8px 12px;">Sum of Length</th>
-                <th style="padding: 8px 12px;">Sum of pred. pos</th>
-                <th style="padding: 8px 12px;">Q3 Mean</th>
-                <th style="padding: 8px 12px;">Q3 Dev</th>
-                <th style="padding: 8px 12px;">SOV Mean</th>
-                <th style="padding: 8px 12px;">SOV Dev</th>
-                <th style="padding: 8px 12px;">Q3_C Mean</th>
-                <th style="padding: 8px 12px;">Q3_C Dev</th>
-                <th style="padding: 8px 12px;">Q3_E Mean</th>
-                <th style="padding: 8px 12px;">Q3_E Dev</th>
-                <th style="padding: 8px 12px;">Q3_H Mean</th>
-                <th style="padding: 8px 12px;">Q3_H Dev</th>
-                <th style="padding: 8px 12px;">SOV_C Mean</th>
-                <th style="padding: 8px 12px;">SOV_C Dev</th>
-                <th style="padding: 8px 12px;">SOV_E Mean</th>
-                <th style="padding: 8px 12px;">SOV_E Dev</th>
-                <th style="padding: 8px 12px;">SOV_H Mean</th>
-                <th style="padding: 8px 12px;">SOV_H Dev</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="padding: 8px 12px;">validation</td>
-                <td style="padding: 8px 12px;">{values[0]}</td>
-                <td style="padding: 8px 12px;">{values[1]}</td>
-                <td style="padding: 8px 12px;">{values[2]}</td>
-                <td style="padding: 8px 12px;">{values[3]}</td>
-                <td style="padding: 8px 12px;">{values[4]}</td>
-                <td style="padding: 8px 12px;">{values[5]}</td>
-                <td style="padding: 8px 12px;">{values[6]}</td>
-                <td style="padding: 8px 12px;">{values[7]}</td>
-                <td style="padding: 8px 12px;">{values[8]}</td>
-                <td style="padding: 8px 12px;">{values[9]}</td>
-                <td style="padding: 8px 12px;">{values[10]}</td>
-                <td style="padding: 8px 12px;">{values[11]}</td>
-                <td style="padding: 8px 12px;">{values[12]}</td>
-                <td style="padding: 8px 12px;">{values[13]}</td>
-                <td style="padding: 8px 12px;">{values[14]}</td>
-                <td style="padding: 8px 12px;">{values[15]}</td>
-                <td style="padding: 8px 12px;">{values[16]}</td>
-                <td style="padding: 8px 12px;">{values[17]}</td>
-                <td style="padding: 8px 12px;">{values[18]}</td>
-                <td style="padding: 8px 12px;">{values[19]}</td>
-            </tr>
-        </tbody>
-    </table>
+<div style="overflow-x:auto;">
+<table style="border-collapse:collapse; font-family:Arial,sans-serif;">
+    <thead>
+        <tr style="background:#1f5c3a; color:white;">
+            <th style="padding:8px 12px; white-space:nowrap;">Nr of Prot</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Mean Length</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Sum of Length</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Sum of pred. pos</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Q3 Mean</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Q3 Dev</th>
+            <th style="padding:8px 12px; white-space:nowrap;">SOV Mean</th>
+            <th style="padding:8px 12px; white-space:nowrap;">SOV Dev</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Q3_C Mean</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Q3_C Dev</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Q3_E Mean</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Q3_E Dev</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Q3_H Mean</th>
+            <th style="padding:8px 12px; white-space:nowrap;">Q3_H Dev</th>
+            <th style="padding:8px 12px; white-space:nowrap;">SOV_C Mean</th>
+            <th style="padding:8px 12px; white-space:nowrap;">SOV_C Dev</th>
+            <th style="padding:8px 12px; white-space:nowrap;">SOV_E Mean</th>
+            <th style="padding:8px 12px; white-space:nowrap;">SOV_E Dev</th>
+            <th style="padding:8px 12px; white-space:nowrap;">SOV_H Mean</th>
+            <th style="padding:8px 12px; white-space:nowrap;">SOV_H Dev</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding:8px 12px; text-align:center;">{values[1]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[2]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[3]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[4]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[5]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[6]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[7]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[8]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[9]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[10]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[11]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[12]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[13]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[14]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[15]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[16]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[17]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[18]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[19]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[20]}</td>
+        </tr>
+    </tbody>
+</table>
 </div>
+
+
 <a href="uploads/detailedGor.txt" download style="display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; text-decoration:none; border-radius:4px;">Download</a>"""
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
@@ -187,7 +188,11 @@ print(f"""<!DOCTYPE html>
         {output_section if action == "seclib" else ""}
     </div>
 
-    <div class="card">
+   
+
+    <p class="section-label">Prediction</p>
+    
+     <div class="card">
         <h2>Train</h2>
         <p>Train a GOR model on a secondary structure database.</p>
         <form method="post" enctype="multipart/form-data">
@@ -204,8 +209,6 @@ print(f"""<!DOCTYPE html>
         </form>
         {output_section if action == "train" else ""}
     </div>
-
-    <p class="section-label">Prediction</p>
 
     <div class="card">
         <h2>Predict</h2>
@@ -284,7 +287,7 @@ print(f"""<!DOCTYPE html>
         <p>
     3D model of protein.
     ---------------------------------------
-    For comparison of GOR-Prediction with observed in 3D (JSmol) attach gor output file.
+    For comparison of GOR-Prediction with ground truth in 3D (JSmol) attach gor output file.
          </p>
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="visualise">
@@ -302,25 +305,21 @@ print(f"""<!DOCTYPE html>
         </form>
         {output_section if action == "visualise" else ""}
         
-        
-        <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
-        <script type="text/javascript">
-        var Info = {{
-            width: 1000,
-            height: 1000,
-            j2sPath: "jsmol/j2s"
-        }};
-        viewer = Jmol.getApplet("viewer", Info);
-        Jmol.script(viewer, "background white; load =8adh; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=13 and :A) or (resno=15 and :A); color green;");
         </script>
     </div>
 
 </div>
 
+
+
+
+
 <footer>
     <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; LMU/TUM &middot; Gruppe 15</span>
     <span>Laura Martin &middot; Lucas Nassonov &middot; Daniel Bernadi &middot; Toan David Huynh Ngoc</span>
 </footer>
+
+
 
 </body>
 </html>""")

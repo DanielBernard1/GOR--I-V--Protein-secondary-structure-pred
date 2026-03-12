@@ -28,8 +28,11 @@ helixes = set()
 sheets = set()
 residues = []
 
-with urllib.request.urlopen("https://files.rcsb.org/download/" + id + ".pdb") as r:
-    text = r.read().decode("utf-8")
+import subprocess
+pdb_path = f"uploads/{id.lower()}.pdb"
+subprocess.run(["wget", "-q", f"https://files.rcsb.org/download/{id.lower()}.pdb", "-O", pdb_path])
+with open(pdb_path) as r:
+    text = r.read()
 
 for line in text.splitlines():
 
@@ -70,9 +73,12 @@ predicted = ""
 
 with open(gorout) as g:
     for line in g:
-        if line.startswith(">") and id.lower() in line.lower():
-            g.readline()
-            predicted = g.readline()[3:].strip()
+        if line.startswith(">"):
+            header = line[1:].strip()
+            if id.lower() == header.lower():
+                g.readline()
+                predicted = g.readline()[3:].strip()
+                break
 
 chain = list(chains)
 referencess = list(ss)
@@ -96,7 +102,7 @@ print(f'''
 <script type="text/javascript">
 var Info = {{
     width: 700,
-    height: 500,
+    height: 700,
     j2sPath: "jsmol/j2s"
 }};
 var viewer = Jmol.getApplet("viewer", Info);
