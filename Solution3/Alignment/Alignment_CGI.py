@@ -212,8 +212,11 @@ try:
     seqlib_file = "seqlib.txt"
     pairs_file = "pairs.txt"
 
+    ali_output = None
     output = None
     java_error = ""
+    fasta_url = ""
+    fasta_filename = "" 
 
     if (use_native or (seq1 and seq2)) and not file_error and not text_error and not pdb_error and not native_error:
         try:
@@ -230,8 +233,20 @@ try:
                    "--go", go, "--ge", ge, "--format", fmt]
             if use_nw == "nw":
                 cmd.append("--nw")
+            if use_ss == "ss":
+                cmd.append("--ss")
+            cmd_ali = ["java", "-jar", alignment_jar,
+                   "--pairs", pairs_file, "--seqlib", seqlib_file,
+                   "-m", matrix_path, "--mode", mode,
+                   "--go", go, "--ge", ge, "--format", "ali"]
+            if use_nw == "nw":
+                cmd_ali.append("--nw")
+            if use_ss == "ss":
+                cmd_ali.append("--ss")
 
-            output = subprocess.run(cmd, capture_output=True, text=True)
+            output     = subprocess.run(cmd,     capture_output=True, text=True)
+            ali_output = subprocess.run(cmd_ali, capture_output=True, text=True)
+
         except Exception as e:
             print(f'<p class="error">ERROR: Java konnte nicht gestartet werden: {e}</p>')
 
@@ -255,7 +270,27 @@ try:
         print(output.stdout)
         sys.exit(0)
 
+    if output and not java_error:
+        fasta_out = ""
+        for line in ali_output.stdout.splitlines():
+            line = line.strip()
+            if not line or line.startswith(">"):
+                continue
+            if ": " in line:
+                seq_id, seq = line.split(": ", 1)
+                fasta_out += f">{seq_id.strip()}\n"
+                seq = seq.strip()
+                for i in range(0, len(seq), 60):
+                    fasta_out += seq[i:i+60] + "\n"
 
+        if not fasta_out:
+            fasta_out = f">{id1}\n{seq1}\n>{id2}\n{seq2}\n"
+
+        fasta_filename = f"alignment.fasta"
+        fasta_path = f"/home/m/martinla/public_html/propragruppe15/Solution3/Alignment/{fasta_filename}"
+        with open(fasta_path, "w") as f:
+            f.write(fasta_out)
+        fasta_url = f"https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/Alignment/{fasta_filename}"
 
     # Vorberechnete Werte für HTML-Template
     if download_output:
@@ -500,10 +535,11 @@ try:
             <input type="button" value="Enter Sequences manually" onclick="switchInput('text')">
     
             <p style="font-size:0.8rem; color:var(--text-dim);">Upload pairs and seqlib File</p>
-            <input type="button" value="pairs + seqlib" onclick="switchInput('native')">
+            <input type="button" value="pairs + seqlib" onclick="switchInput('native'); document.getElementById('ss_hidden').value='none';">
+
     
             <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Enter Seqlib file including Secondary Structure:</p>
-            <input type="button" value="seqlib+SS and pairs" onclick="switchInput('native')">
+            <input type="button" value="seqlib+SS and pairs" onclick="switchInput('native'); document.getElementById('ss_hidden').value='ss';">
             
             <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FASTA-File:</p>
             <input type="button" value="Enter FASTA-File" onclick="switchInput('file')">
@@ -512,6 +548,7 @@ try:
             <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
     
             <input type="hidden" name="input_type" id="input_type_hidden" value="{input_type}">
+            <input type="hidden" name="ss" id="ss_hidden" value="{use_ss}">
             <br>
     
             <div id="input_text" style="{style_text}">
@@ -624,9 +661,6 @@ try:
 
 
 
-
-    if output:
-        print("<pre>")
     if java_error:
         print (f"<p class='error'>{java_error}</p>")
     if output:
@@ -639,18 +673,35 @@ try:
             body_match = re.search(r'<body[^>]*>(.*?)</body>', java_out, re.DOTALL | re.IGNORECASE)
             java_out = body_match.group(1).strip() if body_match else java_out
             # DESIGN: result-bar + div (nicht pre) damit Java-Spans sichtbar bleiben
-            print(
-                f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
+            print(f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
             print('<div class="result">')
+            if fasta_url:
+                print(f'''
+                <a href="{fasta_url}" download="{fasta_filename}"
+                style="display:inline-block;background:#2e7d52;color:white;text-decoration:none;
+                        padding:9px 20px;border-radius:6px;font-size:0.85rem;font-weight:600;margin-bottom:12px;">
+                    ⬇ Download as FASTA
+                </a>
+                ''')
             print(java_out)
             print('</div>')
+
         else:
             # Kein HTML-Output (ali/scores): in <pre> anzeigen
             print(
                 f'<div class="result-bar"><span class="result-dot"></span>Mode: {mode} &nbsp;&middot;&nbsp; Matrix: {matrix} &nbsp;&middot;&nbsp; {use_nw}</div>')
+            if fasta_url:
+                print(f'''
+                <a href="{fasta_url}" download="{fasta_filename}"
+                style="display:inline-block;background:#2e7d52;color:white;text-decoration:none;
+                        padding:9px 20px;border-radius:6px;font-size:0.85rem;font-weight:600;margin-bottom:12px;">
+                    ⬇ Download as FASTA
+                </a>
+                ''')
             print('<pre class="result">')
             print(java_out)
             print('</pre>')
+        
         print('<p class="section-label">Graphics</p>')
 
     # DP-Matrix und Fixpoint
