@@ -89,7 +89,6 @@ elif action == "validate":
 
     <tbody>
         <tr>
-            <td>{values[0]}</td>
             <td>{values[1]}</td>
             <td>{values[2]}</td>
             <td>{values[3]}</td>
@@ -109,6 +108,7 @@ elif action == "validate":
             <td>{values[17]}</td>
             <td>{values[18]}</td>
             <td>{values[19]}</td>
+            <td>{values[20]}</td>
         </tr>
     </tbody>
 </table>
