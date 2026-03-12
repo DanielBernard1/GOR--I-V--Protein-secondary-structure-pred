@@ -27,17 +27,3 @@ def run_visualieze(form):
         "--pdb", pdb_id,
         "--gorout", gorout,
     ], capture_output=True, text=True)
-
-    if result.returncode != 0:
-        return f"<pre>{result.stderr}</pre>"
-
-
-    outfile = f"{pdb_id}.html"
-    try:
-        with open(outfile) as f:
-            content = f.read()
-
-        body = content.split("<body>")[1].split("</body>")[0]
-        return body
-    except Exception as e:
-        return f"<pre>ERROR in {outfile}: {e}</pre>"
