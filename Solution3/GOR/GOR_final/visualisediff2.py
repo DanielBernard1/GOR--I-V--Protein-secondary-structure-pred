@@ -28,7 +28,7 @@ helixes = set()
 sheets = set()
 residues = []
 
-with urllib.request.urlopen("https://files.rcsb.org/download/" + id + ".pdb") as r:
+with urllib.request.urlopen("https://www.rcsb.org/pdb/files/" + id.lower() + ".pdb") as r:
     text = r.read().decode("utf-8")
 
 for line in text.splitlines():
@@ -96,7 +96,7 @@ print(f'''
 <script type="text/javascript">
 var Info = {{
     width: 700,
-    height: 500,
+    height: 700,
     j2sPath: "jsmol/j2s"
 }};
 var viewer = Jmol.getApplet("viewer", Info);
