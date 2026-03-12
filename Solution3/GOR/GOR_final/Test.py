@@ -88,7 +88,6 @@ elif action == "validate":
     </thead>
     <tbody>
         <tr>
-            <td style="padding:8px 12px; text-align:center;">{values[0]}</td>
             <td style="padding:8px 12px; text-align:center;">{values[1]}</td>
             <td style="padding:8px 12px; text-align:center;">{values[2]}</td>
             <td style="padding:8px 12px; text-align:center;">{values[3]}</td>
@@ -108,6 +107,7 @@ elif action == "validate":
             <td style="padding:8px 12px; text-align:center;">{values[17]}</td>
             <td style="padding:8px 12px; text-align:center;">{values[18]}</td>
             <td style="padding:8px 12px; text-align:center;">{values[19]}</td>
+            <td style="padding:8px 12px; text-align:center;">{values[20]}</td>
         </tr>
     </tbody>
 </table>
