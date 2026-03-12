@@ -118,8 +118,8 @@ with open(outfile, "w") as f:
     <script type = "text/javascript" src = "jsmol/JSmol.min.js"></script>
     <script type = "text/javascript">
     var Info = {{
-        width: 1000,GF
-        height: 1000,
+        width: 700,
+        height: 700,
         j2sPath: "jsmol/j2s"
     }}
 </script>

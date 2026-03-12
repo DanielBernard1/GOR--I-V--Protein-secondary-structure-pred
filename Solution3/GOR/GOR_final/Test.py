@@ -23,7 +23,7 @@ if action == "seclib":
     try:
         output, seclib_path, fasta_path = run_seclib(BASE_DIR, form)
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
-        output_section += f"<a href='uploads/sec_lib.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Seclib</a>"
+        output_section += f"<a href={seclib_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Seclib</a>"
         if fasta_path:
             output_section += f" <a href='uploads/sec_lib.fasta' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download FASTA</a>"
     except Exception as e:
@@ -285,6 +285,12 @@ print(f"""<!DOCTYPE html>
             <input type="number" name="--foldcount" value="5" min="2" max="10">
             <label class="field-label">Input Database</label>
             <input type="file" name="--input_seclib">
+            <label class="field-label">
+    <input type="checkbox" name="--postprocess" value="yes" style="width:auto;"> Post-Processing
+        </label>
+        <label class="field-label">Post-Processing Window Size</label>
+        <input type="number" name="--windowsize" value="7" min="3" max="20" step="2">
+        <br>
             <button type="submit">Run</button>
         </form>
         {output_section if action == "kfold" else ""}
