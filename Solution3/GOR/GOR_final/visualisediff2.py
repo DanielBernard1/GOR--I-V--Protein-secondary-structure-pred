@@ -28,7 +28,7 @@ helixes = set()
 sheets = set()
 residues = []
 
-with urllib.request.urlopen("https://files.rcsb.org/download/" + id.lower() + ".pdb") as r:
+with urllib.request.urlopen("https://www.rcsb.org/pdb/files/" + id.lower() + ".pdb") as r:
     text = r.read().decode("utf-8")
 
 for line in text.splitlines():
