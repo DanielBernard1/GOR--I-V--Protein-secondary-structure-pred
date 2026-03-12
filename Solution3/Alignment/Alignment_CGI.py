@@ -260,7 +260,7 @@ try:
     else:
         download_output = False
 
-    if output and not java_error and (input_type == "native" or download_output):
+    if output and not java_error and download_output:
         if fmt == "ali":
             ext = "ali"
         elif fmt == "scores":
@@ -543,9 +543,6 @@ try:
     
             <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Enter Seqlib file including Secondary Structure:</p>
             <input type="button" value="seqlib+SS and pairs" onclick="switchInput('native'); document.getElementById('ss_hidden').value='ss';">
-            
-            <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload FASTA-File:</p>
-            <input type="button" value="Enter FASTA-File" onclick="switchInput('file')">
     
             <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload PDB-IDs from the Database:</p>
             <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
@@ -569,11 +566,6 @@ try:
                 <textarea name="seq1">{seq1}</textarea>
                 <label class="field-label">Sequenz 2</label>
                 <textarea name="seq2">{seq2}</textarea>
-            </div>
-    
-            <div id="input_file" style="{style_file}">
-                <label class="field-label">FASTA-Datei (min. 2 Sequenzen — erste zwei werden aligned)</label>
-                <input type="file" name="seqfile">
             </div>
     
             <div id="input_pdb" style="{style_pdb}">
