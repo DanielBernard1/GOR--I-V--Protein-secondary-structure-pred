@@ -14,7 +14,7 @@ def run_visualieze(form):
     if not gorout_upload:
         return "<pre>ERROR: Kein GOR-Output File hochgeladen</pre>"
 
-    gorout = os.path.join("uploads", "vis_gorout.txt")
+    gorout = os.path.join("vis_gorout.txt")
     with open(gorout, "wb") as f:
         if isinstance(gorout_upload, str):
             f.write(gorout_upload.encode())
