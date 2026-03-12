@@ -461,6 +461,14 @@ try:
                 padding: 14px 40px; font-size: 0.78rem; color: var(--text-dim);
                 display: flex; justify-content: space-between; margin-top: 40px;
             }}
+            div.result {{
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.82rem; line-height: 1.7;
+                white-space: pre; overflow-x: auto;
+                background: #f7fbf8;
+                border: 1.5px solid var(--border); border-top: none;
+                border-radius: 0 0 8px 8px; padding: 20px 24px;
+            }}
         </style>
     
         <script>
@@ -514,9 +522,8 @@ try:
     <div class="page-wrapper">
     
         <p class="section-label">New Searchrequest</p>
-        <div class="card">
         <form method="post" enctype="multipart/form-data" action="Alignment_CGI.py">
-    
+        <div class="card">
             <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:10px;">Input-Type:</p>
     
             <p style="font-size:0.8rem; color:var(--text-dim);">Own Sequences:</p>
