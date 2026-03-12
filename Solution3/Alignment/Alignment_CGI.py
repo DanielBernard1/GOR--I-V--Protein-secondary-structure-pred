@@ -480,7 +480,6 @@ try:
         <script>
         function switchInput(type) {{
             document.getElementById('input_text').style.display = 'none';
-            document.getElementById('input_file').style.display = 'none';
             document.getElementById('input_pdb').style.display  = 'none';
             document.getElementById('input_native').style.display = 'none';
             document.getElementById('input_' + type).style.display = 'block';
@@ -543,6 +542,8 @@ try:
     
             <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Enter Seqlib file including Secondary Structure:</p>
             <input type="button" value="seqlib+SS and pairs" onclick="switchInput('native'); document.getElementById('ss_hidden').value='ss';">
+            
+
     
             <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">Upload PDB-IDs from the Database:</p>
             <input type="button" value="Enter PDB-Ids" onclick="switchInput('pdb')">
