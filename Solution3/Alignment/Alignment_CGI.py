@@ -472,6 +472,8 @@ try:
             div.result a {{
                 font-family: 'Inter', sans-serif;
                 white-space: normal;
+                display: block;
+                width: fit-content;
             }}
         </style>
     

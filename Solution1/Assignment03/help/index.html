@@ -50,19 +50,78 @@
         </details>
     </div>
 
-    <h3 style="margin-bottom: 10px";>Input-Fortmats</h3>
+        <h3 style="margin-bottom: 10px">Input-Formats</h3>
     <div class="card">
         <details>
-            <summary>FASTA files</summary>
-            <p>Your answer here.</p>
+            <summary>Seqlib files</summary>
+            <p>
+                A Seqlib file contains one or more protein sequences in a simple two-line format per entry.
+                Each entry starts with a header line beginning with <code>&gt;</code> followed by the sequence identifier,
+                and the second line contains the amino acid sequence in single-letter code:
+            </p>
+            <div class="file-preview">&gt;1ABC_A
+MKTLLLTLVVVTIVCLDLGAVGNGNSTSSPYYNPTTEELISWKIFTHPNVHAFLLFLMLT
+&gt;2XYZ_B
+ACDEFGHIKLMNPQRSTVWY
+&gt;3PQR_C
+MGAGASAEEKHSSLVLHQDWLNRTYDEAMAQYCQARMGSTMKKILELALPSIHSIVSLYK</div>
+            <div class="download-section">
+                <span class="download-label">Example Files</span>
+                <div class="download-files">
+                    <a class="download-btn" id="dl-seqlib" download="../example_files/example_seqlib.txt">
+                        <svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3 6l3 3 3-3M1 10h10" stroke="#2e7d52" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        example_seqlib.txt
+                    </a>
+                </div>
+            </div>
         </details>
+
         <details>
-            <summary>Secondary Structure FASTA Files</summary>
-            <p>Your answer here.</p>
+            <summary>Secondary Structure FASTA File</summary>
+            <p>
+                Secondary Structure FASTA files extend the standard FASTA format with an additional line per entry
+                encoding the predicted or known secondary structure. Each entry has three lines:
+                a header (<code>&gt;ID</code>), the amino acid sequence (AA), and the secondary structure string (SS)
+                using <code>H</code> (helix), <code>E</code> (strand), and <code>C</code> (coil).
+            </p>
+            <div class="file-preview">&gt;1ABC_A
+AS MKTLLLTLVVVTIVCLDLGAVGNGNSTSSPYYNPTTEELISWKIFTHPN
+SS CCCCHHHHHHHHHCCCCCCCCCCCCCCEEEECCCHHHHHHHHHHCCCCCC
+&gt;2XYZ_B
+AA ACDEFGHIKLMNPQRSTVWYACDEFGHIKLM
+SS CCCEEEEECCCHHHHHHHHCCCCEEEECCCC</div>
+            <div class="download-section">
+                <span class="download-label">Example File</span>
+                <div class="download-files">
+                    <a class="download-btn" id="dl-secstruct" download="../example_files/example_secstruct.txt">
+                        <svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3 6l3 3 3-3M1 10h10" stroke="#2e7d52" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        example_secstruct.txt
+                    </a>
+                </div>
+            </div>
         </details>
+
         <details>
             <summary>Pairs Files</summary>
-            <p>Your answer here.</p>
+            <p>
+                A Pairs file defines which sequence pairs should be aligned against each other.
+                Each line contains two sequence identifiers (matching IDs from your Seqlib file),
+                separated by whitespace.
+            </p>
+            <div class="file-preview"># Pairs file — one pair per line
+# Format: ID_sequence1   ID_sequence2
+1ABC_A 2XYZ_B
+1ABC_A 3PQR_C
+2XYZ_B 3PQR_C</div>
+            <div class="download-section">
+                <span class="download-label">Example File</span>
+                <div class="download-files">
+                    <a class="download-btn" id="dl-pairs" download="../example_files/example_pairs.txt">
+                        <svg width="13" height="13" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3 6l3 3 3-3M1 10h10" stroke="#2e7d52" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        example_pairs.txt
+                    </a>
+                </div>
+            </div>
         </details>
     </div>
 <!--ab hier GOR!!!!!!-->

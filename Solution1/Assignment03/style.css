@@ -189,3 +189,70 @@ details p {
     color: var(--text-dim);
     line-height: 1.65;
 }
+.download-section {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(46, 125, 82, 0.15);
+}
+
+.download-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #2e7d52;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.download-files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(46, 125, 82, 0.07);
+    border: 1px solid rgba(46, 125, 82, 0.25);
+    border-radius: 6px;
+    color: #2e7d52;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    cursor: pointer;
+}
+
+.download-btn:hover {
+    background: rgba(46, 125, 82, 0.14);
+    border-color: rgba(46, 125, 82, 0.5);
+    transform: translateY(-1px);
+}
+
+.download-btn:active {
+    transform: translateY(0);
+}
+
+.download-btn svg {
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.file-preview {
+    margin-top: 12px;
+    background: #f6faf8;
+    border: 1px solid rgba(46, 125, 82, 0.12);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: #3a5a47;
+    white-space: pre;
+    overflow-x: auto;
+}
