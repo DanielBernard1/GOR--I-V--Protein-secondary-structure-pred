@@ -109,7 +109,7 @@ jsmolmatches = " or ".join(parts)
 
 
 
-outfile = os.path.join(output, "htmlprot.html").replace("\\", "/")
+outfile = os.path.join(output, "tempprot.html")
 with open(outfile, "w") as f:
     f.write(f'''<!doctype html >
     <html>
