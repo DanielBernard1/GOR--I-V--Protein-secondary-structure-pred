@@ -11,7 +11,7 @@ def run_seclib(BASE_DIR, form):
     else:
         idList = form.getvalue("--idlist")
 
-    seclib_path = os.path.join(BASE_DIR, "sec_lib.txt")
+    seclib_path = os.path.join( "sec_lib.txt")
     output = ""
 
     if id:
@@ -21,7 +21,7 @@ def run_seclib(BASE_DIR, form):
         output = result.stdout + result.stderr
 
     elif idList:
-        tmp_path = os.path.join(BASE_DIR, "tmp_idlist.txt")
+        tmp_path = os.path.join( "tmp_idlist.txt")
         try:
             with open(tmp_path, "w") as f:
                 f.write(idList)
@@ -39,7 +39,7 @@ def run_seclib(BASE_DIR, form):
 
     fasta_path = None
     if generate_fasta == "yes" and os.path.exists(seclib_path):
-        fasta_path = os.path.join(BASE_DIR, "uploads/sec_lib.fasta")
+        fasta_path = os.path.join(BASE_DIR, "uploads/sec_lib_fasta.fasta")
         with open(seclib_path) as f, open(fasta_path, "w") as out:
             for line in f:
                 if line.startswith(">"):
