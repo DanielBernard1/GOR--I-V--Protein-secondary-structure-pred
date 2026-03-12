@@ -47,11 +47,12 @@ elif action == "predict":
 
 elif action == "visualise":
     try:
-        output_section = run_visualieze(form)
+        with open("testprot.html") as f:
+            content = f.read()
+        output_section = content.split("<body>")[1].split("</body>")[0]
     except Exception as e:
         import traceback
         output_section = f"<pre>ERROR: {e}\n{traceback.format_exc()}</pre>"
-
 elif action == "validate":
     try:
         output = run_validate(BASE_DIR, form)
@@ -89,7 +90,6 @@ elif action == "validate":
 
     <tbody>
         <tr>
-            <td>{values[0]}</td>
             <td>{values[1]}</td>
             <td>{values[2]}</td>
             <td>{values[3]}</td>
@@ -109,6 +109,7 @@ elif action == "validate":
             <td>{values[17]}</td>
             <td>{values[18]}</td>
             <td>{values[19]}</td>
+            <td>{values[20]}</td>
         </tr>
     </tbody>
 </table>
@@ -286,8 +287,8 @@ print(f"""<!DOCTYPE html>
     <div class="card">
         <h2>3D Protein</h2>
         <p>
-    3D model of protein.
-    ---------------------------------------
+    3D model of protein.                          
+    
     For comparison of GOR-Prediction with ground truth in 3D (JSmol) attach gor output file.
          </p>
         <form method="post" enctype="multipart/form-data">
@@ -306,20 +307,7 @@ print(f"""<!DOCTYPE html>
         </form>
         {output_section if action == "visualise" else ""}
         
-          <!-- HARDCODE TEST: testprot direkt eingebettet -->
-        <script type = "text/javascript" src = "jsmol/JSmol.min.js"></script>
-        <script type = "text/javascript">
-        var Info2 = {{
-            width: 700,
-            height: 700,
-            j2sPath: "jsmol/j2s"
-        }}
-        </script>
-        <script type = "text/javascript">
-        viewer2 = Jmol.getApplet("viewer2", Info2);
-        Jmol.script(viewer2, "background white; load =2MZ9; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=10 and :A) or (resno=11 and :A) or (resno=13 and :A) or (resno=14 and :A) or (resno=15 and :A) or (resno=16 and :A) or (resno=19 and :A) or (resno=22 and :A) or (resno=23 and :A) or (resno=24 and :A) or (resno=25 and :A) or (resno=26 and :A) or (resno=27 and :A) or (resno=31 and :A) or (resno=32 and :A) or (resno=33 and :A) or (resno=34 and :A) or (resno=35 and :A) or (resno=36 and :A) or (resno=49 and :A) or (resno=50 and :A) or (resno=60 and :A) or (resno=61 and :A) or (resno=62 and :A) or (resno=63 and :A) or (resno=71 and :A); color green;")
-        </script>
-        <p><strong>Gruen</strong> = Match &nbsp; <strong>Rot</strong> = Mismatch &nbsp; | &nbsp; Matches: 27 / 71</p>
+        
     </div>
 </div>
 
