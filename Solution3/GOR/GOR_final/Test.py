@@ -294,8 +294,6 @@ print(f"""<!DOCTYPE html>
     <div class="card">
         <h2>3D Protein</h2>
         <p>
-    3D model of protein.                          
-    
     For comparison of GOR-Prediction with ground truth in 3D (JSmol) attach gor output file.
          </p>
         <form method="post" enctype="multipart/form-data">
