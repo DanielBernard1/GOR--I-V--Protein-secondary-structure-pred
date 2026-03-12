@@ -34,14 +34,14 @@ elif action == "predict":
         output, pp_path = run_predict(BASE_DIR, form)
         output_section += f"<br><br><h3>Prediction Output</h3>"
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
-        output_section += f"<a href='uploads/temp_seqAndStructure.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none; margin-top:10px; display:inline-block;'>Prediction</a>"
+        output_section += f"<a href='uploads/temp_seqAndStructure.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none; margin-top:10px; display:inline-block;'>Download Prediction</a>"
         if pp_path:
 
             with open(pp_path) as f:
                 pp_content = f.read()
             output_section += f"<br><br><h3>Post-Processed Output</h3>"
             output_section += f"<textarea readonly rows='10' style='width:100%; resize:both;'>{pp_content}</textarea>"
-            output_section += f"<a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Post-Processed</a>"
+            output_section += f"<a href='uploads/temp_seqAndStructure_pp.txt' download style='padding:8px 16px; background:#2c3e50; color:white; border-radius:4px; text-decoration:none;'>Download Post-Processed</a>"
     except Exception as e:
         output_section = f"<pre>ERROR: {e}</pre>"
 
@@ -288,7 +288,7 @@ print(f"""<!DOCTYPE html>
         <p>
     3D model of protein.
     ---------------------------------------
-    For comparison of GOR-Prediction with observed in 3D (JSmol) attach gor output file.
+    For comparison of GOR-Prediction with ground truth in 3D (JSmol) attach gor output file.
          </p>
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="visualise">
@@ -310,6 +310,13 @@ print(f"""<!DOCTYPE html>
         <script type="text/javascript" src="jsmol/JSmol.min.js"></script>
         <script type="text/javascript">
         var Info = {{
+            width: 750,
+            height: 750,
+            j2sPath: "jsmol/j2s"
+        }};
+        viewer = Jmol.getApplet("viewer", Info);
+        Jmol.script(viewer, "background white; load =8adh; cartoon only; spin on; color red; select (resno=9 and :A) or (resno=13 and :A) or (resno=15 and :A); color green;");
+        </script> var Info = {{
             width: 750,
             height: 750,
             j2sPath: "jsmol/j2s"
