@@ -101,6 +101,13 @@ def kfold(BASE_DIR, form):
         with open(PREDICTION_PATH, "w") as f:
             f.write(output.stdout)
 
+        if form.getvalue("--postprocess") == "yes":
+            windowsize = form.getvalue("--windowsize") or 7
+            from GOR_cgi import postprocess
+            pp_path = PREDICTION_PATH.replace(".txt", "_pp.txt")
+            postprocess(PREDICTION_PATH, pp_path, windowsize)
+            PREDICTION_PATH = pp_path
+
         validate_output = subprocess.run(
             ["java", "-jar", VALIDATION_PATH,
              "-p", PREDICTION_PATH,

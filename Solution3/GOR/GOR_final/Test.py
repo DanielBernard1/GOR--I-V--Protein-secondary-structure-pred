@@ -285,6 +285,12 @@ print(f"""<!DOCTYPE html>
             <input type="number" name="--foldcount" value="5" min="2" max="10">
             <label class="field-label">Input Database</label>
             <input type="file" name="--input_seclib">
+            <label class="field-label">
+    <input type="checkbox" name="--postprocess" value="yes" style="width:auto;"> Post-Processing
+        </label>
+        <label class="field-label">Post-Processing Window Size</label>
+        <input type="number" name="--windowsize" value="7" min="3" max="20" step="2">
+        <br>
             <button type="submit">Run</button>
         </form>
         {output_section if action == "kfold" else ""}

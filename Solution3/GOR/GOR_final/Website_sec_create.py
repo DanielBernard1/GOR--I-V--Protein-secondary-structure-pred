@@ -11,7 +11,7 @@ def run_seclib(BASE_DIR, form):
     else:
         idList = form.getvalue("--idlist")
 
-    seclib_path = os.path.join( "sec_lib.txt")
+    seclib_path = "sec_lib.txt"
     output = ""
 
     if id:
