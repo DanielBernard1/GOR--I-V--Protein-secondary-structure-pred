@@ -12,7 +12,7 @@ args = parser.parse_args()
 
 id = args.pdb
 gorout = args.gorout
-output = args.output
+
 
 
 as_map = {
