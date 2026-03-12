@@ -23,7 +23,7 @@ if action == "seclib":
     try:
         output, seclib_path, fasta_path = run_seclib(BASE_DIR, form)
         output_section = f"<textarea readonly rows='10' style='width:100%; resize:both;'>{output}</textarea>"
-        output_section += f"<a href={seclib_path} download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Seclib</a>"
+        output_section += f"<a href='uploads/sec_lib.txt' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download Seclib</a>"
         if fasta_path:
             output_section += f" <a href='uploads/sec_lib.fasta' download style='display:inline-block; margin-top:10px; padding:8px 16px; background:#2c3e50; color:white; border-radius:4px;'>Download FASTA</a>"
     except Exception as e:
@@ -47,11 +47,12 @@ elif action == "predict":
 
 elif action == "visualise":
     try:
-        output_section = run_visualieze(form)
+        with open("testprot.html") as f:
+            content = f.read()
+        output_section = content.split("<body>")[1].split("</body>")[0]
     except Exception as e:
         import traceback
         output_section = f"<pre>ERROR: {e}\n{traceback.format_exc()}</pre>"
-
 elif action == "validate":
     try:
         output = run_validate(BASE_DIR, form)
@@ -140,6 +141,14 @@ print(f"""<!DOCTYPE html>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script type = "text/javascript" src = "jsmol/JSmol.min.js"></script>
+    <script type = "text/javascript">
+    var Info = {{
+        width: 700,
+        height: 700,
+        j2sPath: "jsmol/j2s"
+    }}
+    </script>
 </head>
 <body>
 
@@ -285,8 +294,6 @@ print(f"""<!DOCTYPE html>
     <div class="card">
         <h2>3D Protein</h2>
         <p>
-    3D model of protein.
-    ---------------------------------------
     For comparison of GOR-Prediction with ground truth in 3D (JSmol) attach gor output file.
          </p>
         <form method="post" enctype="multipart/form-data">
@@ -305,21 +312,14 @@ print(f"""<!DOCTYPE html>
         </form>
         {output_section if action == "visualise" else ""}
         
-        </script>
+        
     </div>
-
 </div>
-
-
-
-
 
 <footer>
     <span>propraGruppe15 &mdash; Bioinformatik-Praktikum &middot; LMU/TUM &middot; Gruppe 15</span>
     <span>Laura Martin &middot; Lucas Nassonov &middot; Daniel Bernadi &middot; Toan David Huynh Ngoc</span>
 </footer>
-
-
 
 </body>
 </html>""")
