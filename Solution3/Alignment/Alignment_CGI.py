@@ -478,9 +478,8 @@ try:
         </a>
         <ul class="nav-links">
             <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/aufgabe3_2_0.html">Home</a></li>
-            <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_final/Test.py">GOR</a></li>
-            <!-- class="active": markiert die aktuelle Seite -->
             <li><a href="Alignment_CGI.py" class="active">Alignment</a></li>
+            <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution3/GOR/GOR_final/Test.py">GOR</a></li>
             <li style="margin-left: auto;"><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/help/index.html">Help</a></li>
             <li><a href="https://bioclient1.bio.ifi.lmu.de/~martinla/propragruppe15/Solution1/Assignment03/about/index.html">About</a></li>
         </ul>
