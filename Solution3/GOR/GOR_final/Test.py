@@ -57,11 +57,11 @@ elif action == "validate":
         output = run_validate(BASE_DIR, form)
         values = [""]
         for line in output.splitlines():
-            values.append(line.strip())
+            values.append(round(float(line.strip()),2))
         output_section = f"""<br><br>
     <h2>Results</h2>
 <div style="overflow-x:auto;">
-<table style="border-collapse: collapse; width:100%; font-family: Arial, sans-serif;">
+<table style="border-collapse: collapse; width:200%; font-family: Arial, sans-serif;">
     <thead>
         <tr style="background:#2c3e50; color:white;">
             <th>Nr of Prot</th>
